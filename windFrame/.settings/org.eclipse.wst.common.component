@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="windFrame">
+        <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src_config"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src_frame"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src_frame_interactive"/>
+        <property name="context-root" value="windFrame"/>
+        <property name="java-output-path" value="/windFrame/build/classes"/>
+    </wb-module>
+</project-modules>
