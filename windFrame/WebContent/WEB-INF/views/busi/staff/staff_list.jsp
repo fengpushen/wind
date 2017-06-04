@@ -53,7 +53,6 @@
 	</div>
 
 	<script type="text/javascript">
-
 		function loadDatagridData() {
 			$('#datagrid').datagrid('options').url = "busi/staff/loadStaffList.do";
 			$('#datagrid').datagrid('load', $("#qryForm").serializeJson());
@@ -178,12 +177,18 @@
 						'treeName' : 'busi_com_area_tree_bj',
 						'rootId' : accountArea
 					},
-					onClick : areaTree.nodeClick
+					onClick : function(node) {
+						areaTree.nodeClick(node);
+					}
 				});
 				$('#AREA_NAME_LIST').textbox({
 					buttonText : '选择',
-					onClickButton : areaTree.showAreaTree,
-					onClick : areaTree.showAreaTree,
+					onClickButton : function() {
+						areaTree.showAreaTree();
+					},
+					onClick : function() {
+						areaTree.showAreaTree();
+					},
 					editable : false,
 					required : true
 				});

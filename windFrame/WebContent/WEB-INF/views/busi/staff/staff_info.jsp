@@ -25,45 +25,43 @@
 			data-options="noheader:true" id="infoDiv">
 			<table style="width: 100%">
 				<tr>
-					<td style="width: 10%; text-align: right">账号:</td>
-					<td style="width: 23%; text-align: left"><input
+					<td style="width: 15%; text-align: right">账号:</td>
+					<td style="width: 35%; text-align: left"><input
 						class="easyui-textbox" name="accountInfo.ACCOUNT"
 						value="${requestScope.accountInfo.ACCOUNT }" style="width: 100%"
 						data-options="required:true, validType:['length[2, 20]']" /></td>
 
-					<td style="width: 10%; text-align: right">密码:</td>
-					<td style="width: 23%; text-align: left"><input
+					<td style="width: 15%; text-align: right">密码:</td>
+					<td style="width: 35%; text-align: left"><input
 						class="easyui-passwordbox" name="accountInfo.PASSWORD"
 						style="width: 100%" data-options="prompt:'${pswPrompt }'" /></td>
 				</tr>
 				<tr>
-					<td style="width: 10%; text-align: right">用户名称:</td>
-					<td style="width: 23%; text-align: left"><input
+					<td style="width: 15%; text-align: right">用户名称:</td>
+					<td style="width: 35%; text-align: left"><input
 						class="easyui-textbox" name="staffInfo.STAFF_NAME"
 						value="${staffInfo.STAFF_NAME }" style="width: 100%"
 						data-options="required:true, validType:'length[2,20]'" /></td>
-					<td style="width: 10%; text-align: right">行政区划:</td>
-					<td style="width: 23%; text-align: left"><input
+					<td style="width: 15%; text-align: right">行政区划:</td>
+					<td style="width: 35%; text-align: left"><input
 						class="easyui-textbox" id="AREA_NAME"
-						value="${staffInfo.AREA_NAME }"
-						data-options="buttonText:'选择',onClickButton:showAreaTree,onClick:showAreaTree, editable:false,required:true"
-						style="width: 100%"></td>
+						value="${staffInfo.AREA_NAME }" style="width: 100%"></td>
 				</tr>
 				<tr>
-					<td style="width: 10%; text-align: right">部门名称:</td>
-					<td style="width: 23%; text-align: left"><input
+					<td style="width: 15%; text-align: right">部门名称:</td>
+					<td style="width: 35%; text-align: left"><input
 						class="easyui-textbox" name="staffInfo.UNIT_NAME"
 						value="${staffInfo.UNIT_NAME }" style="width: 100%"
 						data-options="required:true" /></td>
-					<td style="width: 10%; text-align: right">联系电话:</td>
-					<td style="width: 23%; text-align: left"><input
+					<td style="width: 15%; text-align: right">联系电话:</td>
+					<td style="width: 35%; text-align: left"><input
 						value="${staffInfo.PHONE }" class="easyui-textbox"
 						name="staffInfo.PHONE" style="width: 100%"></td>
 
 				</tr>
 				<tr>
-					<td style="width: 10%; text-align: right">权限:</td>
-					<td style="width: 80%; text-align: left" colspan="2"><input
+					<td style="width: 15%; text-align: right">权限:</td>
+					<td style="width: 85%; text-align: left" colspan="3"><input
 						class="easyui-combobox" id="roles" name="accountInfo.ROLES"
 						style="width: 90%" /></td>
 				</tr>
@@ -83,23 +81,13 @@
 		</ul>
 		<div id="hjButtons" style="text-align: center;">
 			<a href="javascript:void(0)" class="easyui-linkbutton"
-				onclick="cleanHj()" style="width: 80px">清除</a>
+				id="cleanAreaBtn" style="width: 80px">清除</a>
 		</div>
 	</div>
 
 
 
 	<script type="text/javascript">
-		function showAreaTree() {
-			$('#dlg').dialog('open');
-		}
-
-		function cleanHj() {
-			$("#AREA_NAME").textbox("setValue", "");
-			$("#AREA_CODE").val('');
-			$('#dlg').dialog('close');
-		}
-
 		$(function() {
 			try {
 				var staff_id = "${staffInfo.STAFF_ID}";
@@ -137,6 +125,7 @@
 									}
 								});
 				var accountArea = '${accountInfo.staffInfo.AREA_CODE}';
+				var areaTree = new AreaTree('dlg', 'AREA_CODE', 'AREA_NAME');
 				$('#areaTree').tree({
 					url : 'busi/common/loadTree.do',
 					method : 'post',
@@ -145,10 +134,22 @@
 						'rootId' : accountArea
 					},
 					onClick : function(node) {
-						$("#AREA_NAME").textbox("setValue", node.text);
-						$("#AREA_CODE").val(node.id);
-						$('#dlg').dialog('close');
+						areaTree.nodeClick(node);
 					}
+				});
+				$('#AREA_NAME').textbox({
+					buttonText : '选择',
+					onClickButton : function() {
+						areaTree.showAreaTree();
+					},
+					onClick : function() {
+						areaTree.showAreaTree();
+					},
+					editable : false,
+					required : true
+				});
+				$("#cleanAreaBtn").bind('click', function() {
+					areaTree.cleanChosed();
 				});
 				$('#theForm').form(
 						{

@@ -70,7 +70,8 @@
 				<tr>
 					<td style="width: 10%; text-align: right">工作地:</td>
 					<td style="width: 23%; text-align: left"><input
-						class="easyui-textbox" id="P_WORK_AREA_NAME" style="width: 100%" value="${P_WORK_AREA_NAME }"></td>
+						class="easyui-textbox" id="P_WORK_AREA_NAME" style="width: 100%"
+						value="${P_WORK_AREA_NAME }"></td>
 					<td style="width: 10%; text-align: right">月工资下限:</td>
 					<td style="width: 23%; text-align: left"><input
 						class="easyui-textbox" name="P_PAY_BOTTON" style="width: 100%"
@@ -175,16 +176,24 @@
 				queryParams : {
 					'treeName' : 'busi_com_area_tree'
 				},
-				onClick : areaTree.nodeClick
+				onClick : function(node) {
+					areaTree.nodeClick(node);
+				}
 			});
 			$('#P_WORK_AREA_NAME').textbox({
 				buttonText : '选择',
-				onClickButton : areaTree.showAreaTree,
-				onClick : areaTree.showAreaTree,
+				onClickButton : function() {
+					areaTree.showAreaTree();
+				},
+				onClick : function() {
+					areaTree.showAreaTree();
+				},
 				editable : false,
 				required : true
 			});
-			$("#cleanAreaBtn").bind('click', areaTree.cleanChosed);
+			$("#cleanAreaBtn").bind('click', function() {
+				areaTree.cleanChosed();
+			});
 			$("#C_ID").combobox({
 				url : 'busi/company/loadCompanyMgd.do',
 				method : 'post',

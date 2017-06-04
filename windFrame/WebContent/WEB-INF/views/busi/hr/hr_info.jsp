@@ -152,8 +152,7 @@
 					<td style="width: 10%; text-align: right">意向工作地:</td>
 					<td style="width: 23%; text-align: left"><input
 						class="easyui-textbox" id="WANT_JOB_AREA_NAME"
-						name="want_job.JOB_AREA_NAME"
-						style="width: 100%"></td>
+						name="want_job.JOB_AREA_NAME" style="width: 100%"></td>
 					<td style="width: 10%; text-align: right">意向职位:</td>
 					<td style="width: 23%; text-align: left"><input
 						class="easyui-textbox" name="want_job.WANT_JOB_NAME"
@@ -193,7 +192,7 @@
 		</ul>
 		<div id="hjButtons" style="text-align: center;">
 			<a href="javascript:void(0)" class="easyui-linkbutton"
-				onclick="cleanHj()" style="width: 80px">清除</a>
+				id="cleanHjBtn" onclick="cleanHj()" style="width: 80px">清除</a>
 		</div>
 	</div>
 
@@ -204,7 +203,7 @@
 		</ul>
 		<div id="gzButtons" style="text-align: center;">
 			<a href="javascript:void(0)" class="easyui-linkbutton"
-				onclick="cleanGz()" style="width: 80px">清除</a>
+				id="cleanGzBtn" onclick="cleanGz()" style="width: 80px">清除</a>
 		</div>
 	</div>
 
@@ -215,7 +214,7 @@
 		</ul>
 		<div id="wantButtons" style="text-align: center;">
 			<a href="javascript:void(0)" class="easyui-linkbutton"
-				onclick="cleanWant()" style="width: 80px">清除</a>
+				id="cleanWantBtn" onclick="cleanWant()" style="width: 80px">清除</a>
 		</div>
 	</div>
 
@@ -237,12 +236,19 @@
 			}
 		}
 		$(function() {
-			var areaTreeGz = new AreaTree('dlgGzArea', 'GZ_AREA', 'GZ_AREA_NAME');
-			alert(areaTreeGz.areaNameId);
+			var areaTreeGz = new AreaTree('dlgGzArea', 'GZ_AREA',
+					'GZ_AREA_NAME');
+			var areaTree = new AreaTree('dlg', 'HJ_AREA', 'HJ_AREA_NAME');
+			var areaTreeWant = new AreaTree('dlgWantArea', 'WANT_JOB_AREA',
+					'WANT_JOB_AREA_NAME');
 			$('#GZ_AREA_NAME').textbox({
 				buttonText : '选择',
-				onClickButton : areaTreeGz.showAreaTree,
-				onClick : areaTreeGz.showAreaTree,
+				onClickButton : function() {
+					areaTreeGz.showAreaTree();
+				},
+				onClick : function() {
+					areaTreeGz.showAreaTree();
+				},
 				editable : false
 			});
 			$('#areaGzTree').tree({
@@ -251,18 +257,23 @@
 				queryParams : {
 					'treeName' : 'busi_com_area_tree'
 				},
-				onClick : areaTreeGz.nodeClick
+				onClick : function(node) {
+					areaTreeGz.nodeClick(node);
+				}
 			});
-			var areaTree = new AreaTree('dlg', 'HJ_AREA', 'HJ_AREA_NAME');
+
 			var accountArea = '${accountInfo.staffInfo.AREA_CODE}';
 			$('#HJ_AREA_NAME').textbox({
-				buttonText : '选择1',
-				onClickButton : areaTree.showAreaTree,
-				onClick : areaTree.showAreaTree,
+				buttonText : '选择',
+				onClickButton : function() {
+					areaTree.showAreaTree();
+				},
+				onClick : function() {
+					areaTree.showAreaTree();
+				},
 				editable : false,
 				required : true
 			});
-			alert(areaTree.areaNameId);
 			$('#areaTree').tree({
 				url : 'busi/common/loadTree.do',
 				method : 'post',
@@ -270,14 +281,19 @@
 					'treeName' : 'busi_com_area_tree',
 					'rootId' : accountArea
 				},
-				onClick : areaTree.nodeClick
+				onClick : function(node) {
+					areaTree.nodeClick(node);
+				}
 			});
-			
-			var areaTreeWant = new AreaTree('dlgWantArea', 'WANT_JOB_AREA', 'WANT_JOB_AREA_NAME');
+
 			$('#WANT_JOB_AREA_NAME').textbox({
 				buttonText : '选择',
-				onClickButton : areaTreeWant.showAreaTree,
-				onClick : areaTreeWant.showAreaTree,
+				onClickButton : function() {
+					areaTreeWant.showAreaTree();
+				},
+				onClick : function() {
+					areaTreeWant.showAreaTree();
+				},
 				editable : false
 			});
 			$('#areaWantTree').tree({
@@ -286,7 +302,18 @@
 				queryParams : {
 					'treeName' : 'busi_com_area_tree'
 				},
-				onClick : areaTreeWant.nodeClick
+				onClick : function(node) {
+					areaTreeWant.nodeClick(node);
+				}
+			});
+			$("#cleanHjBtn").bind('click', function() {
+				areaTree.cleanChosed();
+			});
+			$("#cleanGzBtn").bind('click', function() {
+				areaTreeGz.cleanChosed();
+			});
+			$("#cleanWantBtn").bind('click', function() {
+				areaTreeWant.cleanChosed();
 			});
 			$('#theForm').form({
 				url : 'busi/hr/saveHrInfo.do',

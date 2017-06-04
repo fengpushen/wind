@@ -6,25 +6,20 @@ function AreaTree(areaDlgId, areaCodeId, areaNameId) {
 
 	if (typeof AreaTree._initialized == "undefined") {
 		AreaTree.prototype.showAreaTree = function() {
-			try {
-				$('#' + areaDlgId).dialog('open');
-			} catch (e) {
-				alert(e.message);
-			}
+			$('#' + this.areaDlgId).dialog('open');
 		};
 		AreaTree.prototype.closeAreaTree = function() {
-			$('#' + areaDlgId).dialog('close');
+			$('#' + this.areaDlgId).dialog('close');
 		};
 		AreaTree.prototype.cleanChosed = function() {
-			$('#' + areaNameId).textbox("setValue", "");
-			$('#' + areaCodeId).val('');
-			$('#' + areaDlgId).dialog('close');
+			$('#' + this.areaNameId).textbox("setValue", "");
+			$('#' + this.areaCodeId).val('');
+			$('#' + this.areaDlgId).dialog('close');
 		};
 		AreaTree.prototype.nodeClick = function(node) {
-			alert(areaNameId);
-			$('#' + areaNameId).textbox("setValue", node.text);
-			$('#' + areaCodeId).val(node.id);
-			$('#' + areaDlgId).dialog('close');
+			$('#' + this.areaNameId).textbox("setValue", node.text);
+			$('#' + this.areaCodeId).val(node.id);
+			$('#' + this.areaDlgId).dialog('close');
 		};
 		AreaTree._initialized = true;
 	}
