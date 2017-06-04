@@ -77,14 +77,7 @@
 					<td style="width: 10%; text-align: right">已就业:</td>
 					<td style="width: 23%; text-align: left"><input
 						class="easyui-combobox" name="IS_JOB" id="IS_JOB"
-						style="width: 100%"
-						data-options="
-					url:'frame/loadCode.do?codeName=boolean',
-					method:'post',
-					valueField:'id',
-					textField:'text',
-					panelHeight:'auto', editable:false, onChange:isJobChange, required:true" />
-					</td>
+						style="width: 100%" /></td>
 					<td style="width: 10%; text-align: right">有就业意愿:</td>
 					<td style="width: 23%; text-align: left"><input
 						class="easyui-combobox" name="IS_WANT_JOB" id="IS_WANT_JOB"
@@ -114,7 +107,7 @@
 				<tr>
 					<td style="width: 10%; text-align: right">入职时间:</td>
 					<td style="width: 23%; text-align: left"><input
-						class="easyui-datebox" name="job.JOB_TIME"
+						class="easyui-datebox" name="job.JOB_TIME" id="JOB_TIME"
 						data-options="sharedCalendar:'#cc'" style="width: 100%"></td>
 					<td style="width: 10%; text-align: right">工作地:</td>
 					<td style="width: 23%; text-align: left"><input
@@ -314,6 +307,21 @@
 			});
 			$("#cleanWantBtn").bind('click', function() {
 				areaTreeWant.cleanChosed();
+			});
+			$("#IS_JOB").combobox({
+				url : 'frame/loadCode.do?codeName=boolean',
+				method : 'post',
+				valueField : 'id',
+				textField : 'text',
+				panelHeight : 'auto',
+				editable : false,
+				onChange : isJobChange,
+				required : true,
+				validType : 'equalTriggerRequired["是", "JOB_TIME", "GZ_AREA_NAME"]',
+				invalidMessage:'入职时间、工作地点必须填写'
+			});
+			$('#JOB_TIME').datebox({
+				sharedCalendar : '#cc'
 			});
 			$('#theForm').form({
 				url : 'busi/hr/saveHrInfo.do',

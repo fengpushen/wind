@@ -109,16 +109,23 @@ $.extend($.fn.validatebox.defaults.rules, {
 		},
 		message : '字段不匹配'
 	},
-	/* 有条件的必填 */
-	conditionalRequired : {
+	/* 等值触发必填验证 */
+	equalTriggerRequired : {
 		validator : function(value, param) {
-			if ($("#" + param[0]).val() == param[1]) {
-				return value != null && value != '';
-			} else {
-				return true;
+			var valid = true;
+			if (value == param[0]) {
+				for (var i = 1; i < param.length; i++) {
+
+					valid = $("#" + param[i]).val() != null
+							&& $("#" + param[i]).val() != '';
+					if (!valid) {
+						break;
+					}
+				}
 			}
+			return valid;
 		},
-		message : '该输入项为必输项'
+		message : '必须填写字段'
 	}
 });
 
