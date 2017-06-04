@@ -79,7 +79,7 @@ public class HumanResourceServiceImpl implements HumanResourceService {
 		String IS_WANT_JOB = (String) info.get("IS_WANT_JOB");
 		if (FrameConstant.busi_com_boolean_true.equals(IS_WANT_JOB)) {
 			Map<String, Object> want_job = (Map<String, Object>) info.get("want_job");
-			FrameTool.replaceMapValue(want_job, new String[] { "service_codes" }, "£¬", ",");
+			FrameTool.replaceMapValue(want_job, new String[] { "WANT_JOB_NAME" }, "£¬", ",");
 			String area = (String) want_job.get("WANT_JOB_AREA");
 			if (!FrameTool.isEmpty(area)) {
 				saveWantJobArea(hr_id, new String[] { area });

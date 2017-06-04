@@ -28,6 +28,16 @@
 							class="easyui-textbox" id="HJ_AREA_NAME_LIST"
 							value="${accountInfo.staffInfo.AREA_NAME}" style="width: 100%"></td>
 					</tr>
+					<tr>
+						<td style="width: 10%; text-align: right">是否就业:</td>
+						<td style="width: 23%; text-align: left"><input
+							class="easyui-combobox" name="IS_JOB" id="IS_JOB"
+							style="width: 100%" /></td>
+						<td style="width: 10%; text-align: right">是否有就业意愿:</td>
+						<td style="width: 23%; text-align: left"><input
+							class="easyui-combobox" name="IS_WANT_JOB" id="IS_WANT_JOB"
+							style="width: 100%" /></td>
+					</tr>
 				</table>
 			</form>
 			<div style="text-align: center; padding: 5px 0">
@@ -179,6 +189,52 @@
 								}
 							}
 						} ];
+				$("#IS_JOB").combobox({
+					method : 'post',
+					valueField : 'id',
+					textField : 'text',
+					panelHeight : 'auto',
+					editable : false,
+					loader : function(param, success, error) {
+						$.ajax({
+							url : 'frame/loadCode.do?codeName=boolean',
+							dataType : 'json',
+							success : function(data) {
+								data.unshift({
+									"text" : "请选择",
+									"id" : ""
+								});
+								success(data);
+							},
+							error : function() {
+								error.apply(this, arguments);
+							}
+						});
+					}
+				});
+				$("#IS_WANT_JOB").combobox({
+					method : 'post',
+					valueField : 'id',
+					textField : 'text',
+					panelHeight : 'auto',
+					editable : false,
+					loader : function(param, success, error) {
+						$.ajax({
+							url : 'frame/loadCode.do?codeName=boolean',
+							dataType : 'json',
+							success : function(data) {
+								data.unshift({
+									"text" : "请选择",
+									"id" : ""
+								});
+								success(data);
+							},
+							error : function() {
+								error.apply(this, arguments);
+							}
+						});
+					}
+				});
 				var areaTree = new AreaTree('dlgList', 'HJ_AREA_LIST',
 						'HJ_AREA_NAME_LIST');
 				var accountArea = '${accountInfo.staffInfo.AREA_CODE}';
@@ -247,6 +303,11 @@
 						field : 'HJ_AREA_NAME',
 						title : '户籍地',
 						width : '8%',
+						align : 'center'
+					}, {
+						field : 'NATION_NAME',
+						title : '民族',
+						width : '6%',
 						align : 'center'
 					}, {
 						field : 'IS_JOB_NAME',

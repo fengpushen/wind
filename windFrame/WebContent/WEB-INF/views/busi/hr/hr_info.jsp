@@ -18,7 +18,7 @@
 			type="hidden" id="GZ_AREA" name="job.JOB_AREA" /><input
 			type="hidden" id="WANT_JOB_AREA" name="want_job.WANT_JOB_AREA" />
 		<div class="easyui-panel" style="width: 100%"
-			data-options="noheader:true">
+			data-options="noheader:true" id="infoDiv">
 			<table style="width: 100%">
 				<tr>
 					<td style="width: 10%; text-align: right">身份证:</td>
@@ -75,6 +75,16 @@
 						class="easyui-textbox" name="EMAIL" id="EMAIL" style="width: 100%" /></td>
 				</tr>
 				<tr>
+					<td style="width: 10%; text-align: right">民族:</td>
+					<td style="width: 23%; text-align: left"><input
+						class="easyui-combobox" name="NATION" id="nation"
+						style="width: 100%"
+						data-options="
+					url:'frame/loadCode.do?codeName=nation',
+					method:'post',
+					valueField:'id',
+					textField:'text',
+					panelHeight:200, editable:false" /></td>
 					<td style="width: 10%; text-align: right">已就业:</td>
 					<td style="width: 23%; text-align: left"><input
 						class="easyui-combobox" name="IS_JOB" id="IS_JOB"
@@ -116,7 +126,7 @@
 					method:'post',
 					valueField:'id',
 					textField:'text',
-					panelHeight:'auto', editable:false" /></td>
+					panelHeight:200, editable:false" /></td>
 				</tr>
 				<tr>
 					<td style="width: 10%; text-align: right">单位名称:</td>
@@ -213,6 +223,15 @@
 
 	<script type="text/javascript">
 		$(function() {
+			$("#infoDiv").click(function() {
+				$('#oprTip').panel('close');
+			});
+			$("#jobInfoDiv").click(function() {
+				$('#oprTip').panel('close');
+			});
+			$("#yyInfoDiv").click(function() {
+				$('#oprTip').panel('close');
+			});
 			var areaTreeGz = new AreaTree('dlgGzArea', 'GZ_AREA',
 					'GZ_AREA_NAME');
 			var areaTree = new AreaTree('dlg', 'HJ_AREA', 'HJ_AREA_NAME');

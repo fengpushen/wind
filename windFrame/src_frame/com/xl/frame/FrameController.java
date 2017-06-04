@@ -30,7 +30,7 @@ public class FrameController {
 
 	@ResponseBody
 	@RequestMapping(value = "/loadCode.do")
-	public String loadUserMenu(@RequestParam(required = true) String codeName) {
+	public String loadCode(@RequestParam(required = true) String codeName) {
 
 		String codeJson = FrameCode.getCodeJson(codeName);
 		if (codeJson == null) {
@@ -52,5 +52,4 @@ public class FrameController {
 		return json;
 	}
 
-	
 }

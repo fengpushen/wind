@@ -159,4 +159,3 @@ function closeOrpTip(id) {
 	$("#" + id).html('');
 	$("#" + id).panel('close');
 }
-var mapCommon = {};
