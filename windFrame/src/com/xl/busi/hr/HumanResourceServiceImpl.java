@@ -11,10 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.xl.busi.BusiCommon;
 import com.xl.frame.FrameDAO;
 import com.xl.frame.util.ExecuteResult;
 import com.xl.frame.util.FrameConstant;
 import com.xl.frame.util.FrameTool;
+import com.xl.frame.util.ToolForIdcard;
 
 @Service
 public class HumanResourceServiceImpl implements HumanResourceService {
@@ -29,14 +31,39 @@ public class HumanResourceServiceImpl implements HumanResourceService {
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public ExecuteResult saveHrInfo(String orp_id, String opr_type, Map<String, Object> info) throws SQLException {
+	public ExecuteResult saveHrInfo(String orp_id, String opr_type, String opr_area, Map<String, Object> info)
+			throws SQLException {
 		ExecuteResult rtn = new ExecuteResult();
 		String hr_id = FrameTool.getUUID();
 		String idcard = (String) info.get("IDCARD");
-		info.put("IDCARD", idcard.toUpperCase());
+		String HJ_AREA = (String) info.get("HJ_AREA");
+
+		if (FrameTool.isEmpty(HJ_AREA)) {
+			rtn.setDefaultValue("户籍地不能为空");
+			return rtn;
+		}
+		ExecuteResult rst = ToolForIdcard.idcardValidate(idcard);
+		if (!rst.isSucc()) {
+			return rst;
+		} else {
+			idcard = idcard.toUpperCase();
+		}
+		if (!BusiCommon.isInScope(opr_area, HJ_AREA)) {
+			rtn.setDefaultValue("不能管理非本地区人员");
+			return rtn;
+		}
+		if (BusiCommon.isOverRetirementAgeByIdcardYear(idcard)) {
+			rtn.setDefaultValue("不能录入超过退休年龄的人员");
+			return rtn;
+		}
+
+		info.put("IDCARD", idcard);
+		info.put("BIRTH", ToolForIdcard.getBirthFromIdcard(idcard, FrameConstant.busi_default_date_style));
+		info.put("SEX", BusiCommon.getSexCodeFromIdcard(idcard));
 		info.put("HR_ID", hr_id);
 		info.put("OPR_ID", orp_id);
 		info.put("OPR_TYPE", opr_type);
+		FrameTool.replaceMapValue(info, new String[] { "JNTC" }, "，", ",");
 		frameDAO.anyInsert("busi_hr", info);
 
 		String isJob = (String) info.get("IS_JOB");
@@ -52,6 +79,7 @@ public class HumanResourceServiceImpl implements HumanResourceService {
 		String IS_WANT_JOB = (String) info.get("IS_WANT_JOB");
 		if (FrameConstant.busi_com_boolean_true.equals(IS_WANT_JOB)) {
 			Map<String, Object> want_job = (Map<String, Object>) info.get("want_job");
+			FrameTool.replaceMapValue(want_job, new String[] { "service_codes" }, "，", ",");
 			String area = (String) want_job.get("WANT_JOB_AREA");
 			if (!FrameTool.isEmpty(area)) {
 				saveWantJobArea(hr_id, new String[] { area });
@@ -88,7 +116,7 @@ public class HumanResourceServiceImpl implements HumanResourceService {
 		}
 		info.put("HR_ID", hr_id);
 		frameDAO.anyUpdateByPk("busi_hr", info, hr_id);
-		
+
 		Map<String, Object> want_job = (Map<String, Object>) info.get("want_job");
 		String area = (String) want_job.get("WANT_JOB_AREA");
 		if (!FrameTool.isEmpty(area)) {

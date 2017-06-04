@@ -7,7 +7,8 @@ import com.xl.frame.util.ExecuteResult;
 
 public interface HumanResourceService {
 
-	ExecuteResult saveHrInfo(String orp_id, String opr_type, Map<String, Object> info) throws SQLException;
+	ExecuteResult saveHrInfo(String orp_id, String opr_type, String opr_area, Map<String, Object> info)
+			throws SQLException;
 
 	ExecuteResult loadHrList(Map<String, Object> params);
 

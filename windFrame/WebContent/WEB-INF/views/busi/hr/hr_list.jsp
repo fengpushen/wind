@@ -14,6 +14,7 @@
 		<div class="easyui-panel" data-options="noheader:true"
 			style="background-color: #E0EEEE;" id="divForm">
 			<form id="qryForm" method="post">
+				<input type="hidden" id="HJ_AREA_LIST" name="HJ_AREA" />
 				<table style="width: 100%">
 					<tr>
 						<td style="width: 10%; text-align: right">身份证:</td>
@@ -22,16 +23,10 @@
 						<td style="width: 10%; text-align: right">姓名:</td>
 						<td style="width: 23%; text-align: left"><input
 							class="easyui-textbox" name="HR_NAME_LIKE" style="width: 100%" /></td>
-						<td style="width: 10%; text-align: right">劳动力类型:</td>
+						<td style="width: 10%; text-align: right">户籍地:</td>
 						<td style="width: 23%; text-align: left"><input
-							class="easyui-combobox" name="LD_TYPE" id="LD_TYPE"
-							style="width: 100%"
-							data-options="
-					url:'frame/loadCode.do?codeName=ld_type',
-					method:'post',
-					valueField:'id',
-					textField:'text',
-					panelHeight:'auto',editable:false"></td>
+							class="easyui-textbox" id="HJ_AREA_NAME_LIST"
+							value="${accountInfo.staffInfo.AREA_NAME}" style="width: 100%"></td>
 					</tr>
 				</table>
 			</form>
@@ -47,6 +42,13 @@
 	</div>
 
 	<div id="dd"></div>
+
+	<div id="dlgList" class="easyui-dialog" title="选择"
+		style="width: 250px; height: 350px; padding: 10px;"
+		data-options="iconCls:'icon-save',closed:true">
+		<ul id="areaTreeList" class="easyui-tree">
+		</ul>
+	</div>
 
 	<script type="text/javascript">
 		function loadDatagridData() {
@@ -177,6 +179,31 @@
 								}
 							}
 						} ];
+				var areaTree = new AreaTree('dlgList', 'HJ_AREA_LIST',
+						'HJ_AREA_NAME_LIST');
+				var accountArea = '${accountInfo.staffInfo.AREA_CODE}';
+				$('#areaTreeList').tree({
+					url : 'busi/common/loadTree.do',
+					method : 'post',
+					queryParams : {
+						'treeName' : 'busi_com_area_tree_bj',
+						'rootId' : accountArea
+					},
+					onClick : function(node) {
+						areaTree.nodeClick(node);
+					}
+				});
+				$('#HJ_AREA_NAME_LIST').textbox({
+					buttonText : '选择',
+					onClickButton : function() {
+						areaTree.showAreaTree();
+					},
+					onClick : function() {
+						areaTree.showAreaTree();
+					},
+					editable : false,
+					required : true
+				});
 				var divForm = document.getElementById('divForm');
 				var tableHeight = document.body.clientHeight
 						- divForm.offsetHeight - 70;
@@ -199,22 +226,47 @@
 					}, {
 						field : 'HR_NAME',
 						title : '姓名',
-						width : '8%',
+						width : '6%',
 						align : 'center'
 					}, {
-						field : 'IDCARD',
+						field : 'IDCARD_COVERD',
 						title : '身份证',
-						width : '15%',
+						width : '14%',
 						align : 'center'
 					}, {
-						field : 'HJ_AREA',
+						field : 'AGE',
+						title : '年龄',
+						width : '4%',
+						align : 'center'
+					}, {
+						field : 'SEX_NAME',
+						title : '性别',
+						width : '4%',
+						align : 'center'
+					}, {
+						field : 'HJ_AREA_NAME',
 						title : '户籍地',
 						width : '8%',
 						align : 'center'
 					}, {
-						field : 'CZ_AREA',
-						title : '常住地',
+						field : 'IS_JOB_NAME',
+						title : '是否就业',
+						width : '5%',
+						align : 'center'
+					}, {
+						field : 'IS_WANT_JOB_NAME',
+						title : '有就业意愿',
+						width : '6%',
+						align : 'center'
+					}, {
+						field : 'DEGREE_NAME',
+						title : '文化程度',
 						width : '8%',
+						align : 'center'
+					}, {
+						field : 'JNTC',
+						title : '技能特长',
+						width : '15%',
 						align : 'center'
 					} ] ]
 				});

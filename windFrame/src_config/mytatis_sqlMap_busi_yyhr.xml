@@ -3,19 +3,19 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "mybatis-3-mapper.dtd">
 <mapper namespace="com.wind.busi.yyhr">
-	
+
 	<select id="selectBusi_hr" resultType="hashMap" parameterType="hashMap">
 		<if test="record_count == null and page != null and page != ''">
 			select * from (select rownum as rowidx, qry.* from (
 		</if>
-		select 
+		select
 		<if test="record_count == null">
 			*
 		</if>
 		<if test="record_count != null">
 			count(1) as record_count
 		</if>
-		from busi_hr 
+		from v_busi_hr
 		<where>
 			<if test="HR_NAME_LIKE != null and HR_NAME_LIKE != ''">
 				hr_name like #{HR_NAME_LIKE} || '%'
@@ -35,25 +35,53 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="HR_ID != null and HR_ID != ''">
 				and hr_id = #{HR_ID}
 			</if>
+			<if test="HJ_AREA != null and HJ_AREA != ''">
+				<choose>
+					<when test="HJ_AREA_BJ != null and HJ_AREA_BJ  != ''">
+						and hj_area = #{HJ_AREA}
+					</when>
+					<otherwise>
+						<choose>
+							<when test="HJ_AREA_LEVEL == 0">
+								and province_code_hj = #{HJ_AREA}
+							</when>
+							<when test="HJ_AREA_LEVEL == 1">
+								and city_code_hj = #{HJ_AREA}
+							</when>
+							<when test="HJ_AREA_LEVEL == 2">
+								and country_code_hj = #{HJ_AREA}
+							</when>
+							<when test="HJ_AREA_LEVEL == 3">
+								and street_code_hj = #{HJ_AREA}
+							</when>
+							<when test="HJ_AREA_LEVEL == 4">
+								and village_code_hj = #{HJ_AREA}
+							</when>
+						</choose>
+					</otherwise>
+				</choose>
+			</if>
 		</where>
 		order by in_time desc
 		<if test="record_count == null and page != null and page != ''">
-			)qry ) where rowidx > (#{page} - 1) * #{rows} and   rowidx &lt;= #{page} * #{rows}
+			)qry ) where rowidx > (#{page} - 1) * #{rows} and rowidx
+			&lt;= #{page} * #{rows}
 		</if>
 	</select>
-	
-	<select id="selectBs_job_nojob" resultType="hashMap" parameterType="hashMap">
+
+	<select id="selectBs_job_nojob" resultType="hashMap"
+		parameterType="hashMap">
 		<if test="record_count == null and page != null and page != ''">
 			select * from (select rownum as rowidx, qry.* from (
 		</if>
-		select 
+		select
 		<if test="record_count == null">
 			*
 		</if>
 		<if test="record_count != null">
 			count(1) as record_count
 		</if>
-		from v_jobnojob_list 
+		from v_jobnojob_list
 		<where>
 			<if test="HR_ID != null and HR_ID != ''">
 				hr_id = #{HR_ID}
@@ -61,12 +89,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		</where>
 		order by job_time desc
 		<if test="record_count == null and page != null and page != ''">
-			)qry ) where rowidx > (#{page} - 1) * #{rows} and   rowidx &lt;= #{page} * #{rows}
+			)qry ) where rowidx > (#{page} - 1) * #{rows} and rowidx
+			&lt;= #{page} * #{rows}
 		</if>
 	</select>
-	
-	<select id="selectV_jobnojob_last_list" resultType="hashMap" parameterType="hashMap">
-		select * from v_jobnojob_last_list 
+
+	<select id="selectV_jobnojob_last_list" resultType="hashMap"
+		parameterType="hashMap">
+		select * from v_jobnojob_last_list
 		<where>
 			<if test="HR_ID != null and HR_ID != ''">
 				hr_id = #{HR_ID}
@@ -74,34 +104,35 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		</where>
 		order by job_time desc
 	</select>
-	
-	<select id="selectBs_company" resultType="hashMap" parameterType="hashMap">
+
+	<select id="selectBs_company" resultType="hashMap"
+		parameterType="hashMap">
 		<if test="record_count == null and page != null and page != ''">
 			select * from (select rownum as rowidx, qry.* from (
 		</if>
-		select 
+		select
 		<if test="record_count == null">
 			*
 		</if>
 		<if test="record_count != null">
 			count(1) as record_count
 		</if>
-		from bs_company 
+		from bs_company
 		<where>
 			<if test="C_NAME_LIKE != null and C_NAME_LIKE != ''">
 				C_NAME like #{C_NAME_LIKE} || '%'
 			</if>
 			<if test="C_NAME != null and C_NAME != ''">
-				and C_NAME = #{C_NAME} 
+				and C_NAME = #{C_NAME}
 			</if>
 			<if test="C_ID != null and C_ID != ''">
-				and C_ID = #{C_ID} 
+				and C_ID = #{C_ID}
 			</if>
 			<if test="C_TYPE != null and C_TYPE != ''">
-				and C_TYPE = #{C_TYPE} 
+				and C_TYPE = #{C_TYPE}
 			</if>
 			<if test="C_ID_WT != null and C_ID_WT != ''">
-				and C_ID_WT = #{C_ID_WT} 
+				and C_ID_WT = #{C_ID_WT}
 			</if>
 			<if test="C_ID_MGE != null and C_ID_MGE != ''">
 				and (C_ID = #{C_ID_MGE} or C_ID_WT = #{C_ID_MGE})
@@ -109,81 +140,91 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		</where>
 		order by in_time desc
 		<if test="record_count == null and page != null and page != ''">
-			)qry ) where rowidx > (#{page} - 1) * #{rows} and   rowidx &lt;= #{page} * #{rows}
+			)qry ) where rowidx > (#{page} - 1) * #{rows} and rowidx
+			&lt;= #{page} * #{rows}
 		</if>
 	</select>
-	
-	<select id="selectBs_position" resultType="hashMap" parameterType="hashMap">
+
+	<select id="selectBs_position" resultType="hashMap"
+		parameterType="hashMap">
 		<if test="record_count == null and page != null and page != ''">
 			select * from (select rownum as rowidx, qry.* from (
 		</if>
-		select 
+		select
 		<if test="record_count == null">
 			v_bs_position.*, bs_company.c_name
 		</if>
 		<if test="record_count != null">
 			count(1) as record_count
 		</if>
-		from v_bs_position inner join bs_company on v_bs_position.c_id = bs_company.c_id
+		from v_bs_position inner join bs_company on v_bs_position.c_id =
+		bs_company.c_id
 		<where>
 			<if test="P_NAME_LIKE != null and P_NAME_LIKE != ''">
 				P_NAME like #{P_NAME_LIKE} || '%'
 			</if>
 			<if test="P_ID != null and P_ID != ''">
-				and P_ID = #{P_ID} 
+				and P_ID = #{P_ID}
 			</if>
 			<if test="C_ID != null and C_ID != ''">
-				and (v_bs_position.C_ID = #{C_ID} or bs_company.C_ID_WT = #{C_ID}) 
+				and (v_bs_position.C_ID = #{C_ID} or bs_company.C_ID_WT =
+				#{C_ID})
 			</if>
 			<if test="P_STATUS != null and P_STATUS != ''">
-				and P_STATUS = #{P_STATUS} 
+				and P_STATUS = #{P_STATUS}
 			</if>
 			<if test="P_NAME != null and P_NAME != ''">
-				and P_NAME = #{P_NAME} 
+				and P_NAME = #{P_NAME}
 			</if>
 			<if test="VALID != null and VALID != ''">
-				and P_STATUS = '1' and end_time >= to_char(sysdate, 'yyyy-mm-dd')
+				and P_STATUS = '1' and end_time >= to_char(sysdate,
+				'yyyy-mm-dd')
 			</if>
 		</where>
 		order by v_bs_position.in_time desc
 		<if test="record_count == null and page != null and page != ''">
-			)qry ) where rowidx > (#{page} - 1) * #{rows} and   rowidx &lt;= #{page} * #{rows}
+			)qry ) where rowidx > (#{page} - 1) * #{rows} and rowidx
+			&lt;= #{page} * #{rows}
 		</if>
 	</select>
-	
-	<select id="selectBs_position_req" resultType="hashMap" parameterType="hashMap">
+
+	<select id="selectBs_position_req" resultType="hashMap"
+		parameterType="hashMap">
 		<if test="record_count == null and page != null and page != ''">
 			select * from (select rownum as rowidx, qry.* from (
 		</if>
-		select 
+		select
 		<if test="record_count == null">
-			v_bs_position_req.*, bs_position.p_name, bs_company.c_name, busi_hr.hr_name, room_no
+			v_bs_position_req.*, bs_position.p_name,
+			bs_company.c_name, busi_hr.hr_name, room_no
 		</if>
 		<if test="record_count != null">
 			count(1) as record_count
 		</if>
 		from v_bs_position_req
-		 inner join bs_position
-		    on v_bs_position_req.P_ID = bs_position.P_ID
-		 inner join bs_company
-		    on bs_position.c_id = bs_company.c_id
-		 inner join busi_hr
-    		on busi_hr.hr_id = v_bs_position_req.HR_ID
-    	 left outer join v_POSITION_INTERVIEW_ROOM on v_POSITION_INTERVIEW_ROOM.req_id = v_bs_position_req.req_id
+		inner join bs_position
+		on v_bs_position_req.P_ID = bs_position.P_ID
+		inner join bs_company
+		on bs_position.c_id = bs_company.c_id
+		inner join busi_hr
+		on busi_hr.hr_id = v_bs_position_req.HR_ID
+		left outer join v_POSITION_INTERVIEW_ROOM on
+		v_POSITION_INTERVIEW_ROOM.req_id = v_bs_position_req.req_id
 		<where>
 			<if test="P_ID != null and P_ID != ''">
-				v_bs_position_req.P_ID = #{P_ID} 
+				v_bs_position_req.P_ID = #{P_ID}
 			</if>
 			<if test="HR_ID != null and HR_ID != ''">
-				and v_bs_position_req.HR_ID = #{HR_ID} 
+				and v_bs_position_req.HR_ID = #{HR_ID}
 			</if>
 			<if test="C_ID != null and C_ID != ''">
-				and bs_company.C_ID = #{C_ID} 
+				and bs_company.C_ID = #{C_ID}
 			</if>
 		</where>
 		order by v_bs_position_req.in_time desc
 		<if test="record_count == null and page != null and page != ''">
-			)qry ) where rowidx > (#{page} - 1) * #{rows} and   rowidx &lt;= #{page} * #{rows}
+			)qry ) where rowidx > (#{page} - 1) * #{rows} and rowidx
+			&lt;= #{page} * #{rows}
 		</if>
 	</select>
 

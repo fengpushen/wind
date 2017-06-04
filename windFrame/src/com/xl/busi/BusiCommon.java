@@ -7,6 +7,7 @@ import javax.servlet.http.HttpSession;
 import com.xl.frame.util.FrameCache;
 import com.xl.frame.util.FrameConstant;
 import com.xl.frame.util.FrameTool;
+import com.xl.frame.util.ToolForIdcard;
 import com.xl.frame.util.tree.TreeNode;
 import com.xl.frame.util.tree.TreeView;
 
@@ -104,10 +105,82 @@ public class BusiCommon {
 		if (FrameTool.isEmpty(areaCode) || FrameTool.isEmpty(otherAreaCode)) {
 			return false;
 		}
+		if (otherAreaCode.equals(areaCode)) {
+			return true;
+		}
 		TreeNode node = BusiCommon.getAreaTreeNode(areaCode);
 		if (FrameTool.isEmpty(node)) {
 			return false;
 		}
 		return node.hasTheUnbornNode(otherAreaCode);
 	}
+
+	/**
+	 * 根据身份证号码获取系统中的性别代码
+	 * 
+	 * @param idcard
+	 * @return
+	 */
+	public static String getSexCodeFromIdcard(String idcard) {
+		if (ToolForIdcard.isMale(idcard)) {
+			return FrameConstant.busi_sex_code_male;
+		} else {
+			return FrameConstant.busi_sex_code_female;
+		}
+	}
+
+	/**
+	 * 处理查询参数中的本级地区的问题
+	 * 
+	 * @param map
+	 *            查询参数map
+	 * @param key
+	 *            指向地区编码的key
+	 */
+	public static void dealAreaBj(Map map, String key) {
+		if (FrameTool.isEmpty(map) || FrameTool.isEmpty(key)) {
+			return;
+		}
+		String areaCode = (String) map.get(key);
+		if (FrameTool.isEmpty(areaCode)) {
+			return;
+		}
+		// 如果参数中的地区编码是本级地区的编码则在查询参数中加一个表示本级的参数，并把地区编码恢复成正常的样子
+		if (areaCode.endsWith(FrameConstant.busi_com_area_bj_add)) {
+			map.put(key + "_" + FrameConstant.busi_com_area_bj_add, FrameConstant.busi_com_area_bj_add);
+			areaCode = areaCode.replaceAll(FrameConstant.busi_com_area_bj_add, "");
+			map.put(key, areaCode);
+		} else {
+			// 地区编码不是本级的，则需要在查询参数里面增加一个表示地区等级的参数
+			map.put(key + "_" + FrameConstant.busi_com_area_level_add, BusiCommon.getAreaLevel(areaCode));
+		}
+	}
+
+	/**
+	 * 根据年龄和性别判断当前是否超过了退休年龄
+	 * 
+	 * @param age
+	 * @param sexCode
+	 * @return
+	 */
+	public static boolean isOverRetirementAge(int age, String sexCode) {
+		if (FrameConstant.busi_sex_code_female.equals(sexCode)) {
+			return age >= 55;
+		}
+		if (FrameConstant.busi_sex_code_male.equals(sexCode)) {
+			return age >= 60;
+		}
+		throw new RuntimeException("错误的性别代码");
+	}
+
+	/**
+	 * 根据身份证上的出生年份和性别判断当前是否超过了退休年龄
+	 * 
+	 * @param idcard
+	 * @return
+	 */
+	public static boolean isOverRetirementAgeByIdcardYear(String idcard) {
+		return isOverRetirementAge(ToolForIdcard.getAgeFromIdcardYear(idcard), BusiCommon.getSexCodeFromIdcard(idcard));
+	}
+
 }

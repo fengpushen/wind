@@ -41,24 +41,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			</if>
 			<if test="area_code != null and area_code != ''">
 				<choose>
-			        <when test="area_code_bj != null and area_code_bj != ''">
+			        <when test="area_code_BJ != null and area_code_BJ != ''">
 			            and area_code = #{area_code}
 			        </when>
 			        <otherwise>
 			            <choose>
-					        <when test="area_code_level == 0">
+					        <when test="area_code_LEVEL == 0">
 					            and province_code = #{area_code}
 					        </when>
-					        <when test="area_code_level == 1">
+					        <when test="area_code_LEVEL == 1">
 					            and city_code = #{area_code}
 					        </when>
-					        <when test="area_code_level == 2">
+					        <when test="area_code_LEVEL == 2">
 					            and country_code = #{area_code}
 					        </when>
-					        <when test="area_code_level == 3">
+					        <when test="area_code_LEVEL == 3">
 					            and street_code = #{area_code}
 					        </when>
-					        <when test="area_code_level == 4">
+					        <when test="area_code_LEVEL == 4">
 					            and village_code = #{area_code}
 					        </when>
 		    			</choose>

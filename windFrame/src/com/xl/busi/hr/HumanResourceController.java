@@ -37,9 +37,15 @@ public class HumanResourceController {
 
 	@ResponseBody
 	@RequestMapping(value = "/loadHrList.do")
-	public String loadHrList(HttpServletRequest request) {
+	public String loadHrList(HttpSession session, HttpServletRequest request) {
 
 		Map<String, Object> info = FrameTool.getRequestParameterMap(request);
+		String hj_area = (String) info.get("HJ_AREA");
+		if (FrameTool.isEmpty(hj_area)) {
+			info.put("HJ_AREA", BusiCommon.getLoginAccountStaffArea(session));
+
+		}
+		BusiCommon.dealAreaBj(info, "HJ_AREA");
 		ExecuteResult rst = humanResourceService.loadHrList(info);
 		if (rst.isSucc()) {
 			Map map = (Map) rst.getInfoOne("info");
@@ -62,7 +68,7 @@ public class HumanResourceController {
 		try {
 			Map<String, Object> info = FrameTool.getRequestParameterMap(request);
 			rst = humanResourceService.saveHrInfo(BusiCommon.getLoginAccountId(session),
-					BusiCommon.getLoginAccountKind(session), info);
+					BusiCommon.getLoginAccountKind(session), BusiCommon.getLoginAccountStaffArea(session), info);
 		} catch (Exception e) {
 			rst.setDefaultValue("程序内部错误");
 			log.error("error", e);
@@ -249,13 +255,13 @@ public class HumanResourceController {
 
 		return new ModelAndView("/busi/mobile/hr/mo_hr_jobnojob_mge");
 	}
-	
+
 	@RequestMapping("/showMobileHrJobRegUI.do")
 	public ModelAndView showMobileHrJobRegUI() {
 
 		return new ModelAndView("/busi/mobile/hr/mo_hr_job_reg");
 	}
-	
+
 	@RequestMapping("/showMobileHrNojobRegUI.do")
 	public ModelAndView showMobileHrNojobRegUI() {
 

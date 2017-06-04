@@ -43,13 +43,9 @@ public class StaffController {
 		Map<String, Object> info = FrameTool.getRequestParameterMap(request);
 		String area_code = (String) info.get("area_code");
 		if (FrameTool.isEmpty(area_code)) {
-			area_code = BusiCommon.getLoginAccountStaffArea(session);
-		} else if (area_code.endsWith(FrameConstant.busi_com_area_bj_add)) {
-			info.put("area_code_bj", FrameConstant.busi_com_area_bj_add);
-			area_code = area_code.replaceAll(FrameConstant.busi_com_area_bj_add, "");
+			info.put("area_code", BusiCommon.getLoginAccountStaffArea(session));
 		}
-		info.put("area_code", area_code);
-		info.put("area_code_level", BusiCommon.getAreaLevel(area_code));
+		BusiCommon.dealAreaBj(info, "area_code");
 		ExecuteResult rst = staffService.loadStaffList(info);
 		if (rst.isSucc()) {
 			Map map = (Map) rst.getInfoOne("info");

@@ -25,6 +25,9 @@ public final class FrameConstant {
 	// 本级行政区划后附加的字符
 	public static final String busi_com_area_bj_add = "BJ";
 
+	// 行政区划级别后附加的字符
+	public static final String busi_com_area_level_add = "LEVEL";
+
 	// 登录用户类型：人社用户
 	public static final String busi_user_kind_rs = "0";
 
@@ -65,4 +68,16 @@ public final class FrameConstant {
 	 * 委托招聘企业的type值
 	 */
 	public static final String busi_company_type_wtzp = "4";
+
+	public static final String busi_default_date_style = "yyyy-MM-dd";
+
+	/**
+	 * 男性码值
+	 */
+	public static final String busi_sex_code_male = "1";
+
+	/**
+	 * 女性码值
+	 */
+	public static final String busi_sex_code_female = "2";
 }
