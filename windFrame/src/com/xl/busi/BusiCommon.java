@@ -1,8 +1,16 @@
 package com.xl.busi;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
+
+import org.apache.commons.io.FileUtils;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 
 import com.xl.frame.util.FrameCache;
 import com.xl.frame.util.FrameConstant;
@@ -12,6 +20,39 @@ import com.xl.frame.util.tree.TreeNode;
 import com.xl.frame.util.tree.TreeView;
 
 public class BusiCommon {
+
+	/**
+	 * 系统预定义供下载文件的存放目录
+	 */
+	public static final String download_file_dir = "WEB-INF/views/busi/forDwn/";
+
+	/**
+	 * 系统运行临时文件的存放目录
+	 */
+	public static final String temp_file_dir = "temp/";
+
+	public static String getFullPathOfHrImpTemplate() {
+		return System.getProperty("realPath.webcontent") + download_file_dir + "hrImpTemplate.xls";
+	}
+
+	public static String getFullPathOfTempDir() {
+		return System.getProperty("realPath.webcontent") + temp_file_dir;
+	}
+
+	public static ResponseEntity<byte[]> getFileDwnResponseEntity(String fileFullPath, String showName)
+			throws IOException {
+
+		File file = new File(fileFullPath);
+		HttpHeaders headers = new HttpHeaders();
+		String fileName = FrameTool.getIso8859Str(showName);
+
+		headers.setContentDispositionFormData("attachment", fileName);
+		headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+		byte[] bs = FileUtils.readFileToByteArray(file);
+
+		headers.setContentLength(bs.length);
+		return new ResponseEntity<byte[]>(bs, headers, HttpStatus.OK);
+	}
 
 	public static boolean isLogined(HttpSession session) {
 		return !FrameTool.isEmpty(getLoginAccount(session));

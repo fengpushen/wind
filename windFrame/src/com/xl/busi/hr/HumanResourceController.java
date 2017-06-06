@@ -2,7 +2,6 @@ package com.xl.busi.hr;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,18 +9,15 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.xl.busi.BusiCommon;
@@ -308,28 +304,36 @@ public class HumanResourceController {
 	}
 
 	@RequestMapping("/dwnBatchTemplate.do")
-	public ResponseEntity<byte[]> download() {
-		String path = "f:/唐亚兰/安装质量员.html";
-		File file = new File(path);
-		HttpHeaders headers = new HttpHeaders();
-		String fileName = null;
+	public ResponseEntity<byte[]> dwnBatchTemplate() {
+		ResponseEntity<byte[]> rst = null;
 		try {
-			fileName = FrameTool.getIso8859Str("安装质量员.html");
-		} catch (UnsupportedEncodingException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} // 为了解决中文名称乱码问题
-		headers.setContentDispositionFormData("attachment", fileName);
-		headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-		byte[] bs = null;
-		try {
-			bs = FileUtils.readFileToByteArray(file);
+			rst = BusiCommon.getFileDwnResponseEntity(BusiCommon.getFullPathOfHrImpTemplate(), "劳动力资源信息导入模板.xls");
 		} catch (IOException e) {
-			e.printStackTrace();
+			log.error("download", e);
 		}
-		System.out.println("-------------------" + System.getProperty("realPath.webcontent"));
-		headers.setContentLength(bs.length);
-		return new ResponseEntity<byte[]>(bs, headers, HttpStatus.OK);
+		return rst;
+	}
+
+	@RequestMapping("/showHrImpUI.do")
+	public ModelAndView showHrImpUI() {
+
+		return new ModelAndView("/busi/hr/hr_imp");
+	}
+
+	@ResponseBody
+	@RequestMapping("/batchImpHrInfo.do")
+	public String batchImpHrInfo(@RequestParam(value="hrImpFile") CommonsMultipartFile file) {
+
+		ExecuteResult rst = new ExecuteResult();
+		System.out.println("-------------------fileName：" + file.getOriginalFilename());
+		String path = BusiCommon.getFullPathOfTempDir() + file.getOriginalFilename();
+		File newFile = new File(path);
+		try {
+			file.transferTo(newFile);
+		} catch (IOException e) {
+			log.error("batchImpHrInfo", e);
+		}
+		return FrameTool.toJson(rst);
 	}
 
 }

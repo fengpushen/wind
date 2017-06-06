@@ -226,6 +226,23 @@
 								window.location.href = baseHref
 										+ 'busi/hr/dwnBatchTemplate.do';
 							}
+						}, {
+							text : '人员批量导入',
+							iconCls : 'icon-save',
+							handler : function() {
+								$('#dd').dialog({
+									title : '人员批量导入',
+									width : 600,
+									height : 200,
+									closed : false,
+									cache : false,
+									href : 'busi/hr/showHrImpUI.do',
+									modal : false,
+									onBeforeClose : function() {
+										loadDatagridData();
+									}
+								});
+							}
 						} ];
 				$("#IS_JOB_LIST").combobox({
 					method : 'post',
