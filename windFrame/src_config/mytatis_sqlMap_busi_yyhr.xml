@@ -68,11 +68,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				</choose>
 			</if>
 		</where>
-		order by in_time desc
+		order by hj_area, idcard
 		<if test="record_count == null and page != null and page != ''">
 			)qry ) where rowidx > (#{page} - 1) * #{rows} and rowidx
 			&lt;= #{page} * #{rows}
 		</if>
+	</select>
+	
+	<select id="selectBs_h_need_service" resultType="hashMap"
+		parameterType="hashMap">
+		select * from BS_H_NEED_SERVICE
+		<where>
+			<if test="HR_ID != null and HR_ID != ''">
+				hr_id = #{HR_ID}
+			</if>
+		</where>
 	</select>
 
 	<select id="selectBs_job_nojob" resultType="hashMap"

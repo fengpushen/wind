@@ -24,16 +24,6 @@
 				<td style="width: 23%; text-align: left"><input
 					class="easyui-textbox" name="HR_NAME" style="width: 100%"
 					data-options="disabled:true" value="${HR_NAME }"/></td>
-				<td style="width: 10%; text-align: right">劳动力类型:</td>
-				<td style="width: 23%; text-align: left"><input
-					class="easyui-combobox" name="LD_TYPE" id="LD_TYPE"
-					style="width: 100%"
-					data-options="
-					url:'frame/loadCode.do?codeName=ld_type',
-					method:'post',
-					valueField:'id',
-					textField:'text',
-					panelHeight:'auto',required:true, editable:false,disabled:true" value="${LD_TYPE }"/></td>
 			</tr>
 		</table>
 	</div>

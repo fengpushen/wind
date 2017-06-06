@@ -18,7 +18,6 @@ import org.springframework.web.servlet.ModelAndView;
 import com.xl.busi.BusiCommon;
 import com.xl.frame.util.ExecuteResult;
 import com.xl.frame.util.FrameCache;
-import com.xl.frame.util.FrameConstant;
 import com.xl.frame.util.FrameTool;
 
 @Controller

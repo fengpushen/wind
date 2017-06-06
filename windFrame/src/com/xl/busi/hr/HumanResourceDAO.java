@@ -16,5 +16,7 @@ public interface HumanResourceDAO {
 	List<Map> selectBs_job_nojob(String hr_id);
 
 	Map selectV_jobnojob_last_list(String hr_id);
+	
+	List<Map> selectBs_h_need_service(String hr_id);
 
 }

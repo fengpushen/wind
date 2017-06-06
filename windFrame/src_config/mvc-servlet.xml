@@ -30,6 +30,8 @@
 					</property>
 					<property name="writeAcceptCharset" value="false"></property>
 				</bean>
+				<bean
+					class="org.springframework.http.converter.ByteArrayHttpMessageConverter" />
 			</list>
 		</property>
 	</bean>

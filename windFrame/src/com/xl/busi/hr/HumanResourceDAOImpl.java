@@ -45,4 +45,10 @@ public class HumanResourceDAOImpl implements HumanResourceDAO {
 		params.put("HR_ID", hr_id);
 		return sqlSession.selectOne("selectV_jobnojob_last_list", params);
 	}
+	
+	public List<Map> selectBs_h_need_service(String hr_id) {
+		Map params = new HashMap();
+		params.put("HR_ID", hr_id);
+		return sqlSession.selectList("selectBs_h_need_service", params);
+	}
 }

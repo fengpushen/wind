@@ -29,13 +29,17 @@
 							value="${accountInfo.staffInfo.AREA_NAME}" style="width: 100%"></td>
 					</tr>
 					<tr>
+						<td style="width: 10%; text-align: right">是否为劳动力:</td>
+						<td style="width: 23%; text-align: left"><input
+							class="easyui-combobox" name="LD_TYPE" id="LD_TYPE_LIST"
+							style="width: 100%" value="${LD_TYPE }" /></td>
 						<td style="width: 10%; text-align: right">是否就业:</td>
 						<td style="width: 23%; text-align: left"><input
-							class="easyui-combobox" name="IS_JOB" id="IS_JOB"
+							class="easyui-combobox" name="IS_JOB" id="IS_JOB_LIST"
 							style="width: 100%" /></td>
 						<td style="width: 10%; text-align: right">是否有就业意愿:</td>
 						<td style="width: 23%; text-align: left"><input
-							class="easyui-combobox" name="IS_WANT_JOB" id="IS_WANT_JOB"
+							class="easyui-combobox" name="IS_WANT_JOB" id="IS_WANT_JOB_LIST"
 							style="width: 100%" /></td>
 					</tr>
 				</table>
@@ -58,6 +62,17 @@
 		data-options="iconCls:'icon-save',closed:true">
 		<ul id="areaTreeList" class="easyui-tree">
 		</ul>
+	</div>
+
+	<div id="dlgLdType" class="easyui-dialog" title="选择"
+		style="width: 250px; height: 80px; padding: 10px;"
+		data-options="iconCls:'icon-save',closed:true,buttons: '#ldtypeButtons'">
+		<ul id="ldtypeTree" class="easyui-tree">
+		</ul>
+		<div id="#ldtypeButtons" style="text-align: center;">
+			<a href="javascript:void(0)" class="easyui-linkbutton"
+				id="cleanLdTypeBtn" style="width: 80px">清除</a>
+		</div>
 	</div>
 
 	<script type="text/javascript">
@@ -156,13 +171,28 @@
 								} else if (rows.length > 1) {
 									$.messager.alert("", "请选中单条记录进行操作");
 								} else {
-
+									var hr_id = rows[0].HR_ID;
+									$('#dd').dialog({
+										title : '修改',
+										width : 1000,
+										height : 420,
+										closed : false,
+										cache : false,
+										href : 'busi/hr/showHrInfoMdy.do',
+										queryParams : {
+											'hr_id' : hr_id
+										},
+										modal : false,
+										onBeforeClose : function() {
+											loadDatagridData();
+										}
+									});
 								}
 							}
 						},
 						{
 							text : '入离职登记',
-							iconCls : 'icon-pencil',
+							iconCls : 'icon-save',
 							handler : function() {
 								var rows = $('#datagrid').datagrid(
 										'getSelections');
@@ -188,8 +218,16 @@
 									});
 								}
 							}
+						},
+						{
+							text : '下载批量模板',
+							iconCls : 'icon-save',
+							handler : function() {
+								window.location.href = baseHref
+										+ 'busi/hr/dwnBatchTemplate.do';
+							}
 						} ];
-				$("#IS_JOB").combobox({
+				$("#IS_JOB_LIST").combobox({
 					method : 'post',
 					valueField : 'id',
 					textField : 'text',
@@ -212,7 +250,30 @@
 						});
 					}
 				});
-				$("#IS_WANT_JOB").combobox({
+				$("#IS_WANT_JOB_LIST").combobox({
+					method : 'post',
+					valueField : 'id',
+					textField : 'text',
+					panelHeight : 'auto',
+					editable : false,
+					loader : function(param, success, error) {
+						$.ajax({
+							url : 'frame/loadCode.do?codeName=boolean',
+							dataType : 'json',
+							success : function(data) {
+								data.unshift({
+									"text" : "请选择",
+									"id" : ""
+								});
+								success(data);
+							},
+							error : function() {
+								error.apply(this, arguments);
+							}
+						});
+					}
+				});
+				$("#LD_TYPE_LIST").combobox({
 					method : 'post',
 					valueField : 'id',
 					textField : 'text',
@@ -307,6 +368,11 @@
 					}, {
 						field : 'NATION_NAME',
 						title : '民族',
+						width : '6%',
+						align : 'center'
+					}, {
+						field : 'LD_TYPE_NAME',
+						title : '是否劳动力',
 						width : '6%',
 						align : 'center'
 					}, {

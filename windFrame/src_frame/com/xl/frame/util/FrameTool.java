@@ -1,5 +1,6 @@
 package com.xl.frame.util;
 
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Array;
 import java.math.BigInteger;
 import java.security.MessageDigest;
@@ -8,12 +9,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -232,6 +229,22 @@ public final class FrameTool {
 					map.put(key, value.replaceAll(original, replacement));
 				}
 			}
+		}
+	}
+
+	/**
+	 * 获得以iso-8859-1编码的字符串
+	 * 
+	 * @param str
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 */
+	public static String getIso8859Str(String str) throws UnsupportedEncodingException {
+
+		if (FrameTool.isEmpty(str)) {
+			return str;
+		} else {
+			return new String(str.getBytes(FrameConstant.frame_sys_charset), "iso-8859-1");
 		}
 	}
 

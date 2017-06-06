@@ -10,6 +10,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import com.xl.busi.BusiCommon;
 import com.xl.frame.FrameDAO;
@@ -56,6 +57,11 @@ public class HumanResourceServiceImpl implements HumanResourceService {
 			rtn.setDefaultValue("不能录入超过退休年龄的人员");
 			return rtn;
 		}
+		Map idcardInfo = humanResourceDAO.selectBusi_hrByIdcard(idcard);
+		if (!FrameTool.isEmpty(idcardInfo)) {
+			rtn.setDefaultValue("相同的身份证号码已经存在");
+			return rtn;
+		}
 
 		info.put("IDCARD", idcard);
 		info.put("BIRTH", ToolForIdcard.getBirthFromIdcard(idcard, FrameConstant.busi_default_date_style));
@@ -100,6 +106,68 @@ public class HumanResourceServiceImpl implements HumanResourceService {
 			if (!FrameTool.isEmpty(params)) {
 				frameDAO.anyUpdateByPk("busi_hr", params, hr_id);
 			}
+		}
+		rtn.setSucc(true);
+		return rtn;
+	}
+
+	@Transactional(rollbackFor = Exception.class)
+	public ExecuteResult updateHrInfoStaff(String orp_id, String opr_type, String opr_area, Map<String, Object> info)
+			throws SQLException {
+		ExecuteResult rtn = new ExecuteResult();
+		String hr_id = (String) info.get("HR_ID");
+		String idcard = (String) info.get("IDCARD");
+		String hj_area = (String) info.get("HJ_AREA");
+
+		if (FrameTool.isEmpty(hj_area)) {
+			rtn.setDefaultValue("户籍地不能为空");
+			return rtn;
+		}
+		Map infoOrg = humanResourceDAO.selectBusi_hr(hr_id);
+		if (FrameTool.isEmpty(infoOrg)) {
+			rtn.setDefaultValue("修改的数据不存在");
+			return rtn;
+		}
+		ExecuteResult rst = ToolForIdcard.idcardValidate(idcard);
+		if (!rst.isSucc()) {
+			return rst;
+		} else {
+			idcard = idcard.toUpperCase();
+		}
+		boolean idcardChanged = true;
+		if (idcard.equals(infoOrg.get("IDCARD"))) {
+			idcardChanged = false;
+		}
+		String hj_area_org = (String) infoOrg.get("HJ_AREA");
+		if (!BusiCommon.isInScope(opr_area, hj_area) || !BusiCommon.isInScope(opr_area, hj_area_org)) {
+			rtn.setDefaultValue("不能管理非本地区人员");
+			return rtn;
+		}
+		if (idcardChanged && BusiCommon.isOverRetirementAgeByIdcardYear(idcard)) {
+			rtn.setDefaultValue("不能录入超过退休年龄的人员");
+			return rtn;
+		}
+		if (idcardChanged) {
+			Map idcardInfo = humanResourceDAO.selectBusi_hrByIdcard(idcard);
+			if (!FrameTool.isEmpty(idcardInfo) && !hr_id.equals(idcardInfo.get("HR_ID"))
+					&& idcard.equals(idcardInfo.get("IDCARD"))) {
+				rtn.setDefaultValue("相同的身份证号码已经存在");
+				return rtn;
+			}
+			info.put("BIRTH", ToolForIdcard.getBirthFromIdcard(idcard, FrameConstant.busi_default_date_style));
+			info.put("SEX", BusiCommon.getSexCodeFromIdcard(idcard));
+		}
+		FrameTool.replaceMapValue(info, new String[] { "JNTC", "WANT_JOB_NAME" }, "，", ",");
+		frameDAO.anyUpdateByPk("busi_hr", info, hr_id);
+
+		Map<String, Object> want_job = (Map<String, Object>) info.get("want_job");
+		String area = (String) want_job.get("WANT_JOB_AREA");
+		if (!FrameTool.isEmpty(area)) {
+			saveWantJobArea(hr_id, new String[] { area });
+		}
+		Object needServices = want_job.get("service_codes");
+		if (!FrameTool.isEmpty(needServices)) {
+			saveNeedService(hr_id, FrameTool.getStringArray(needServices));
 		}
 		rtn.setSucc(true);
 		return rtn;
@@ -193,12 +261,39 @@ public class HumanResourceServiceImpl implements HumanResourceService {
 	@Transactional(rollbackFor = Exception.class)
 	public ExecuteResult delHrInfo(String[] hids, String oprId, String oprArea) throws SQLException {
 		ExecuteResult rtn = new ExecuteResult();
-		Map params = new HashMap();
-		params.put("is_deled", FrameConstant.busi_com_boolean_true);
+
 		for (String hid : hids) {
-			frameDAO.anyUpdateByPk("busi_hr", params, hid);
+			rtn = delHrInfoSingle(oprId, oprArea, hid);
+			if (!rtn.isSucc()) {
+				TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+				break;
+			}
 		}
-		rtn.setSucc(true);
+		return rtn;
+	}
+
+	@Transactional(rollbackFor = Exception.class)
+	public ExecuteResult delHrInfoSingle(String oprId, String oprArea, String hid) throws SQLException {
+		ExecuteResult rtn = new ExecuteResult();
+		try {
+			Map infoOrg = humanResourceDAO.selectBusi_hr(hid);
+			String hj_area_org = (String) infoOrg.get("HJ_AREA");
+			if (!BusiCommon.isInScope(oprArea, hj_area_org)) {
+				rtn.setDefaultValue("不能管理非本地区人员");
+				return rtn;
+			}
+			Map params = new HashMap();
+			params.put("hr_id", hid);
+			frameDAO.anyDelete("BS_H_JOB", params);
+			frameDAO.anyDelete("BS_H_NEED_SERVICE", params);
+			frameDAO.anyDelete("BS_H_NOJOB", params);
+			frameDAO.anyDelete("BS_H_WANT_JOB_AREA", params);
+			frameDAO.anyDeleteByPk("busi_hr", hid);
+			rtn.setSucc(true);
+		} catch (Exception e) {
+			log.error("delHrInfoSingle", e);
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+		}
 		return rtn;
 	}
 
@@ -239,6 +334,8 @@ public class HumanResourceServiceImpl implements HumanResourceService {
 		try {
 			Map info = humanResourceDAO.selectBusi_hr(hr_id);
 			if (!FrameTool.isEmpty(info)) {
+				List<Map> needServices = humanResourceDAO.selectBs_h_need_service(hr_id);
+				info.put("needServices", needServices);
 				rtn.addInfo("hrInfo", info);
 				rtn.setSucc(true);
 			}

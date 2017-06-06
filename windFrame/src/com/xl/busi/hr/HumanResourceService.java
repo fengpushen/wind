@@ -31,4 +31,7 @@ public interface HumanResourceService {
 
 	ExecuteResult updateHrInfo(String orp_id, String opr_type, String hr_id, Map<String, Object> info)
 			throws SQLException;
+
+	ExecuteResult updateHrInfoStaff(String orp_id, String opr_type, String opr_area, Map<String, Object> info)
+			throws SQLException;
 }

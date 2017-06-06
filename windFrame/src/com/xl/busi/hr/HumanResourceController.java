@@ -1,14 +1,23 @@
 package com.xl.busi.hr;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -31,8 +40,9 @@ public class HumanResourceController {
 
 	@RequestMapping("/qryHrList")
 	public ModelAndView qryHrList() {
-
-		return new ModelAndView("/busi/hr/hr_list");
+		Map trans = new HashMap();
+		trans.put("LD_TYPE", "1");
+		return new ModelAndView("/busi/hr/hr_list", trans);
 	}
 
 	@ResponseBody
@@ -82,6 +92,19 @@ public class HumanResourceController {
 
 		ExecuteResult rst = humanResourceService.loadHrInfo(hr_id);
 		return FrameTool.toJson(rst);
+	}
+
+	@RequestMapping(value = "/showHrInfoMdy.do")
+	public ModelAndView showHrInfoMdy(@RequestParam(required = true) String hr_id) {
+
+		Map trans = null;
+		ExecuteResult rst = humanResourceService.loadHrInfo(hr_id);
+		if (rst.isSucc()) {
+			trans = (Map) rst.getInfoOne("hrInfo");
+			List<Map> needServices = (List<Map>) trans.get("needServices");
+			trans.put("needServicesJson", FrameTool.toJson(needServices));
+		}
+		return new ModelAndView("/busi/hr/hr_info_mdy", trans);
 	}
 
 	@ResponseBody
@@ -217,6 +240,22 @@ public class HumanResourceController {
 		return FrameTool.toJson(rst);
 	}
 
+	@ResponseBody
+	@RequestMapping(value = "/updateHrInfoStaff.do")
+	public String updateHrInfoStaff(HttpSession session, HttpServletRequest request) {
+
+		ExecuteResult rst = new ExecuteResult();
+		try {
+			Map<String, Object> info = FrameTool.getRequestParameterMap(request);
+			rst = humanResourceService.updateHrInfoStaff(BusiCommon.getLoginAccountId(session),
+					BusiCommon.getLoginAccountKind(session), BusiCommon.getLoginAccountStaffArea(session), info);
+		} catch (Exception e) {
+			rst.setDefaultValue("程序内部错误");
+			log.error("error", e);
+		}
+		return FrameTool.toJson(rst);
+	}
+
 	@RequestMapping("/unbindHr.do")
 	public ModelAndView unbindHr() {
 		Map trans = new HashMap();
@@ -266,6 +305,31 @@ public class HumanResourceController {
 	public ModelAndView showMobileHrNojobRegUI() {
 
 		return new ModelAndView("/busi/mobile/hr/mo_hr_nojob_reg");
+	}
+
+	@RequestMapping("/dwnBatchTemplate.do")
+	public ResponseEntity<byte[]> download() {
+		String path = "f:/唐亚兰/安装质量员.html";
+		File file = new File(path);
+		HttpHeaders headers = new HttpHeaders();
+		String fileName = null;
+		try {
+			fileName = FrameTool.getIso8859Str("安装质量员.html");
+		} catch (UnsupportedEncodingException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} // 为了解决中文名称乱码问题
+		headers.setContentDispositionFormData("attachment", fileName);
+		headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+		byte[] bs = null;
+		try {
+			bs = FileUtils.readFileToByteArray(file);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		System.out.println("-------------------" + System.getProperty("realPath.webcontent"));
+		headers.setContentLength(bs.length);
+		return new ResponseEntity<byte[]>(bs, headers, HttpStatus.OK);
 	}
 
 }

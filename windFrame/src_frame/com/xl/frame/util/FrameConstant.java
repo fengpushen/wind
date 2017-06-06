@@ -7,6 +7,11 @@ public final class FrameConstant {
 	public static final String frame_menu_base_tree = "frame_menu_base_tree";
 
 	/**
+	 * 系统运行环境的字符集
+	 */
+	public static final String frame_sys_charset = "gbk";
+
+	/**
 	 * 超级管理员的账号id
 	 */
 	public static final String busi_com_super_admin_account_id = "10001";
@@ -80,4 +85,5 @@ public final class FrameConstant {
 	 * 女性码值
 	 */
 	public static final String busi_sex_code_female = "2";
+
 }
