@@ -243,5 +243,49 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			&lt;= #{page} * #{rows}
 		</if>
 	</select>
+	
+	<insert id="insertBs_hr_imp_pre"  parameterType="hashMap">  
+   		insert into BS_HR_IMP_PRE (  
+   					batch_id,
+   					row_no,
+					hr_name ,
+					idcard,
+					hj_area_name ,
+					nation_name,
+					degree_name,
+					school,
+					gra_year,
+					pro ,
+					address ,
+					phone ,
+					qq,
+					email ,
+					jntc,
+					is_job,
+					is_want_job,
+					job_time,
+					job_area_name,
+					job_type_name,
+					job_dw,
+					job_gw,
+					income,
+					want_job_area_name ,
+					want_income,
+					want_job_name)   
+		values (#{batchId},
+   		<foreach collection="row" item="item" separator=" , " >  
+       		 #{item} 
+    	</foreach>  
+    	)
+	</insert> 
+	
+	<select id="f_hr_imp_deal" statementType="CALLABLE" parameterType="hashMap">  
+ 		{#{result,mode=OUT,jdbcType=VARCHAR} = call f_hr_imp_deal(#{batch_id,mode=IN,jdbcType=VARCHAR})}  
+ 	</select>
+ 	
+ 	<select id="selectBs_hr_imp_pre" resultType="hashMap"
+		parameterType="string">
+		select row_no, error_info from BS_HR_IMP_PRE where batch_id = #{batch_id} and error_info is not null
+	</select>
 
 </mapper>

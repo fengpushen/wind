@@ -1,5 +1,6 @@
 package com.xl.busi.hr;
 
+import java.io.File;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +18,8 @@ import com.xl.frame.FrameDAO;
 import com.xl.frame.util.ExecuteResult;
 import com.xl.frame.util.FrameConstant;
 import com.xl.frame.util.FrameTool;
+import com.xl.frame.util.ToolForExcel;
+import com.xl.frame.util.ToolForFile;
 import com.xl.frame.util.ToolForIdcard;
 
 @Service
@@ -55,6 +58,10 @@ public class HumanResourceServiceImpl implements HumanResourceService {
 		}
 		if (BusiCommon.isOverRetirementAgeByIdcardYear(idcard)) {
 			rtn.setDefaultValue("不能录入超过退休年龄的人员");
+			return rtn;
+		}
+		if (BusiCommon.isTooYoungForWorkByIdcardYear(idcard)) {
+			rtn.setDefaultValue("不能录入未到法定工作年龄的人员");
 			return rtn;
 		}
 		Map idcardInfo = humanResourceDAO.selectBusi_hrByIdcard(idcard);
@@ -404,6 +411,42 @@ public class HumanResourceServiceImpl implements HumanResourceService {
 			rtn.setSucc(true);
 		} catch (Exception e) {
 			log.error("bindHr", e);
+		}
+		return rtn;
+	}
+
+	public ExecuteResult batchImpHrInfo(String batchId, File impFile, String oprId, String oprArea) {
+
+		ExecuteResult rtn = new ExecuteResult();
+		try {
+			if (FrameTool.isEmpty(batchId) || FrameTool.isEmpty(impFile) || FrameTool.isEmpty(oprId)
+					|| FrameTool.isEmpty(oprArea)) {
+				rtn.setDefaultValue("错误的参数");
+				return rtn;
+			}
+			if (!ToolForFile.isExcelFile(impFile)) {
+				rtn.setDefaultValue("请用规定的模板导入");
+				return rtn;
+			}
+
+			List<String[]> rows = ToolForExcel.buildListFromExcel(impFile, 4, 1, 24);
+			if (FrameTool.isEmpty(rows)) {
+				rtn.setDefaultValue("导入文件中没有数据");
+				return rtn;
+			}
+			humanResourceDAO.insertBs_hr_imp_pre(batchId, rows);
+			if (!humanResourceDAO.f_hr_imp_deal(batchId)) {
+				List<Map> errors = humanResourceDAO.selectBs_hr_imp_pre(batchId);
+				System.out.println("-0---------------------------------------");
+				System.out.println(errors);
+			} else {
+				rtn.setSucc(true);
+			}
+
+		} catch (Exception e) {
+			log.error("batchImpHrInfo", e);
+			rtn.setDefaultValue("系统内部错误");
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 		}
 		return rtn;
 	}

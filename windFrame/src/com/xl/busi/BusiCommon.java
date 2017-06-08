@@ -31,10 +31,20 @@ public class BusiCommon {
 	 */
 	public static final String temp_file_dir = "temp/";
 
+	/**
+	 * 获取人员批量导入模板的全路径
+	 * 
+	 * @return
+	 */
 	public static String getFullPathOfHrImpTemplate() {
 		return System.getProperty("realPath.webcontent") + download_file_dir + "hrImpTemplate.xls";
 	}
 
+	/**
+	 * 获取系统运行时临时文件存放地的全路径
+	 * 
+	 * @return
+	 */
 	public static String getFullPathOfTempDir() {
 		return System.getProperty("realPath.webcontent") + temp_file_dir;
 	}
@@ -215,6 +225,16 @@ public class BusiCommon {
 	}
 
 	/**
+	 * 判断是否未到法定工作年龄
+	 * 
+	 * @param age
+	 * @return
+	 */
+	public static boolean isTooYoungForWork(int age) {
+		return age < 16;
+	}
+
+	/**
 	 * 根据身份证上的出生年份和性别判断当前是否超过了退休年龄
 	 * 
 	 * @param idcard
@@ -222,6 +242,16 @@ public class BusiCommon {
 	 */
 	public static boolean isOverRetirementAgeByIdcardYear(String idcard) {
 		return isOverRetirementAge(ToolForIdcard.getAgeFromIdcardYear(idcard), BusiCommon.getSexCodeFromIdcard(idcard));
+	}
+
+	/**
+	 * 根据身份证上的出生年份判断是否未到法定工作年龄
+	 * 
+	 * @param idcard
+	 * @return
+	 */
+	public static boolean isTooYoungForWorkByIdcardYear(String idcard) {
+		return isTooYoungForWork(ToolForIdcard.getAgeFromIdcardYear(idcard));
 	}
 
 }

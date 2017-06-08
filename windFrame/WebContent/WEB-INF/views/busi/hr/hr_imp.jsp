@@ -42,15 +42,17 @@
 				url : 'busi/hr/batchImpHrInfo.do',
 				success : function(data) {
 					var rst = eval('(' + data + ')');
+					alert(rst.isSucc);
 					if (rst.isSucc) {
 						loadDatagridData();
 						showOprTip("oprTip", "操作成功，你可继续添加下一条", 'green');
 						$('#theForm').form("clear");
 					} else {
+						alert('aaa');
 						var msg = '操作失败';
-						if (rst.info.INFO_KEY_DEFAULT != null) {
+						/*if (rst.info.INFO_KEY_DEFAULT != null) {
 							msg = msg + ',' + rst.info.INFO_KEY_DEFAULT;
-						}
+						}*/
 						showOprTip("oprTip", msg, 'red');
 					}
 					$('#oprTip').panel('open');

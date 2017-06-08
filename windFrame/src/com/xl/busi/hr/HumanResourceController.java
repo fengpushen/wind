@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -322,14 +323,18 @@ public class HumanResourceController {
 
 	@ResponseBody
 	@RequestMapping("/batchImpHrInfo.do")
-	public String batchImpHrInfo(@RequestParam(value="hrImpFile") CommonsMultipartFile file) {
+	public String batchImpHrInfo(@RequestParam(value = "hrImpFile") CommonsMultipartFile file, HttpSession session) {
 
 		ExecuteResult rst = new ExecuteResult();
-		System.out.println("-------------------fileName：" + file.getOriginalFilename());
-		String path = BusiCommon.getFullPathOfTempDir() + file.getOriginalFilename();
-		File newFile = new File(path);
 		try {
+			// 批量文件上传后先生成处理批次号，然后把文件转存到临时文件夹中，再调用业务处理函数进行处理
+			String batchId = FrameTool.getUUID();
+			String path = BusiCommon.getFullPathOfTempDir() + batchId + "."
+					+ FilenameUtils.getExtension(file.getOriginalFilename());
+			File newFile = new File(path);
 			file.transferTo(newFile);
+			rst = humanResourceService.batchImpHrInfo(batchId, newFile, BusiCommon.getLoginAccountId(session),
+					BusiCommon.getLoginAccountStaffArea(session));
 		} catch (IOException e) {
 			log.error("batchImpHrInfo", e);
 		}
