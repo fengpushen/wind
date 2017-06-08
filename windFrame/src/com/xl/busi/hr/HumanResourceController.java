@@ -334,7 +334,7 @@ public class HumanResourceController {
 					+ FilenameUtils.getExtension(file.getOriginalFilename());
 			File newFile = new File(path);
 			file.transferTo(newFile);
-			rst = humanResourceService.batchImpHrInfo(batchId, newFile, BusiCommon.getLoginAccountId(session),
+			rst = humanResourceService.batchImpHrInfo(batchId, newFile, BusiCommon.getLoginAccountId(session),BusiCommon.getLoginAccountKind(session),
 					BusiCommon.getLoginAccountStaffArea(session));
 		} catch (IOException e) {
 			log.error("batchImpHrInfo", e);

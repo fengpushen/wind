@@ -21,7 +21,7 @@ public interface HumanResourceDAO {
 
 	void insertBs_hr_imp_pre(String batchId, List<String[]> rows);
 
-	boolean f_hr_imp_deal(String batchId);
+	boolean f_hr_imp_deal(String batchId, String opr_id, String opr_type, String opr_area);
 
 	List<Map> selectBs_hr_imp_pre(String batchId);
 

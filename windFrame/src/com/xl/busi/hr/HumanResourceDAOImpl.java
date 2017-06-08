@@ -61,11 +61,14 @@ public class HumanResourceDAOImpl implements HumanResourceDAO {
 		}
 	}
 
-	public boolean f_hr_imp_deal(String batchId) {
+	public boolean f_hr_imp_deal(String batchId, String opr_id, String opr_type, String opr_area) {
 		Map params = new HashMap();
 		boolean rst = false;
 		try {
 			params.put("batch_id", batchId);
+			params.put("opr_id", opr_id);
+			params.put("opr_type", opr_type);
+			params.put("opr_area", opr_area);
 			params.put("result", "");
 			sqlSession.selectOne("f_hr_imp_deal", params);
 			String rstStr = (String) params.get("result");

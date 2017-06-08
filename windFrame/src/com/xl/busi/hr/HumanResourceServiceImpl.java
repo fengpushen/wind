@@ -416,7 +416,7 @@ public class HumanResourceServiceImpl implements HumanResourceService {
 		return rtn;
 	}
 
-	public ExecuteResult batchImpHrInfo(String batchId, File impFile, String oprId, String oprArea) {
+	public ExecuteResult batchImpHrInfo(String batchId, File impFile, String oprId, String orpKind, String oprArea) {
 
 		ExecuteResult rtn = new ExecuteResult();
 		try {
@@ -437,7 +437,7 @@ public class HumanResourceServiceImpl implements HumanResourceService {
 			}
 			rtn.addInfo("allNum", rows.size());
 			humanResourceDAO.insertBs_hr_imp_pre(batchId, rows);
-			if (!humanResourceDAO.f_hr_imp_deal(batchId)) {
+			if (!humanResourceDAO.f_hr_imp_deal(batchId, oprId, orpKind, oprArea)) {
 				List<Map> errors = humanResourceDAO.selectBs_hr_imp_pre(batchId);
 				if (!FrameTool.isEmpty(errors)) {
 					List<ToolForExcel.CellInfo> cellInfos = new ArrayList<ToolForExcel.CellInfo>();

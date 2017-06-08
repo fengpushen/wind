@@ -280,7 +280,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</insert> 
 	
 	<select id="f_hr_imp_deal" statementType="CALLABLE" parameterType="hashMap">  
- 		{#{result,mode=OUT,jdbcType=VARCHAR} = call f_hr_imp_deal(#{batch_id,mode=IN,jdbcType=VARCHAR})}  
+ 		{#{result,mode=OUT,jdbcType=VARCHAR} = call f_hr_imp_deal(#{batch_id,mode=IN,jdbcType=VARCHAR},
+ 																	#{opr_id,mode=IN,jdbcType=VARCHAR},
+ 																	#{opr_type,mode=IN,jdbcType=VARCHAR},
+ 																	#{opr_area,mode=IN,jdbcType=VARCHAR})}  
  	</select>
  	
  	<select id="selectBs_hr_imp_pre" resultType="hashMap"

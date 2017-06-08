@@ -36,7 +36,7 @@ public interface HumanResourceService {
 	ExecuteResult updateHrInfoStaff(String orp_id, String opr_type, String opr_area, Map<String, Object> info)
 			throws SQLException;
 
-	ExecuteResult batchImpHrInfo(String batchId, File impFile, String oprId, String oprArea);
+	ExecuteResult batchImpHrInfo(String batchId, File impFile, String oprId, String orpKind, String oprArea);
 
 	String getBatchImpHrErrorFilePath(String batch_id);
 }
