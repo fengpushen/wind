@@ -2,6 +2,7 @@ package com.xl.busi.hr;
 
 import java.io.File;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -434,11 +435,22 @@ public class HumanResourceServiceImpl implements HumanResourceService {
 				rtn.setDefaultValue("导入文件中没有数据");
 				return rtn;
 			}
+			rtn.addInfo("allNum", rows.size());
 			humanResourceDAO.insertBs_hr_imp_pre(batchId, rows);
 			if (!humanResourceDAO.f_hr_imp_deal(batchId)) {
 				List<Map> errors = humanResourceDAO.selectBs_hr_imp_pre(batchId);
-				System.out.println("-0---------------------------------------");
-				System.out.println(errors);
+				if (!FrameTool.isEmpty(errors)) {
+					List<ToolForExcel.CellInfo> cellInfos = new ArrayList<ToolForExcel.CellInfo>();
+					for (Map error : errors) {
+						cellInfos.add(ToolForExcel.getNewCellInfo(Integer.parseInt((String) error.get("ROW_NO")), 25,
+								(String) error.get("ERROR_INFO")));
+					}
+					if (!FrameTool.isEmpty(cellInfos)) {
+						ToolForExcel.randomWriteExcelFile(impFile, cellInfos);
+						rtn.addInfo("batchId", batchId);
+						rtn.setDefaultValue(cellInfos.size() + "行数据错误");
+					}
+				}
 			} else {
 				rtn.setSucc(true);
 			}
@@ -446,9 +458,12 @@ public class HumanResourceServiceImpl implements HumanResourceService {
 		} catch (Exception e) {
 			log.error("batchImpHrInfo", e);
 			rtn.setDefaultValue("系统内部错误");
-			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 		}
 		return rtn;
+	}
+
+	public String getBatchImpHrErrorFilePath(String batch_id) {
+		return BusiCommon.getFullPathOfTempDir() + batch_id + ".xls";
 	}
 
 }

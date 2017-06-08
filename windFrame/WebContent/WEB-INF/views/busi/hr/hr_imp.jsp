@@ -13,7 +13,7 @@
 	<div id="oprTip" class="easyui-panel"
 		style="width: 100%; text-align: center; font-size: 20px; background-color: #EEEEEE"
 		data-options="closed:true, border:false"></div>
-	<form id="theForm" method="post" enctype="multipart/form-data" 
+	<form id="theForm" method="post" enctype="multipart/form-data"
 		style="width: 100%">
 		<div class="easyui-panel" style="background-color: #E0EEEE;"
 			data-options="noheader:true" id="infoDiv">
@@ -38,26 +38,41 @@
 
 	<script type="text/javascript">
 		$(function() {
-			$('#theForm').form({
-				url : 'busi/hr/batchImpHrInfo.do',
-				success : function(data) {
-					var rst = eval('(' + data + ')');
-					alert(rst.isSucc);
-					if (rst.isSucc) {
-						loadDatagridData();
-						showOprTip("oprTip", "操作成功，你可继续添加下一条", 'green');
-						$('#theForm').form("clear");
-					} else {
-						alert('aaa');
-						var msg = '操作失败';
-						/*if (rst.info.INFO_KEY_DEFAULT != null) {
-							msg = msg + ',' + rst.info.INFO_KEY_DEFAULT;
-						}*/
-						showOprTip("oprTip", msg, 'red');
-					}
-					$('#oprTip').panel('open');
-				}
-			});
+			try {
+				$('#theForm')
+						.form(
+								{
+									url : 'busi/hr/batchImpHrInfo.do',
+									success : function(data) {
+										var rst = eval('(' + data + ')');
+										if (rst.isSucc) {
+											loadDatagridData();
+											var msg = "操作成功";
+											showOprTip("oprTip", msg, 'green');
+											$('#theForm').form("clear");
+										} else {
+											var msg = '操作失败';
+											if (rst.info.INFO_KEY_DEFAULT != null) {
+												msg = msg
+														+ ','
+														+ rst.info.INFO_KEY_DEFAULT;
+											}
+											if (rst.info.batchId != null) {
+												msg = msg
+														+ ',点<a href="'
+														+ baseHref
+														+ 'busi/hr/dwnBatchImpError.do?batch_id='
+														+ rst.info.batchId
+														+ '">这里</a>可以下载详情';
+											}
+											showOprTip("oprTip", msg, 'red');
+										}
+										$('#oprTip').panel('open');
+									}
+								});
+			} catch (e) {
+				alert(e);
+			}
 		});
 	</script>
 

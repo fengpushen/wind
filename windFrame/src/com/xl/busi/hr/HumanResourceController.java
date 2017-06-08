@@ -323,7 +323,8 @@ public class HumanResourceController {
 
 	@ResponseBody
 	@RequestMapping("/batchImpHrInfo.do")
-	public String batchImpHrInfo(@RequestParam(value = "hrImpFile") CommonsMultipartFile file, HttpSession session) {
+	public String batchImpHrInfo(@RequestParam(value = "hrImpFile", required = true) CommonsMultipartFile file,
+			HttpSession session) {
 
 		ExecuteResult rst = new ExecuteResult();
 		try {
@@ -339,6 +340,18 @@ public class HumanResourceController {
 			log.error("batchImpHrInfo", e);
 		}
 		return FrameTool.toJson(rst);
+	}
+
+	@RequestMapping("/dwnBatchImpError.do")
+	public ResponseEntity<byte[]> dwnBatchImpError(@RequestParam(required = true) String batch_id) {
+		ResponseEntity<byte[]> rst = null;
+		try {
+			rst = BusiCommon.getFileDwnResponseEntity(humanResourceService.getBatchImpHrErrorFilePath(batch_id),
+					"劳动力资源信息导入模板.xls");
+		} catch (IOException e) {
+			log.error("download", e);
+		}
+		return rst;
 	}
 
 }

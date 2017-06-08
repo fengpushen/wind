@@ -37,4 +37,6 @@ public interface HumanResourceService {
 			throws SQLException;
 
 	ExecuteResult batchImpHrInfo(String batchId, File impFile, String oprId, String oprArea);
+
+	String getBatchImpHrErrorFilePath(String batch_id);
 }

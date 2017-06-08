@@ -3,6 +3,7 @@ package com.xl.frame.util;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PushbackInputStream;
@@ -11,15 +12,14 @@ import java.util.List;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.DocumentFactoryHelper;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class ToolForExcel {
@@ -33,27 +33,29 @@ public class ToolForExcel {
 	}
 
 	public static Workbook getWorkbookFromExcelFile(File excelFile) {
-		FileInputStream fileInputStream = null;
+		FileInputStream streamForBook = null;
 		try {
-			fileInputStream = new FileInputStream(excelFile);
+			streamForBook = new FileInputStream(excelFile);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-		return getWorkbookFromExcelFile(fileInputStream);
-	}
-
-	public static Workbook getWorkbookFromExcelFile(FileInputStream excelInputStream) {
 		Workbook wb = null;
 		try {
-			String excelType = getExcelFileType(excelInputStream);
+			String excelType = getExcelFileType(excelFile);
 			if (ToolForExcel.excel_type_2003.equals(excelType)) {
-				wb = new HSSFWorkbook(excelInputStream);
+				wb = new HSSFWorkbook(streamForBook);
 			}
 			if (ToolForExcel.excel_type_2007.equals(excelType)) {
-				wb = new XSSFWorkbook(excelInputStream);
+				wb = new XSSFWorkbook(streamForBook);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				streamForBook.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		return wb;
 	}
@@ -79,14 +81,8 @@ public class ToolForExcel {
 	 * @throws IOException
 	 */
 	public static List<String[]> buildListFromExcel(File file, int startRow, int startCol) throws IOException {
-		String fileType = getExcelFileType(file);
-		if ("2003".equals(fileType)) {
-			return buildListFromExcel2003(file, startRow, startCol);
-		}
-		if ("2007".equals(fileType)) {
-			return buildListFromExcel2007(file, startRow, startCol);
-		}
-		return null;
+
+		return buildListFromExcel(file, startRow, startCol, -1);
 	}
 
 	/**
@@ -102,14 +98,61 @@ public class ToolForExcel {
 	 */
 	public static List<String[]> buildListFromExcel(File file, int startRow, int startCol, int endCol)
 			throws IOException {
-		String fileType = getExcelFileType(file);
-		if ("2003".equals(fileType)) {
-			return buildListFromExcel2003(file, startRow, startCol, endCol);
+
+		List<String[]> rst = new ArrayList<String[]>();
+		Workbook workbook = getWorkbookFromExcelFile(file);
+
+		if (workbook != null) {
+			Sheet worksheet = workbook.getSheetAt(0);
+			for (int rowIdx = startRow, maxRow = worksheet.getLastRowNum(); rowIdx <= maxRow; rowIdx++) {
+				Row row = worksheet.getRow(rowIdx);
+				if (endCol < 0) {
+					endCol = row.getLastCellNum();
+				}
+				String[] rowStr = new String[endCol - startCol + 2];
+				int idx = 0;
+				rowStr[idx] = Integer.toString(rowIdx);
+				for (int colIdx = startCol; colIdx <= endCol; colIdx++) {
+					idx++;
+					String value = ToolForExcel.getCellValueAsString(row.getCell(colIdx));
+					if (value != null && value.length() > 0) {
+						value = value.trim();
+					}
+					rowStr[idx] = value;
+				}
+				rst.add(rowStr);
+			}
+			workbook.close();
 		}
-		if ("2007".equals(fileType)) {
-			return buildListFromExcel2007(file, startRow, startCol, endCol);
+
+		return rst;
+	}
+
+	public static void randomWriteExcelFile(File file, List<CellInfo> writeParams) throws IOException {
+
+		FileOutputStream fout = null;
+		try {
+			Workbook workbook = getWorkbookFromExcelFile(file);
+			if (workbook != null) {
+				Sheet worksheet = workbook.getSheetAt(0);
+				for (CellInfo writeParam : writeParams) {
+					Row row = worksheet.getRow(writeParam.getRow());
+					if (row == null) {
+						row = worksheet.createRow(writeParam.getRow());
+					}
+					Cell cell = row.getCell(writeParam.getCol());
+					if (cell == null) {
+						cell = row.createCell(writeParam.getCol());
+					}
+					cell.setCellValue(writeParam.getValue());
+				}
+				fout = new FileOutputStream(file);
+				workbook.write(fout);
+				workbook.close();
+			}
+		} finally {
+			fout.close();
 		}
-		return null;
 	}
 
 	public static void allRowSetStyle(HSSFRow row, CellStyle style) {
@@ -122,218 +165,7 @@ public class ToolForExcel {
 		}
 	}
 
-	public static List<String[]> buildListFromExcel2003(File file, int startRow, int startCol) {
-
-		List<String[]> rst = new ArrayList<String[]>();
-		FileInputStream fin = null;
-		HSSFWorkbook workbook = null;
-		try {
-			fin = new FileInputStream(file);
-			workbook = new HSSFWorkbook(fin);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		if (workbook != null) {
-			HSSFSheet worksheet = workbook.getSheetAt(0);
-			for (int rowIdx = startRow, maxRow = worksheet.getLastRowNum(); rowIdx <= maxRow; rowIdx++) {
-				HSSFRow row = worksheet.getRow(rowIdx);
-				int endCol = row.getLastCellNum();
-				String[] rowStr = new String[endCol - startCol + 2];
-				int idx = 0;
-				rowStr[idx] = Integer.toString(rowIdx);
-				for (int colIdx = startCol; colIdx <= endCol; colIdx++) {
-					idx++;
-					String value = ToolForExcel.getCellValueAsString(row.getCell(colIdx));
-					if (value != null && value.length() > 0) {
-						value = value.trim();
-					}
-					rowStr[idx] = value;
-				}
-				rst.add(rowStr);
-			}
-		}
-
-		if (fin != null) {
-			try {
-				fin.close();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-
-		return rst;
-	}
-
-	public static List<String[]> buildListFromExcel2003(File file, int startRow, int startCol, int endCol) {
-
-		List<String[]> rst = new ArrayList<String[]>();
-		FileInputStream fin = null;
-		HSSFWorkbook workbook = null;
-		try {
-			fin = new FileInputStream(file);
-			workbook = new HSSFWorkbook(fin);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		if (workbook != null) {
-			HSSFSheet worksheet = workbook.getSheetAt(0);
-			for (int rowIdx = startRow, maxRow = worksheet.getLastRowNum(); rowIdx <= maxRow; rowIdx++) {
-				HSSFRow row = worksheet.getRow(rowIdx);
-				String[] rowStr = new String[endCol - startCol + 2];
-				int idx = 0;
-				rowStr[idx] = Integer.toString(rowIdx);
-				for (int colIdx = startCol; colIdx <= endCol; colIdx++) {
-					idx++;
-					String value = ToolForExcel.getCellValueAsString(row.getCell(colIdx));
-					if (value != null && value.length() > 0) {
-						value = value.trim();
-					}
-					rowStr[idx] = value;
-				}
-				rst.add(rowStr);
-			}
-		}
-
-		if (fin != null) {
-			try {
-				fin.close();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-
-		return rst;
-	}
-
-	public static List<String[]> buildListFromExcel2007(File file, int startRow, int startCol) {
-
-		List<String[]> rst = new ArrayList<String[]>();
-		FileInputStream fin = null;
-		XSSFWorkbook workbook = null;
-
-		try {
-			fin = new FileInputStream(file);
-			workbook = new XSSFWorkbook(fin);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		if (workbook != null) {
-			XSSFSheet worksheet = workbook.getSheetAt(0);
-			for (int rowIdx = startRow, maxRow = worksheet.getLastRowNum(); rowIdx <= maxRow; rowIdx++) {
-				XSSFRow row = worksheet.getRow(rowIdx);
-				int endCol = row.getLastCellNum();
-				String[] rowStr = new String[endCol - startCol + 2];
-				int idx = 0;
-				rowStr[idx] = Integer.toString(rowIdx);
-				for (int colIdx = startCol; colIdx <= endCol; colIdx++) {
-					idx++;
-					String value = ToolForExcel.getCellValueAsString(row.getCell(colIdx));
-					if (value != null && value.length() > 0) {
-						value = value.trim();
-					}
-					rowStr[idx] = value;
-				}
-				rst.add(rowStr);
-			}
-		}
-
-		if (fin != null) {
-			try {
-				fin.close();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-
-		return rst;
-	}
-
-	public static List<String[]> buildListFromExcel2007(File file, int startRow, int startCol, int endCol) {
-
-		List<String[]> rst = new ArrayList<String[]>();
-		FileInputStream fin = null;
-		XSSFWorkbook workbook = null;
-
-		try {
-			fin = new FileInputStream(file);
-			workbook = new XSSFWorkbook(fin);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		if (workbook != null) {
-			XSSFSheet worksheet = workbook.getSheetAt(0);
-			for (int rowIdx = startRow, maxRow = worksheet.getLastRowNum(); rowIdx <= maxRow; rowIdx++) {
-				XSSFRow row = worksheet.getRow(rowIdx);
-				String[] rowStr = new String[endCol - startCol + 2];
-				int idx = 0;
-				rowStr[idx] = Integer.toString(rowIdx);
-				for (int colIdx = startCol; colIdx <= endCol; colIdx++) {
-					idx++;
-					String value = ToolForExcel.getCellValueAsString(row.getCell(colIdx));
-					if (value != null && value.length() > 0) {
-						value = value.trim();
-					}
-					rowStr[idx] = value;
-				}
-				rst.add(rowStr);
-			}
-		}
-
-		if (fin != null) {
-			try {
-				fin.close();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-
-		return rst;
-	}
-
-	public static List<String[]> buildListFromExcel2007(File file, int startRow, int endRow, int startCol, int endCol) {
-
-		List<String[]> rst = new ArrayList<String[]>();
-		FileInputStream fin = null;
-		XSSFWorkbook workbook = null;
-
-		try {
-			fin = new FileInputStream(file);
-			workbook = new XSSFWorkbook(fin);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		if (workbook != null) {
-			XSSFSheet worksheet = workbook.getSheetAt(0);
-			for (int rowIdx = startRow, maxRow = worksheet.getLastRowNum() > endRow ? endRow
-					: worksheet.getLastRowNum(); rowIdx <= maxRow; rowIdx++) {
-				XSSFRow row = worksheet.getRow(rowIdx);
-				String[] rowStr = new String[endCol - startCol + 2];
-				int idx = 0;
-				rowStr[idx] = Integer.toString(rowIdx);
-				for (int colIdx = startCol; colIdx <= endCol; colIdx++) {
-					idx++;
-					String value = ToolForExcel.getCellValueAsString(row.getCell(colIdx));
-					if (value != null && value.length() > 0) {
-						value = value.trim();
-					}
-					rowStr[idx] = value;
-				}
-				rst.add(rowStr);
-			}
-		}
-
-		if (fin != null) {
-			try {
-				fin.close();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-
-		return rst;
-	}
-
-	private static String getCellValueAsString(Cell cell) {
+	public static String getCellValueAsString(Cell cell) {
 		String value = "";
 		if (!FrameTool.isEmpty(cell)) {
 			switch (cell.getCellTypeEnum()) {
@@ -357,27 +189,52 @@ public class ToolForExcel {
 		return value.trim();
 	}
 
-	private static String getExcelFileType(File file) throws IOException {
+	public static String getExcelFileType(File file) throws IOException {
 
 		return getExcelFileType(new FileInputStream(file));
 	}
 
-	private static String getExcelFileType(InputStream in) throws IOException {
+	public static String getExcelFileType(InputStream in) throws IOException {
 		InputStream inp = null;
-		try {
-			if (!in.markSupported()) {
-				inp = new PushbackInputStream(in, 8);
-			}
-			if (POIFSFileSystem.hasPOIFSHeader(inp)) {
-				return ToolForExcel.excel_type_2003;
-			}
-			if (DocumentFactoryHelper.hasOOXMLHeader(inp)) {
-				return ToolForExcel.excel_type_2007;
-			}
-			return null;
-		} finally {
-			inp.close();
+		if (!in.markSupported()) {
+			inp = new PushbackInputStream(in, 8);
 		}
+		if (POIFSFileSystem.hasPOIFSHeader(inp)) {
+			return ToolForExcel.excel_type_2003;
+		}
+		if (DocumentFactoryHelper.hasOOXMLHeader(inp)) {
+			return ToolForExcel.excel_type_2007;
+		}
+		return null;
+	}
+
+	public static CellInfo getNewCellInfo(int row, int col, String value) {
+		return new ToolForExcel.CellInfo(row, col, value);
+	}
+
+	public static class CellInfo {
+		private int row;
+		private int col;
+		private String value;
+
+		public CellInfo(int row, int col, String value) {
+			this.row = row;
+			this.col = col;
+			this.value = value;
+		}
+
+		public int getRow() {
+			return row;
+		}
+
+		public int getCol() {
+			return col;
+		}
+
+		public String getValue() {
+			return value;
+		}
+
 	}
 
 }
