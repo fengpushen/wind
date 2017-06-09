@@ -203,7 +203,7 @@
 						width : '10%',
 						align : 'center'
 					}, {
-						field : 'IS_JOB',
+						field : 'IS_JOB_NAME',
 						title : '类型',
 						width : '5%',
 						align : 'center'
@@ -215,12 +215,12 @@
 						"title" : "离职信息",
 						"colspan" : 2
 					} ], [ {
-						field : 'JOB_AREA',
+						field : 'JOB_AREA_NAME',
 						title : '工作地',
 						width : '8%',
 						align : 'center'
 					}, {
-						field : 'JOB_TYPE',
+						field : 'JOB_TYPE_NAME',
 						title : '工作类型',
 						width : '8%',
 						align : 'center'

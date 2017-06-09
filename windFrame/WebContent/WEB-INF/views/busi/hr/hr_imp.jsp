@@ -39,6 +39,9 @@
 	<script type="text/javascript">
 		$(function() {
 			try {
+				$("#infoDiv").click(function() {
+					$('#oprTip').panel('close');
+				});
 				$('#theForm')
 						.form(
 								{
@@ -48,6 +51,11 @@
 										if (rst.isSucc) {
 											loadDatagridData();
 											var msg = "操作成功";
+											if (rst.info.allNum != null) {
+												msg = msg + ',共导入'
+														+ rst.info.allNum
+														+ '条记录';
+											}
 											showOprTip("oprTip", msg, 'green');
 											$('#theForm').form("clear");
 										} else {

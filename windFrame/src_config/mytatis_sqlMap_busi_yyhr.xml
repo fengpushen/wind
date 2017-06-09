@@ -97,7 +97,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<if test="record_count != null">
 			count(1) as record_count
 		</if>
-		from v_jobnojob_list
+		from v_jobnojob_list_name
 		<where>
 			<if test="HR_ID != null and HR_ID != ''">
 				hr_id = #{HR_ID}

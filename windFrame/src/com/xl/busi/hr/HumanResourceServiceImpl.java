@@ -446,6 +446,8 @@ public class HumanResourceServiceImpl implements HumanResourceService {
 								(String) error.get("ERROR_INFO")));
 					}
 					if (!FrameTool.isEmpty(cellInfos)) {
+						//先清除错误提示列的内容，以防有些用户直接用上次的错误文件直接改后导入
+						ToolForExcel.cleanColumn(impFile, 4, 25);
 						ToolForExcel.randomWriteExcelFile(impFile, cellInfos);
 						rtn.addInfo("batchId", batchId);
 						rtn.setDefaultValue(cellInfos.size() + "行数据错误");

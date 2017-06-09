@@ -155,6 +155,30 @@ public class ToolForExcel {
 		}
 	}
 
+	public static void cleanColumn(File file, int startRow, int columnNum) throws IOException {
+		FileOutputStream fout = null;
+		try {
+			Workbook workbook = getWorkbookFromExcelFile(file);
+			if (workbook != null) {
+				Sheet worksheet = workbook.getSheetAt(0);
+				for (int rowIdx = startRow, maxRow = worksheet.getLastRowNum(); rowIdx <= maxRow; rowIdx++) {
+					Row row = worksheet.getRow(rowIdx);
+					if (row != null) {
+						Cell cell = row.getCell(columnNum);
+						if (cell != null) {
+							row.removeCell(cell);
+						}
+					}
+				}
+				fout = new FileOutputStream(file);
+				workbook.write(fout);
+				workbook.close();
+			}
+		} finally {
+			fout.close();
+		}
+	}
+
 	public static void allRowSetStyle(HSSFRow row, CellStyle style) {
 		for (int colIdx = 0; colIdx < row.getLastCellNum(); colIdx++) {
 			HSSFCell cell = row.getCell(colIdx);

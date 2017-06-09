@@ -97,14 +97,13 @@
 						value="${NATION }" /></td>
 					<td style="width: 10%; text-align: right">是否为劳动力:</td>
 					<td style="width: 23%; text-align: left"><input
-						class="easyui-combobox" name="LD_TYPE" style="width: 100%"
+						class="easyui-combobox" name="LD_TYPE" style="width: 100%" value="${LD_TYPE }"
 						data-options="
 					url:'frame/loadCode.do?codeName=boolean',
 					method:'post',
 					valueField:'id',
 					textField:'text',
-					panelHeight:auto, editable:false"
-						value="${LD_TYPE }" /></td>
+					panelHeight:'auto', editable:false" /></td>
 					<td style="width: 10%; text-align: right">有就业意愿:</td>
 					<td style="width: 23%; text-align: left"><input
 						class="easyui-combobox" name="IS_WANT_JOB" id="IS_WANT_JOB_Mdy"
