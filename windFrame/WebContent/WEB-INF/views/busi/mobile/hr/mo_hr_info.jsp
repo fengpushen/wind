@@ -81,18 +81,8 @@
 			</div>
 			<div style="margin-bottom: 10px">
 				<input class="easyui-textbox" id="HJ_AREA_NAME"
-					data-options="label:'户籍地', buttonText:'选择', editable:false, onClickButton:showAreaTree, onClick:showAreaTree"
-					style="width: 100%" value="${HJ_AREA_NAME }">
-			</div>
-			<div style="margin-bottom: 10px">
-				<input class="easyui-combobox" name="HJ_TYPE" style="width: 100%"
-					data-options="
-					url:'frame/loadCode.do?codeName=hj_type',
-					method:'post',
-					valueField:'id',
-					textField:'text',
-					panelHeight:'auto', editable:false, label:'户口性质'"
-					value="${HJ_TYPE }" />
+					data-options="label:'户籍地'" style="width: 100%"
+					value="${HJ_AREA_NAME }">
 			</div>
 			<div style="margin-bottom: 10px">
 				<input class="easyui-textbox" name="SCHOOL"
@@ -121,8 +111,8 @@
 			</div>
 			<div style="margin-bottom: 10px">
 				<input class="easyui-textbox" id="WANT_JOB_AREA_NAME"
-					data-options="buttonText:'选择',onClickButton:showWantAreaTree,onClick:showWantAreaTree, editable:false,label:'意向工作地'"
-					style="width: 100%">
+					data-options="label:'意向工作地'" style="width: 100%"
+					value="${WANT_JOB_AREA_NAME }">
 			</div>
 			<div style="margin-bottom: 10px">
 				<input class="easyui-textbox" name="WANT_JOB_NAME"
@@ -136,14 +126,7 @@
 			</div>
 			<div style="margin-bottom: 10px">
 				<input class="easyui-combobox" name="want_job.service_codes"
-					id="service_codes" style="width: 80%"
-					data-options="
-					url:'frame/loadCode.do?codeName=service_code',
-					method:'post',
-					valueField:'id',
-					textField:'text',
-					multiple:true,
-					panelHeight:'auto', editable:false,label:'就业服务需求'" />
+					id="service_codes" style="width: 100%" />
 			</div>
 		</form>
 		<div style="text-align: center; margin-top: 30px">
@@ -153,9 +136,10 @@
 		</div>
 		<footer style="padding: 2px 3px">
 			<a href="javascript:void(0)" class="easyui-linkbutton" plain="true"
-				outline="true" onclick="showMobileHrJobNOjobMgeUI()" style="width: 70px">入离职登记</a> <a
-				href="javascript:void(0)" class="easyui-linkbutton" plain="true"
-				outline="true" onclick="unbind()" style="width: 60px">解除绑定</a>
+				outline="true" onclick="showMobileHrJobNOjobMgeUI()"
+				style="width: 70px">入离职登记</a> <a href="javascript:void(0)"
+				class="easyui-linkbutton" plain="true" outline="true"
+				onclick="unbind()" style="width: 60px">解除绑定</a>
 		</footer>
 
 	</div>
@@ -167,7 +151,7 @@
 		</ul>
 		<div id="hjButtons" style="text-align: center;">
 			<a href="javascript:void(0)" class="easyui-linkbutton"
-				onclick="cleanHj()" style="width: 80px">清除</a> <a
+				id="cleanHjBtn" style="width: 80px">清除</a> <a
 				href="javascript:void(0)" class="easyui-linkbutton"
 				onclick="$('#dlg').dialog('close')" style="width: 80px">关闭</a>
 		</div>
@@ -180,7 +164,7 @@
 		</ul>
 		<div id="wantButtons" style="text-align: center;">
 			<a href="javascript:void(0)" class="easyui-linkbutton"
-				onclick="cleanWant()" style="width: 80px">清除</a> <a
+				id="cleanWantBtn" style="width: 80px">清除</a> <a
 				href="javascript:void(0)" class="easyui-linkbutton"
 				onclick="$('#dlgWantArea').dialog('close')" style="width: 80px">关闭</a>
 		</div>
@@ -194,37 +178,34 @@
 		function showMobileHrCenterUI() {
 			window.location.href = baseHref + "busi/hr/showMobileHrCenterUI.do";
 		}
-		function cleanHj() {
-			$("#HJ_AREA_NAME").textbox("setValue", "");
-			$("#HJ_AREA").val('');
-			$('#dlg').dialog('close');
-		}
-		function cleanWant() {
-			$("#WANT_JOB_AREA_NAME").textbox("setValue", "");
-			$("#WANT_JOB_AREA").val('');
-			$('#dlgWantArea').dialog('close');
-		}
-		function showAreaTree() {
-			$('#dlg').dialog('open');
-		}
-		function showWantAreaTree() {
-			$('#dlgWantArea').dialog('open');
-		}
 		function unbind() {
 			window.location.href = baseHref + "busi/hr/unbindHr.do";
 		}
 		$(function() {
+			var areaTreeWant = new AreaTree('dlgWantArea', 'WANT_JOB_AREA',
+					'WANT_JOB_AREA_NAME');
+			var areaTree = new AreaTree('dlg', 'HJ_AREA', 'HJ_AREA_NAME');
 			$('#areaTree').tree({
 				url : 'busi/common/loadTree.do',
 				method : 'post',
 				queryParams : {
-					'treeName' : 'busi_com_area_tree'
+					'treeName' : 'busi_com_area_tree',
+					'rootId' : '430900000000'
 				},
 				onClick : function(node) {
-					$("#HJ_AREA_NAME").textbox("setValue", node.text);
-					$("#HJ_AREA").val(node.id);
-					$('#dlg').dialog('close');
+					areaTree.nodeClick(node);
 				}
+			});
+			$('#HJ_AREA_NAME').textbox({
+				buttonText : '选择',
+				onClickButton : function() {
+					areaTree.showAreaTree();
+				},
+				onClick : function() {
+					areaTree.showAreaTree();
+				},
+				editable : false,
+				required : true
 			});
 			$('#areaWantTree').tree({
 				url : 'busi/common/loadTree.do',
@@ -233,9 +214,48 @@
 					'treeName' : 'busi_com_area_tree'
 				},
 				onClick : function(node) {
-					$("#WANT_JOB_AREA_NAME").textbox("setValue", node.text);
-					$("#WANT_JOB_AREA").val(node.id);
-					$('#dlgWantArea').dialog('close');
+					areaTreeWant.nodeClick(node);
+				}
+			});
+			$('#WANT_JOB_AREA_NAME').textbox({
+				buttonText : '选择',
+				onClickButton : function() {
+					areaTreeWant.showAreaTree();
+				},
+				onClick : function() {
+					areaTreeWant.showAreaTree();
+				},
+				editable : false
+			});
+			$("#cleanHjBtn").bind('click', function() {
+				areaTree.cleanChosed();
+			});
+			$("#cleanWantBtn").bind('click', function() {
+				areaTreeWant.cleanChosed();
+			});
+			var needServicesJson = '${needServicesJson}';
+			$("#service_codes").combobox({
+				label : '就业服务需求',
+				url : 'frame/loadCode.do?codeName=service_code',
+				method : 'post',
+				valueField : 'id',
+				textField : 'text',
+				multiple : true,
+				panelHeight : '200',
+				editable : false,
+				onLoadSuccess : function() {
+					if (needServicesJson != '') {
+						var services = eval('(' + needServicesJson + ')');
+						var val = $(this).combobox("getData");
+						for (var i = 0; i < val.length; i++) {
+							for (var j = 0; j < services.length; j++) {
+								if (services[j].SERVICE_CODE == val[i].id) {
+									$(this).combobox("select", val[i].id);
+									break;
+								}
+							}
+						}
+					}
 				}
 			});
 			$('#theForm')

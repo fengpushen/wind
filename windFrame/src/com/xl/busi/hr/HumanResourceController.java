@@ -312,11 +312,14 @@ public class HumanResourceController {
 	public ModelAndView showMobileHrInfoUI(HttpSession session) {
 
 		String hr_id = BusiCommon.getLoginAccountBusiId(session);
-		if (!FrameTool.isEmpty(hr_id)) {
-			Map info = humanResourceService.getHrInfo(hr_id);
-			if (!FrameTool.isEmpty(info)) {
-				return new ModelAndView("/busi/mobile/hr/mo_hr_info", info);
-			}
+
+		Map trans = null;
+		ExecuteResult rst = humanResourceService.loadHrInfo(hr_id);
+		if (rst.isSucc()) {
+			trans = (Map) rst.getInfoOne("hrInfo");
+			List<Map> needServices = (List<Map>) trans.get("needServices");
+			trans.put("needServicesJson", FrameTool.toJson(needServices));
+			return new ModelAndView("/busi/mobile/hr/mo_hr_info", trans);
 		}
 		return unbindHr();
 	}
