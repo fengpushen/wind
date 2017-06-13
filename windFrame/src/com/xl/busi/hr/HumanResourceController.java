@@ -61,6 +61,24 @@ public class HumanResourceController {
 		return null;
 	}
 
+	@ResponseBody
+	@RequestMapping(value = "/searchHrListCom.do")
+	public String searchHrListCom(HttpSession session, HttpServletRequest request) {
+
+		Map<String, Object> info = FrameTool.getRequestParameterMap(request);
+		String hj_area = (String) info.get("HJ_AREA");
+		if (!FrameTool.isEmpty(hj_area)) {
+			BusiCommon.dealAreaBj(info, "HJ_AREA");
+		}
+
+		ExecuteResult rst = humanResourceService.searchHrListCom(info);
+		if (rst.isSucc()) {
+			Map map = (Map) rst.getInfoOne("info");
+			return FrameTool.toJson(map);
+		}
+		return null;
+	}
+
 	@RequestMapping("/showHrInfo")
 	public ModelAndView showHrInfo() {
 
@@ -102,6 +120,13 @@ public class HumanResourceController {
 			trans.put("needServicesJson", FrameTool.toJson(needServices));
 		}
 		return new ModelAndView("/busi/hr/hr_info_mdy", trans);
+	}
+	
+	
+	
+	@RequestMapping(value = "/showHrSearch.do")
+	public ModelAndView showHrSearch() {
+		return new ModelAndView("/busi/hr/hr_search");
 	}
 
 	@ResponseBody
@@ -334,8 +359,8 @@ public class HumanResourceController {
 					+ FilenameUtils.getExtension(file.getOriginalFilename());
 			File newFile = new File(path);
 			file.transferTo(newFile);
-			rst = humanResourceService.batchImpHrInfo(batchId, newFile, BusiCommon.getLoginAccountId(session),BusiCommon.getLoginAccountKind(session),
-					BusiCommon.getLoginAccountStaffArea(session));
+			rst = humanResourceService.batchImpHrInfo(batchId, newFile, BusiCommon.getLoginAccountId(session),
+					BusiCommon.getLoginAccountKind(session), BusiCommon.getLoginAccountStaffArea(session));
 		} catch (IOException e) {
 			log.error("batchImpHrInfo", e);
 		}

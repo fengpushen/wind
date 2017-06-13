@@ -4,8 +4,10 @@ import java.io.File;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -321,9 +323,36 @@ public class HumanResourceServiceImpl implements HumanResourceService {
 		return rtn;
 	}
 
+	public ExecuteResult searchHrListCom(Map<String, Object> params) {
+		// 企业查询人员信息只能查询有就业意愿的劳动力
+		params.put("LD_TYPE", FrameConstant.busi_com_boolean_true);
+		params.put("IS_WANT_JOB", FrameConstant.busi_com_boolean_true);
+		return loadHrList(params);
+	}
+
+	private Set<String> getSetFromString(String s) {
+		if (!FrameTool.isEmpty(s)) {
+			String[] sa = s.split(",");
+			Set<String> set = new HashSet<String>();
+			for (String str : sa) {
+				set.add(str);
+			}
+			return set;
+		}
+		return null;
+	}
+
 	public ExecuteResult loadHrList(Map<String, Object> params) {
 		ExecuteResult rtn = new ExecuteResult();
 		try {
+			String jntc = (String) params.get("JNTC");
+			if (!FrameTool.isEmpty(jntc)) {
+				params.put("jntcSet", getSetFromString(jntc));
+			}
+			String want_job_name = (String) params.get("WANT_JOB_NAME");
+			if (!FrameTool.isEmpty(want_job_name)) {
+				params.put("wantJobNameSet", getSetFromString(want_job_name));
+			}
 			Map info = new HashMap();
 			int total = frameDAO.selectRecord_count("selectBusi_hr", params);
 			info.put("total", total);
@@ -446,7 +475,7 @@ public class HumanResourceServiceImpl implements HumanResourceService {
 								(String) error.get("ERROR_INFO")));
 					}
 					if (!FrameTool.isEmpty(cellInfos)) {
-						//先清除错误提示列的内容，以防有些用户直接用上次的错误文件直接改后导入
+						// 先清除错误提示列的内容，以防有些用户直接用上次的错误文件直接改后导入
 						ToolForExcel.cleanColumn(impFile, 4, 25);
 						ToolForExcel.randomWriteExcelFile(impFile, cellInfos);
 						rtn.addInfo("batchId", batchId);

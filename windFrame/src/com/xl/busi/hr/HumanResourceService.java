@@ -39,4 +39,6 @@ public interface HumanResourceService {
 	ExecuteResult batchImpHrInfo(String batchId, File impFile, String oprId, String orpKind, String oprArea);
 
 	String getBatchImpHrErrorFilePath(String batch_id);
+
+	ExecuteResult searchHrListCom(Map<String, Object> params);
 }

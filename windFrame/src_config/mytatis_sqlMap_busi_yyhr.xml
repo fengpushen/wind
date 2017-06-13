@@ -38,6 +38,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="IS_JOB != null and IS_JOB != ''">
 				and IS_JOB = #{IS_JOB}
 			</if>
+			<if test="jntcSet != null">
+				and hr_id in 
+				<foreach collection="jntcSet" index="index" item="item" open="(" separator="union all" close=")">
+              		select hr_id from v_hr_jntc where UTL_MATCH.edit_distance_similarity(v_hr_jntc.jntc, #{item}) >= 60      
+        		</foreach>  
+			</if>
+			<if test="wantJobNameSet != null">
+				and hr_id in 
+				<foreach collection="wantJobNameSet" index="index" item="item" open="(" separator="union all" close=")">
+              		select hr_id from V_HR_WANT_JOB_NAME where UTL_MATCH.edit_distance_similarity(V_HR_WANT_JOB_NAME.WANT_JOB_NAME, #{item}) >= 60      
+        		</foreach>  
+			</if>
 			<if test="IS_WANT_JOB != null and IS_WANT_JOB != ''">
 				and IS_WANT_JOB = #{IS_WANT_JOB}
 			</if>
