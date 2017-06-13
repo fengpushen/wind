@@ -118,7 +118,7 @@
 					try{
 						var rst = eval('(' + data + ')');
 						if (rst.isSucc) {
-							showOprTip('oprTipMge', '操作成功', 'green');
+							$.messager.alert('提示', '操作成功');
 							closeJobnojobOpr();
 						} else {
 							var msg = '操作失败';

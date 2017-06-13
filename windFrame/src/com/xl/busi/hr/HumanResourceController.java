@@ -2,6 +2,7 @@ package com.xl.busi.hr;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -121,9 +122,7 @@ public class HumanResourceController {
 		}
 		return new ModelAndView("/busi/hr/hr_info_mdy", trans);
 	}
-	
-	
-	
+
 	@RequestMapping(value = "/showHrSearch.do")
 	public ModelAndView showHrSearch() {
 		return new ModelAndView("/busi/hr/hr_search");
@@ -174,6 +173,17 @@ public class HumanResourceController {
 	public ModelAndView showHrJobnojobMge(@RequestParam(required = true) String hr_id) {
 		Map hrInfo = humanResourceService.getHrInfo(hr_id);
 		return new ModelAndView("/busi/hr/hr_jobnojob_mge", hrInfo);
+	}
+
+	@RequestMapping("/showHrInfoDetailCom")
+	public ModelAndView showHrInfoDetailCom(HttpSession session, @RequestParam(required = true) String hr_id) {
+		Map hrInfo = null;
+		try {
+			hrInfo = humanResourceService.getHrInfoCom(BusiCommon.getLoginAccountBusiId(session), hr_id);
+		} catch (SQLException e) {
+			log.error("showHrInfoDetailCom", e);
+		}
+		return new ModelAndView("/busi/hr/hr_info_detail", hrInfo);
 	}
 
 	@ResponseBody

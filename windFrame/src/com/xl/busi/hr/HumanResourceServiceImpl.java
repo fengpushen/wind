@@ -404,6 +404,17 @@ public class HumanResourceServiceImpl implements HumanResourceService {
 		return humanResourceDAO.selectBusi_hr(hr_id);
 	}
 
+	/*
+	 * 企业查看人员信息详情，需要记录查看情况
+	 */
+	public Map getHrInfoCom(String c_id, String hr_id) throws SQLException {
+		Map params = new HashMap();
+		params.put("c_id", c_id);
+		params.put("hr_id", hr_id);
+		frameDAO.anyInsert("BS_C_HR_VIEW_LOG", params);
+		return humanResourceDAO.selectBusi_hr(hr_id);
+	}
+
 	public void refreshHrJobStatus(String hr_id) throws SQLException {
 		Map jobInfo = humanResourceDAO.selectV_jobnojob_last_list(hr_id);
 		if (!FrameTool.isEmpty(jobInfo)) {

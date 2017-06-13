@@ -41,4 +41,6 @@ public interface HumanResourceService {
 	String getBatchImpHrErrorFilePath(String batch_id);
 
 	ExecuteResult searchHrListCom(Map<String, Object> params);
+
+	Map getHrInfoCom(String c_id, String hr_id) throws SQLException;
 }

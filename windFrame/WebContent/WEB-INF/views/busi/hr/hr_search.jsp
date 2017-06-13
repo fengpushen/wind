@@ -78,6 +78,9 @@
 			$('#datagrid').datagrid('options').url = "busi/hr/searchHrListCom.do";
 			$('#datagrid').datagrid('load', $("#qryForm").serializeJson());
 		}
+		function closeJobnojobOpr() {
+			$('#dd').dialog('close');
+		}
 		$(function() {
 			try {
 				var toolbar = [ {
@@ -91,12 +94,12 @@
 							$.messager.alert("", "请选中单条记录进行操作");
 						} else {
 							$('#dd').dialog({
-								title : '入离职登记',
+								title : '人员详情',
 								width : 1000,
 								height : 500,
 								closed : false,
 								cache : false,
-								href : 'busi/hr/showHrJobnojobMge.do',
+								href : 'busi/hr/showHrInfoDetailCom.do',
 								queryParams : {
 									'hr_id' : rows[0].HR_ID
 								},
@@ -107,7 +110,34 @@
 							});
 						}
 					}
-				} ];
+				}, {
+					text : '入职登记',
+					iconCls : 'icon-save',
+					handler : function() {
+						var rows = $('#datagrid').datagrid('getSelections');
+						if (rows == null || rows.length == 0) {
+							$.messager.alert("", "请选中要操作的记录");
+						} else if (rows.length > 1) {
+							$.messager.alert("", "请选中单条记录进行操作");
+						} else {
+							$('#dd').dialog({
+								title : '入职登记',
+								width : 1000,
+								height : 500,
+								closed : false,
+								cache : false,
+								href : 'busi/hr/showHrJobReg.do',
+								queryParams : {
+									'hr_id' : rows[0].HR_ID
+								},
+								modal : false,
+								onBeforeClose : function() {
+									loadDatagridData();
+								}
+							});
+						}
+					}
+				}];
 				$("#IS_JOB_LIST").combobox({
 					method : 'post',
 					valueField : 'id',

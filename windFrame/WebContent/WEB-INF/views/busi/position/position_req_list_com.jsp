@@ -9,35 +9,36 @@
 <title>岗位申请管理</title>
 <tags:commonHead />
 </head>
-<body>
-	<div class="easyui-panel" style="width: 100%; padding: 5px 5px;"
-		data-options="noheader:true">
-		<form id="qryForm" method="post">
-			<table style="width: 100%">
-				<tr>
-					<td style="width: 10%; text-align: right">岗位名称:</td>
-					<td style="width: 23%; text-align: left"><input
-						class="easyui-textbox" name="C_NAME_LIKE" style="width: 100%" /></td>
-					<td style="width: 10%; text-align: right">是否公开:</td>
-					<td style="width: 23%; text-align: left"><input
-						class="easyui-combobox" name="P_STATUS" style="width: 100%"
-						data-options="
+<body class="easyui-layout">
+	<div class="easyui-panel" data-options="noheader:true">
+		<div class="easyui-panel" data-options="noheader:true"
+			style="background-color: #E0EEEE;" id="divForm">
+			<form id="qryForm" method="post">
+				<table style="width: 100%">
+					<tr>
+						<td style="width: 10%; text-align: right">岗位名称:</td>
+						<td style="width: 23%; text-align: left"><input
+							class="easyui-textbox" name="C_NAME_LIKE" style="width: 100%" /></td>
+						<td style="width: 10%; text-align: right">是否公开:</td>
+						<td style="width: 23%; text-align: left"><input
+							class="easyui-combobox" name="P_STATUS" style="width: 100%"
+							data-options="
 					url:'frame/loadCode.do?codeName=boolean',
 					method:'post',
 					valueField:'id',
 					textField:'text',
 					panelHeight:'auto',editable:false"></td>
-					<td style="width: 33%; text-align: center"><a
-						href="javascript:void(0)" class="easyui-linkbutton"
-						onclick="loadDatagridData();" style="width: 80px">查询</a></td>
-				</tr>
-			</table>
-		</form>
-	</div>
-	<div>
+						<td style="width: 33%; text-align: center"><a
+							href="javascript:void(0)" class="easyui-linkbutton"
+							onclick="loadDatagridData();" style="width: 80px">查询</a></td>
+					</tr>
+				</table>
+			</form>
+		</div>
 		<table id="datagrid">
 		</table>
 	</div>
+
 
 	<script type="text/javascript">
 		var toolbar = [
@@ -52,7 +53,11 @@
 							$.messager.alert("", "请选中单条记录进行操作");
 						} else {
 							var req_id = rows[0].REQ_ID;
-							window.open(baseHref + "busi/position/showComPositionReqInterviewUI.do?req_id="+req_id, "_blank");   
+							window
+									.open(
+											baseHref
+													+ "busi/position/showComPositionReqInterviewUI.do?req_id="
+													+ req_id, "_blank");
 						}
 					}
 				},
@@ -259,7 +264,7 @@
 						title : '申请时间',
 						width : '8%',
 						align : 'center'
-					}] ],
+					} ] ],
 				});
 				loadDatagridData();
 			} catch (e) {
