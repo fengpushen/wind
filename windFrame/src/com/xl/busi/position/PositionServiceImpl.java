@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.xl.busi.BusiCommon;
 import com.xl.busi.company.CompanyDAO;
 import com.xl.busi.hr.HumanResourceDAO;
 import com.xl.frame.FrameDAO;
@@ -56,6 +57,14 @@ public class PositionServiceImpl implements PositionService {
 		ExecuteResult rtn = new ExecuteResult();
 		try {
 			params.put("VALID", "VALID");
+			String p_names = (String) params.get("p_names");
+			if (!FrameTool.isEmpty(p_names)) {
+				params.put("pNameSet", FrameTool.getSetFromString(p_names));
+			}
+			String p_work_area = (String) params.get("P_WORK_AREA");
+			if (!FrameTool.isEmpty(p_work_area)) {
+				params.put("P_WORK_AREA_LEVEL", BusiCommon.getAreaLevel(p_work_area));
+			}
 			Map info = new HashMap();
 			int total = frameDAO.selectRecord_count("selectBs_position", params);
 			info.put("total", total);

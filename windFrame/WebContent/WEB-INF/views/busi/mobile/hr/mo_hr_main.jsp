@@ -19,9 +19,9 @@
 					<a href="javascript:void(0)" class="easyui-linkbutton" plain="true"
 						outline="true" onclick="showMobileHrInfoUI()">个人信息</a> <a
 						href="javascript:void(0)" class="easyui-linkbutton" plain="true"
-						outline="true">职位搜索</a> <a href="javascript:void(0)"
-						class="easyui-linkbutton" plain="true" outline="true"
-						onclick="showMobilePositionHrReqsUI()">我申请的职位</a>
+						outline="true" onclick="showMobilePositionSearchUI()">职位搜索</a> <a
+						href="javascript:void(0)" class="easyui-linkbutton" plain="true"
+						outline="true" onclick="showMobilePositionHrReqsUI()">我申请的职位</a>
 				</div>
 
 			</div>
@@ -42,6 +42,10 @@
 		function showMobileHrInfoUI() {
 			window.location.href = baseHref + "busi/hr/showMobileHrInfoUI.do";
 		}
+		function showMobilePositionSearchUI() {
+			window.location.href = baseHref
+					+ "busi/position/showMobilePositionSearch.do";
+		}
 		$(function() {
 			var hr_id = localStorage.getItem("hr_id");
 			$('#datagrid')
@@ -59,14 +63,17 @@
 											+ "busi/position/showMobilePositionInfo.do?pid="
 											+ rowData.P_ID;
 								},
+								striped : true,
 								columns : [ [ {
 									field : 'P_ID',
 									"title" : "岗位信息",
-									width : '90%',
+									width : '99%',
 									align : 'left',
 									formatter : function(value, row, index) {
 										var space = "|";
 										var showValue = row.P_NAME;
+										showValue += "&nbsp;&nbsp;&nbsp;&nbsp;"
+										showValue += row.P_WORK_AREA_NAME;
 										showValue += "<br />";
 										showValue += row.C_NAME;
 										if (row.P_PAY_BOTTON != null

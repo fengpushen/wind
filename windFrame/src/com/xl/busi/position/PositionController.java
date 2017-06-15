@@ -1,6 +1,7 @@
 package com.xl.busi.position;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -180,7 +181,15 @@ public class PositionController {
 				String cid = (String) positionInfo.get("C_ID");
 				rst = companyService.loadComInfo(cid);
 				if (rst.isSucc()) {
-					positionInfo.put("comInfo", rst.getInfoOne("comInfo"));
+					Map comInfo = (Map) rst.getInfoOne("comInfo");
+					positionInfo.put("comInfo", comInfo);
+					String cidWt = (String) comInfo.get("C_ID_WT");
+					if (!FrameTool.isEmpty(cidWt)) {
+						rst = companyService.loadComInfo(cidWt);
+						if (rst.isSucc()) {
+							positionInfo.put("comWtInfo", rst.getInfoOne("comInfo"));
+						}
+					}
 				}
 			}
 		}
@@ -259,13 +268,13 @@ public class PositionController {
 		return null;
 	}
 
-	@RequestMapping("/showComPositionReqMgeUI")
+	@RequestMapping("/showComPositionReqMgeUI.do")
 	public ModelAndView showComPositionReqMgeUI() {
 
 		return new ModelAndView("/busi/position/position_req_list_com");
 	}
 
-	@RequestMapping("/showComPositionReqInterviewUI")
+	@RequestMapping("/showComPositionReqInterviewUI.do")
 	public ModelAndView showComPositionReqInterviewUI(@RequestParam(required = true) String req_id) {
 
 		Map trans = new HashMap();
@@ -276,13 +285,40 @@ public class PositionController {
 		return new ModelAndView("/busi/position/position_req_interview_com", trans);
 	}
 
-	@RequestMapping("/showMobilePositionInterview")
+	@RequestMapping("/showMobilePositionInterview.do")
 	public ModelAndView showMobilePositionInterview(@RequestParam(required = true) String room) {
 
 		Map trans = new HashMap();
 		trans.put("room", room);
 		trans.put("rtmp_url", FrameCache.getFrameConfig("rtmp_url"));
 		return new ModelAndView("/busi/mobile/hr/mo_hr_interview", trans);
+	}
+
+	@RequestMapping("/showMobilePositionSearch.do")
+	public ModelAndView showMobilePositionSearch() {
+
+		Map trans = new HashMap();
+		return new ModelAndView("/busi/mobile/hr/mo_position_search", trans);
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/searchMobilePositionValidList.do")
+	public String searchMobilePositionValidList(HttpServletRequest request) {
+
+		Map<String, Object> info = FrameTool.getRequestParameterMap(request);
+		ExecuteResult rst = positionService.loadPositionValidList(info);
+		if (rst.isSucc()) {
+			Map map = (Map) rst.getInfoOne("info");
+			return FrameTool.toJson(map);
+		}
+		return null;
+	}
+	
+	@RequestMapping(value = "/searchMobilePositionValidListUI.do")
+	public ModelAndView searchMobilePositionValidListUI(HttpServletRequest request) {
+
+		Map<String, Object> info = FrameTool.getRequestParameterMap(request);
+		return new ModelAndView("/busi/mobile/hr/mo_position_search_result", info);
 	}
 
 }

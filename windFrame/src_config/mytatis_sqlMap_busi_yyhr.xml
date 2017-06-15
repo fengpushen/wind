@@ -204,9 +204,37 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="P_NAME != null and P_NAME != ''">
 				and P_NAME = #{P_NAME}
 			</if>
+			<if test="pNameSet != null">
+			    and
+				<foreach collection="pNameSet" item="item" open="(" separator="or" close=")">
+              		UTL_MATCH.edit_distance_similarity(P_NAME, #{item}) >= 60      
+        		</foreach>  
+			</if>
 			<if test="VALID != null and VALID != ''">
 				and P_STATUS = '1' and end_time >= to_char(sysdate,
 				'yyyy-mm-dd')
+			</if>
+			<if test="pay_botton_bgn != null and pay_botton_bgn != ''">
+				and pay_botton >= #{pay_botton_bgn}
+			</if>
+			<if test="P_WORK_AREA != null and P_WORK_AREA != ''">
+				<choose>
+					<when test="P_WORK_AREA_LEVEL == 0">
+						and p_work_area_province_code = #{P_WORK_AREA}
+					</when>
+					<when test="P_WORK_AREA_LEVEL == 1">
+						and p_work_area_city_code = #{P_WORK_AREA}
+					</when>
+					<when test="P_WORK_AREA_LEVEL == 2">
+						and p_work_area_country_code = #{P_WORK_AREA}
+					</when>
+					<when test="P_WORK_AREA_LEVEL == 3">
+						and p_work_area_street_code = #{P_WORK_AREA}
+					</when>
+					<when test="P_WORK_AREA_LEVEL == 4">
+						and p_work_area_village_code = #{P_WORK_AREA}
+					</when>
+				</choose>
 			</if>
 		</where>
 		order by v_bs_position.in_time desc

@@ -18,7 +18,7 @@
 			<div class="m-toolbar">
 				<div class="m-left">
 					<a href="javascript:void(0)" class="easyui-linkbutton" plain="true"
-						outline="true" onclick="history.back()">退回</a>
+						outline="true" onclick="history.back()">返回</a>
 				</div>
 
 			</div>
@@ -90,6 +90,28 @@
 				<p>企业介绍</p>
 				<p>${comInfo.C_INTRO}</p>
 			</div>
+			<c:if test="${ comWtInfo != null}">
+				<div title="中介信息" style="padding: 10px">
+					<p style="font-size: 14px">${comWtInfo.C_NAME }</p>
+					<table>
+						<tr>
+							<td style="width: 20%">地址</td>
+							<td style="width: 80%" colspan="3">${comWtInfo.C_ADDRESS }</td>
+						</tr>
+						<tr>
+							<td style="width: 20%">成立时间</td>
+							<td style="width: 30%">${comWtInfo.C_CREATETIME}</td>
+							<td style="width: 20%">员工规模</td>
+							<td style="width: 30%">${comWtInfo.C_DIMENSIONS}</td>
+						</tr>
+					</table>
+					<hr
+						style="FILTER: alpha(opacity = 100, finishopacity = 0, style = 3)"
+						width="95%" color='#987cb9' size='3' />
+					<p>企业介绍</p>
+					<p>${comWtInfo.C_INTRO}</p>
+				</div>
+			</c:if>
 		</div>
 		<div id="jobnojobOpr"></div>
 		<footer style="padding: 2px 3px">

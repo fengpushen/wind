@@ -330,28 +330,16 @@ public class HumanResourceServiceImpl implements HumanResourceService {
 		return loadHrList(params);
 	}
 
-	private Set<String> getSetFromString(String s) {
-		if (!FrameTool.isEmpty(s)) {
-			String[] sa = s.split(",");
-			Set<String> set = new HashSet<String>();
-			for (String str : sa) {
-				set.add(str);
-			}
-			return set;
-		}
-		return null;
-	}
-
 	public ExecuteResult loadHrList(Map<String, Object> params) {
 		ExecuteResult rtn = new ExecuteResult();
 		try {
 			String jntc = (String) params.get("JNTC");
 			if (!FrameTool.isEmpty(jntc)) {
-				params.put("jntcSet", getSetFromString(jntc));
+				params.put("jntcSet", FrameTool.getSetFromString(jntc));
 			}
 			String want_job_name = (String) params.get("WANT_JOB_NAME");
 			if (!FrameTool.isEmpty(want_job_name)) {
-				params.put("wantJobNameSet", getSetFromString(want_job_name));
+				params.put("wantJobNameSet", FrameTool.getSetFromString(want_job_name));
 			}
 			Map info = new HashMap();
 			int total = frameDAO.selectRecord_count("selectBusi_hr", params);

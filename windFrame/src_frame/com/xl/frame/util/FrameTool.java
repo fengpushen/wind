@@ -12,8 +12,10 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -246,6 +248,23 @@ public final class FrameTool {
 		} else {
 			return new String(str.getBytes(FrameConstant.frame_sys_charset), "iso-8859-1");
 		}
+	}
+
+	/**
+	 * 从逗号分隔的字符串中生成字符串的set
+	 * @param s
+	 * @return
+	 */
+	public static Set<String> getSetFromString(String s) {
+		if (!FrameTool.isEmpty(s)) {
+			String[] sa = s.split(",");
+			Set<String> set = new HashSet<String>();
+			for (String str : sa) {
+				set.add(str);
+			}
+			return set;
+		}
+		return null;
 	}
 
 }
