@@ -419,16 +419,18 @@ public class HumanResourceServiceImpl implements HumanResourceService {
 			idcard = idcard.toUpperCase();
 			Map info = humanResourceDAO.selectBusi_hrByIdcard(idcard);
 			if (FrameTool.isEmpty(info)) {
-				String hr_id = FrameTool.getUUID();
-				Map params = new HashMap();
-				params.put("HR_ID", hr_id);
-				params.put("HR_NAME", hr_name);
-				params.put("IDCARD", idcard);
-				params.put("IS_WANT_JOB", FrameConstant.busi_com_boolean_true);
-				params.put("OPR_ID", hr_id);
-				params.put("OPR_TYPE", FrameConstant.busi_user_kind_hr);
-				frameDAO.anyInsert("busi_hr", params);
-				rtn.addInfo("hr_id", hr_id);
+//				String hr_id = FrameTool.getUUID();
+//				Map params = new HashMap();
+//				params.put("HR_ID", hr_id);
+//				params.put("HR_NAME", hr_name);
+//				params.put("IDCARD", idcard);
+//				params.put("IS_WANT_JOB", FrameConstant.busi_com_boolean_true);
+//				params.put("OPR_ID", hr_id);
+//				params.put("OPR_TYPE", FrameConstant.busi_user_kind_hr);
+//				frameDAO.anyInsert("busi_hr", params);
+//				rtn.addInfo("hr_id", hr_id);
+				rtn.setDefaultValue("没有此身份证号码的信息");
+				return rtn;
 			} else {
 				String hr_name_cur = (String) info.get("HR_NAME");
 				if (!hr_name_cur.equals(hr_name)) {

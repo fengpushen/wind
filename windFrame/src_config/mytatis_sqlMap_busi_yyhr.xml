@@ -252,7 +252,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select
 		<if test="record_count == null">
 			v_bs_position_req.*, bs_position.p_name,
-			bs_company.c_name, busi_hr.hr_name, room_no
+			bs_company.c_name, V_BUSI_HR.hr_name, V_BUSI_HR.age, V_BUSI_HR.sex_name, V_BUSI_HR.degree_name, V_BUSI_HR.jntc, V_BUSI_HR.hj_area_name
 		</if>
 		<if test="record_count != null">
 			count(1) as record_count
@@ -262,10 +262,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		on v_bs_position_req.P_ID = bs_position.P_ID
 		inner join bs_company
 		on bs_position.c_id = bs_company.c_id
-		inner join busi_hr
-		on busi_hr.hr_id = v_bs_position_req.HR_ID
-		left outer join v_POSITION_INTERVIEW_ROOM on
-		v_POSITION_INTERVIEW_ROOM.req_id = v_bs_position_req.req_id
+		inner join V_BUSI_HR
+		on V_BUSI_HR.hr_id = v_bs_position_req.HR_ID
 		<where>
 			<if test="P_ID != null and P_ID != ''">
 				v_bs_position_req.P_ID = #{P_ID}
@@ -275,6 +273,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			</if>
 			<if test="C_ID != null and C_ID != ''">
 				and bs_company.C_ID = #{C_ID}
+			</if>
+			<if test="owner_id != null and owner_id != ''">
+				and (bs_company.C_ID = #{owner_id} or bs_company.c_type = '4' and c_id_wt = #{owner_id})
 			</if>
 		</where>
 		order by v_bs_position_req.in_time desc

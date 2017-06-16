@@ -89,7 +89,7 @@
 				<td style="width: 10%; text-align: right">技能特长:</td>
 				<td style="width: 56%; text-align: left" colspan="3"><input
 					class="easyui-textbox" name="JNTC" style="width: 95%"
-					data-options="disabled:true" /></td>
+					data-options="disabled:true" value="${JNTC }"/></td>
 			</tr>
 		</table>
 

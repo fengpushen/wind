@@ -1,7 +1,6 @@
 package com.xl.busi.position;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -259,7 +258,7 @@ public class PositionController {
 	public String loadCorpReqList(HttpSession session, HttpServletRequest request) {
 
 		Map<String, Object> info = FrameTool.getRequestParameterMap(request);
-		info.put("C_ID", BusiCommon.getLoginAccountBusiId(session));
+		info.put("owner_id", BusiCommon.getLoginAccountBusiId(session));
 		ExecuteResult rst = positionService.loadReqList(info);
 		if (rst.isSucc()) {
 			Map map = (Map) rst.getInfoOne("info");
@@ -313,7 +312,7 @@ public class PositionController {
 		}
 		return null;
 	}
-	
+
 	@RequestMapping(value = "/searchMobilePositionValidListUI.do")
 	public ModelAndView searchMobilePositionValidListUI(HttpServletRequest request) {
 

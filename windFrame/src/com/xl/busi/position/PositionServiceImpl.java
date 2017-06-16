@@ -228,14 +228,7 @@ public class PositionServiceImpl implements PositionService {
 					if (!FrameTool.isEmpty(hrInfo)) {
 						rtn.addInfo("hrInfo", hrInfo);
 						rtn.addInfo("rtmp_url", FrameCache.getFrameConfig("rtmp_url"));
-						String roomNo = FrameTool.getUUID();
-						Map params = new HashMap();
-						params.put("req_id", req_id);
-						params.put("P_ID", pid);
-						params.put("hr_id", hr_id);
-						params.put("ROOM_NO", roomNo);
-						frameDAO.anyInsert("bs_position_interview_room", params);
-						rtn.addInfo("room", roomNo);
+						rtn.addInfo("room", req_id);
 						rtn.setSucc(true);
 					}
 				}
