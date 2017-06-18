@@ -10,6 +10,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import com.xl.busi.BusiCommon;
 import com.xl.busi.company.CompanyDAO;
@@ -219,6 +220,7 @@ public class PositionServiceImpl implements PositionService {
 		try {
 			Map reqInfo = positionDAO.selectBs_position_reqById(req_id);
 			if (!FrameTool.isEmpty(reqInfo)) {
+				rtn.addInfo("req_id", req_id);
 				String pid = (String) reqInfo.get("P_ID");
 				String hr_id = (String) reqInfo.get("HR_ID");
 				Map positionInfo = positionDAO.selectBs_positionById(pid);
@@ -235,6 +237,49 @@ public class PositionServiceImpl implements PositionService {
 			}
 		} catch (Exception e) {
 			log.error("bgnPostionReqInterview", e);
+		}
+		return rtn;
+	}
+
+	public ExecuteResult loadComPostionReqDetail(String req_id, String c_id) {
+		ExecuteResult rtn = bgnPostionReqInterview(req_id);
+		if (rtn.isSucc()) {
+			Map hrInfo = (Map) rtn.getInfoOne("hrInfo");
+			String hr_id = (String) hrInfo.get("HR_ID");
+			Map params = new HashMap();
+			params.put("c_id", c_id);
+			params.put("hr_id", hr_id);
+			try {
+				frameDAO.anyInsert("BS_C_HR_VIEW_LOG", params);
+			} catch (SQLException e) {
+				log.error("", e);
+			}
+		}
+		return rtn;
+	}
+
+	@Transactional(rollbackFor = Exception.class)
+	public ExecuteResult changeReqsStatus(String[] req_ids, String req_status) {
+		ExecuteResult rtn = new ExecuteResult();
+		for (String req_id : req_ids) {
+			rtn = changeReqStatus(req_id, req_status);
+			if (!rtn.isSucc()) {
+				TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+				break;
+			}
+		}
+		return rtn;
+	}
+
+	public ExecuteResult changeReqStatus(String req_id, String req_status) {
+		ExecuteResult rtn = new ExecuteResult();
+		try {
+			Map params = new HashMap();
+			params.put("req_status", req_status);
+			frameDAO.anyUpdateByPk("bs_position_req", params, req_id);
+			rtn.setSucc(true);
+		} catch (Exception e) {
+			log.error("changeReqStatus", e);
 		}
 		return rtn;
 	}

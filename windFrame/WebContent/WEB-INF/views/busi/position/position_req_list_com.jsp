@@ -18,16 +18,11 @@
 					<tr>
 						<td style="width: 10%; text-align: right">岗位名称:</td>
 						<td style="width: 23%; text-align: left"><input
-							class="easyui-textbox" name="C_NAME_LIKE" style="width: 100%" /></td>
-						<td style="width: 10%; text-align: right">是否公开:</td>
+							class="easyui-textbox" name="P_NAME_LIKE" style="width: 100%" /></td>
+						<td style="width: 10%; text-align: right">申请状态:</td>
 						<td style="width: 23%; text-align: left"><input
-							class="easyui-combobox" name="P_STATUS" style="width: 100%"
-							data-options="
-					url:'frame/loadCode.do?codeName=boolean',
-					method:'post',
-					valueField:'id',
-					textField:'text',
-					panelHeight:'auto',editable:false"></td>
+							class="easyui-combobox" name="req_status" id="req_status"
+							style="width: 100%"></td>
 						<td style="width: 33%; text-align: center"><a
 							href="javascript:void(0)" class="easyui-linkbutton"
 							onclick="loadDatagridData();" style="width: 80px">查询</a></td>
@@ -39,18 +34,86 @@
 		</table>
 	</div>
 
+	<div id="dd"></div>
+
 
 	<script type="text/javascript">
 		function loadDatagridData() {
 			$('#datagrid').datagrid('options').url = "busi/position/loadCorpReqList.do";
 			$('#datagrid').datagrid('load', $("#qryForm").serializeJson());
 		}
+		function batchChangeReqStatus(status_code, status_name) {
+			var rows = $('#datagrid').datagrid('getSelections');
+			if (rows == null || rows.length == 0) {
+				$.messager.alert("", "请选中要操作的记录");
+			} else {
+				var ids = [];
+				for (var i = 0; i < rows.length; i++) {
+					ids.push(rows[i].REQ_ID);
+				}
+				var msg = '你确定要设置这' + ids.length + '个申请为' + status_name + '？';
+				$.messager.confirm('Confirm', msg, function(r) {
+					if (r) {
+						$.ajax({
+							type : "post",
+							url : "busi/position/changeReqsStatus.do",
+							dataType : "json",
+							data : {
+								'ids' : ids,
+								'req_status' : status_code
+							},
+							success : function(rst) {
+								if (rst.isSucc) {
+									$.messager.alert("", "操作成功");
+								} else {
+									var msg = '操作失败';
+									if (rst.info.INFO_KEY_DEFAULT != null) {
+										msg = msg + ','
+												+ rst.info.INFO_KEY_DEFAULT;
+									}
+									$.messager.alert("", msg);
+								}
+								loadDatagridData();
+							}
+						});
+					}
+				});
+			}
+		}
 		$(function() {
 			try {
+				var req_status = "${req_status}";
+				$("#req_status").combobox({
+					method : 'post',
+					valueField : 'id',
+					textField : 'text',
+					panelHeight : 'auto',
+					editable : false,
+					onLoadSuccess : function() {
+						$(this).combobox("select", req_status);
+						loadDatagridData();
+					},
+					loader : function(param, success, error) {
+						$.ajax({
+							url : 'frame/loadCode.do?codeName=req_status',
+							dataType : 'json',
+							success : function(data) {
+								data.unshift({
+									"text" : "请选择",
+									"id" : ""
+								});
+								success(data);
+							},
+							error : function() {
+								error.apply(this, arguments);
+							}
+						});
+					}
+				});
 				var toolbar = [
 						{
 							text : '视频面试',
-							iconCls : 'icon-add',
+							iconCls : 'icon-save',
 							handler : function() {
 								var rows = $('#datagrid').datagrid(
 										'getSelections');
@@ -69,66 +132,8 @@
 							}
 						},
 						{
-							text : '删除',
-							iconCls : 'icon-remove',
-							handler : function() {
-								var rows = $('#datagrid').datagrid(
-										'getSelections');
-								if (rows == null || rows.length == 0) {
-									$.messager.alert("", "请选中要操作的记录");
-								} else {
-									var ids = [];
-									var names = [];
-									for (var i = 0; i < rows.length; i++) {
-										ids.push(rows[i].P_ID);
-										names.push(rows[i].P_NAME);
-									}
-									var msg = '你确定要删除' + names.join(',') + "这"
-											+ names.length + "个职位？";
-									$.messager
-											.confirm(
-													'Confirm',
-													msg,
-													function(r) {
-														if (r) {
-															$
-																	.ajax({
-																		type : "post",
-																		url : "busi/position/delComPosition.do",
-																		dataType : "json",
-																		data : {
-																			'ids' : ids
-																		},
-																		success : function(
-																				rst) {
-																			if (rst.isSucc) {
-																				$.messager
-																						.alert(
-																								"",
-																								"操作成功");
-																			} else {
-																				var msg = '操作失败';
-																				if (rst.info.INFO_KEY_DEFAULT != null) {
-																					msg = msg
-																							+ ','
-																							+ rst.info.INFO_KEY_DEFAULT;
-																				}
-																				$.messager
-																						.alert(
-																								"",
-																								msg);
-																			}
-																			loadDatagridData();
-																		}
-																	});
-														}
-													});
-								}
-							}
-						},
-						{
-							text : '修改',
-							iconCls : 'icon-cut',
+							text : '查看详情',
+							iconCls : 'icon-save',
 							handler : function() {
 								try {
 									var rows = $('#datagrid').datagrid(
@@ -138,18 +143,18 @@
 									} else if (rows.length > 1) {
 										$.messager.alert("", "请选中单条记录进行操作");
 									} else {
-										var pid = rows[0].P_ID;
+										var req_id = rows[0].REQ_ID;
 										$('#dd')
 												.dialog(
 														{
-															title : '修改职位',
+															title : '申请详情',
 															width : 1000,
-															height : 450,
+															height : 500,
 															closed : false,
 															cache : false,
-															href : 'busi/position/showComPositionInfoSaveUI.do',
+															href : 'busi/position/showComPositionReqDetail.do',
 															queryParams : {
-																'pid' : pid
+																'req_id' : req_id
 															},
 															modal : false,
 															onBeforeClose : function() {
@@ -163,84 +168,52 @@
 							}
 						},
 						{
-							text : '公开',
-							iconCls : 'icon-remove',
+							text : '已通知',
+							iconCls : 'icon-save',
 							handler : function() {
-								var rows = $('#datagrid').datagrid(
-										'getSelections');
-								if (rows == null || rows.length == 0) {
-									$.messager.alert("", "请选中要操作的记录");
-								} else {
-									var ids = [];
-									for (var i = 0; i < rows.length; i++) {
-										ids.push(rows[i].P_ID);
-									}
-									$
-											.ajax({
-												type : "post",
-												url : "busi/position/pubPosition.do",
-												dataType : "json",
-												data : {
-													'ids' : ids
-												},
-												success : function(rst) {
-													if (rst.isSucc) {
-														$.messager.alert("",
-																"操作成功");
-													} else {
-														var msg = '操作失败';
-														if (rst.info.INFO_KEY_DEFAULT != null) {
-															msg = msg
-																	+ ','
-																	+ rst.info.INFO_KEY_DEFAULT;
-														}
-														$.messager.alert("",
-																msg);
-													}
-													loadDatagridData();
-												}
-											});
-								}
+								batchChangeReqStatus('03', '已通知');
 							}
 						},
 						{
-							text : '不公开',
-							iconCls : 'icon-remove',
+							text : '忽略',
+							iconCls : 'icon-save',
+							handler : function() {
+								batchChangeReqStatus('04', '忽略');
+							}
+						},
+						{
+							text : '符合条件',
+							iconCls : 'icon-save',
+							handler : function() {
+								batchChangeReqStatus('02', '符合条件');
+							}
+						},
+						{
+							text : '入职登记',
+							iconCls : 'icon-save',
 							handler : function() {
 								var rows = $('#datagrid').datagrid(
 										'getSelections');
 								if (rows == null || rows.length == 0) {
 									$.messager.alert("", "请选中要操作的记录");
+								} else if (rows.length > 1) {
+									$.messager.alert("", "请选中单条记录进行操作");
 								} else {
-									var ids = [];
-									for (var i = 0; i < rows.length; i++) {
-										ids.push(rows[i].P_ID);
-									}
-									$
-											.ajax({
-												type : "post",
-												url : "busi/position/unpubPosition.do",
-												dataType : "json",
-												data : {
-													'ids' : ids
-												},
-												success : function(rst) {
-													if (rst.isSucc) {
-														$.messager.alert("",
-																"操作成功");
-													} else {
-														var msg = '操作失败';
-														if (rst.info.INFO_KEY_DEFAULT != null) {
-															msg = msg
-																	+ ','
-																	+ rst.info.INFO_KEY_DEFAULT;
-														}
-														$.messager.alert("",
-																msg);
-													}
-													loadDatagridData();
-												}
-											});
+									$('#dd').dialog({
+										title : '入职登记',
+										width : 1000,
+										height : 300,
+										closed : false,
+										cache : false,
+										href : 'busi/position/showPositionReqJobReg.do',
+										queryParams : {
+											'req_id' : rows[0].REQ_ID
+										},
+										modal : false,
+										onBeforeClose : function() {
+											loadDatagridData();
+										}
+									});
 								}
 							}
 						} ];
@@ -274,6 +247,11 @@
 						width : '12%',
 						align : 'center'
 					}, {
+						field : 'REQ_STATUS_NAME',
+						title : '申请状态',
+						width : '8%',
+						align : 'center'
+					}, {
 						field : 'HJ_AREA_NAME',
 						title : '户籍地',
 						width : '8%',
@@ -300,7 +278,6 @@
 						align : 'center'
 					} ] ],
 				});
-				loadDatagridData();
 			} catch (e) {
 				alert(e);
 			}

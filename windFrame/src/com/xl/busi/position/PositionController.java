@@ -20,6 +20,7 @@ import com.xl.busi.company.CompanyService;
 import com.xl.busi.hr.HumanResourceService;
 import com.xl.frame.util.ExecuteResult;
 import com.xl.frame.util.FrameCache;
+import com.xl.frame.util.FrameConstant;
 import com.xl.frame.util.FrameTool;
 
 @Controller
@@ -269,8 +270,9 @@ public class PositionController {
 
 	@RequestMapping("/showComPositionReqMgeUI.do")
 	public ModelAndView showComPositionReqMgeUI() {
-
-		return new ModelAndView("/busi/position/position_req_list_com");
+		Map trans = new HashMap();
+		trans.put("req_status", FrameConstant.busi_req_status_wait_deal);
+		return new ModelAndView("/busi/position/position_req_list_com", trans);
 	}
 
 	@RequestMapping("/showComPositionReqInterviewUI.do")
@@ -318,6 +320,66 @@ public class PositionController {
 
 		Map<String, Object> info = FrameTool.getRequestParameterMap(request);
 		return new ModelAndView("/busi/mobile/hr/mo_position_search_result", info);
+	}
+
+	@RequestMapping("/showComPositionReqDetail.do")
+	public ModelAndView showComPositionReqDetail(HttpSession session, @RequestParam(required = true) String req_id) {
+
+		Map trans = new HashMap();
+		ExecuteResult rst = positionService.loadComPostionReqDetail(req_id, BusiCommon.getLoginAccountBusiId(session));
+		if (rst.isSucc()) {
+			trans = rst.getInfo();
+		}
+		return new ModelAndView("/busi/position/position_req_detail", trans);
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/changeReqStatus.do")
+	public String changeReqStatus(@RequestParam(required = true) String req_id,
+			@RequestParam(required = true) String req_status) {
+
+		ExecuteResult rst = positionService.changeReqStatus(req_id, req_status);
+		return FrameTool.toJson(rst);
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/changeReqsStatus.do")
+	public String changeReqsStatus(HttpServletRequest request, @RequestParam(required = true) String req_status) {
+		Map<String, Object> info = FrameTool.getRequestParameterMap(request);
+		Object delIds = info.get("ids[]");
+		ExecuteResult rst = positionService.changeReqsStatus(FrameTool.getStringArray(delIds), req_status);
+		return FrameTool.toJson(rst);
+	}
+
+	@RequestMapping("/showPositionReqJobReg.do")
+	public ModelAndView showPositionReqJobReg(@RequestParam(required = true) String req_id) {
+
+		Map trans = new HashMap();
+		ExecuteResult rst = positionService.loadPostionReqInfo(req_id);
+		if (rst.isSucc()) {
+			trans = rst.getInfo();
+		}
+		return new ModelAndView("/busi/position/position_req_job_reg", trans);
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/saveJobInfo.do")
+	public String saveJobInfo(HttpSession session, HttpServletRequest request,
+			@RequestParam(required = true) String req_id) {
+
+		ExecuteResult rst = new ExecuteResult();
+		try {
+			Map<String, Object> info = FrameTool.getRequestParameterMap(request);
+			rst = humanResourceService.saveJobInfo(BusiCommon.getLoginAccountId(session),
+					BusiCommon.getLoginAccountKind(session), info);
+			if (rst.isSucc()) {
+				rst = positionService.changeReqStatus(req_id, "05");
+			}
+		} catch (Exception e) {
+			rst.setDefaultValue("程序内部错误");
+			log.error("error", e);
+		}
+		return FrameTool.toJson(rst);
 	}
 
 }

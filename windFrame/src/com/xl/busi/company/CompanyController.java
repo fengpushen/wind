@@ -261,5 +261,10 @@ public class CompanyController {
 		}
 		return json;
 	}
+	
+	@RequestMapping("/showComRegJobList")
+	public ModelAndView showComRegJobList() {
+		return new ModelAndView("/busi/company/company_reg_job_list");
+	}
 
 }

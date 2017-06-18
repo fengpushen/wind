@@ -85,5 +85,10 @@ public final class FrameConstant {
 	 * 女性码值
 	 */
 	public static final String busi_sex_code_female = "2";
+	
+	/**
+	 * 求职申请状态之待处理的码值
+	 */
+	public static final String busi_req_status_wait_deal = "01";
 
 }
