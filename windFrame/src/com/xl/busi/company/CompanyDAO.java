@@ -11,4 +11,6 @@ public interface CompanyDAO {
 
 	Map selectBs_companyById(String c_id);
 
+	List<Map> selectBs_h_job(Map params);
+
 }

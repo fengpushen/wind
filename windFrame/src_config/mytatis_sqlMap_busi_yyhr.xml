@@ -96,6 +96,50 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			</if>
 		</where>
 	</select>
+	
+	<sql id="jobNojobDetail">
+		from v_jobnojob_list_name a inner join V_BUSI_HR b on a.hr_id = b.hr_id
+		<where>
+			<if test="HR_ID != null and HR_ID != ''">
+				a.hr_id = #{HR_ID}
+			</if>
+			<if test="opr_id != null and opr_id != ''">
+				and a.opr_id = #{opr_id}
+			</if>
+			<if test="in_time_bgn != null and in_time_bgn != ''">
+				and a.in_time >= to_date(#{in_time_bgn}, 'yyyy-mm-dd')
+			</if>
+			<if test="in_time_end != null and in_time_end != ''">
+				and a.in_time &lt; to_date(#{in_time_end}, 'yyyy-mm-dd')
+			</if>
+			<if test="HJ_AREA != null and HJ_AREA != ''">
+				<choose>
+					<when test="HJ_AREA_BJ != null and HJ_AREA_BJ  != ''">
+						and b.hj_area = #{HJ_AREA}
+					</when>
+					<otherwise>
+						<choose>
+							<when test="HJ_AREA_LEVEL == 0">
+								and b.province_code_hj = #{HJ_AREA}
+							</when>
+							<when test="HJ_AREA_LEVEL == 1">
+								and b.city_code_hj = #{HJ_AREA}
+							</when>
+							<when test="HJ_AREA_LEVEL == 2">
+								and b.country_code_hj = #{HJ_AREA}
+							</when>
+							<when test="HJ_AREA_LEVEL == 3">
+								and b.street_code_hj = #{HJ_AREA}
+							</when>
+							<when test="HJ_AREA_LEVEL == 4">
+								and b.village_code_hj = #{HJ_AREA}
+							</when>
+						</choose>
+					</otherwise>
+				</choose>
+			</if>
+		</where>
+	</sql>
 
 	<select id="selectBs_job_nojob" resultType="hashMap"
 		parameterType="hashMap">
@@ -109,21 +153,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<if test="record_count != null">
 			count(1) as record_count
 		</if>
-		from v_jobnojob_list_name a inner join V_BUSI_HR b on a.hr_id = b.hr_id
-		<where>
-			<if test="HR_ID != null and HR_ID != ''">
-				hr_id = #{HR_ID}
-			</if>
-			<if test="orp_id != null and orp_id != ''">
-				and orp_id = #{orp_id}
-			</if>
-			<if test="in_time_bgn != null and in_time_bgn != ''">
-				and in_time >= to_date(#{in_time_bgn}, 'yyyy-mm-dd')
-			</if>
-			<if test="in_time_end != null and in_time_end != ''">
-				and in_time &lt; to_date(#{in_time_end}, 'yyyy-mm-dd')
-			</if>
-		</where>
+		<include refid="jobNojobDetail"/>
 		order by job_time desc
 		<if test="record_count == null and page != null and page != ''">
 			)qry ) where rowidx > (#{page} - 1) * #{rows} and rowidx

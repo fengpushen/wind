@@ -17,17 +17,21 @@ public class CompanyDAOImpl implements CompanyDAO {
 	public List<Map> selectBs_company(Map params) {
 		return sqlSession.selectList("selectBs_company", params);
 	}
-	
-	public Map selectBs_companyByName(String c_name, String c_type){
+
+	public Map selectBs_companyByName(String c_name, String c_type) {
 		Map params = new HashMap();
 		params.put("C_NAME", c_name);
 		params.put("C_TYPE", c_type);
 		return sqlSession.selectOne("selectBs_company", params);
 	}
-	
-	public Map selectBs_companyById(String c_id){
+
+	public Map selectBs_companyById(String c_id) {
 		Map params = new HashMap();
 		params.put("C_ID", c_id);
 		return sqlSession.selectOne("selectBs_company", params);
+	}
+
+	public List<Map> selectBs_h_job(Map params) {
+		return sqlSession.selectList("selectBs_job_nojob", params);
 	}
 }

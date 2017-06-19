@@ -159,6 +159,22 @@ public class CompanyServiceImpl implements CompanyService {
 		return frameService.selectFrame_account(params);
 	}
 
+	public ExecuteResult loadComRegJobList(Map params) {
+		ExecuteResult rtn = new ExecuteResult();
+		try {
+			Map info = new HashMap();
+			int total = frameDAO.selectRecord_count("selectBs_job_nojob", params);
+			info.put("total", total);
+			List<Map> rows = companyDAO.selectBs_h_job(params);
+			info.put("rows", rows);
+			rtn.addInfo("info", info);
+			rtn.setSucc(true);
+		} catch (Exception e) {
+			log.error("loadHrList", e);
+		}
+		return rtn;
+	}
+
 	private boolean comNameExits(String c_id, String c_name, String c_type) {
 		Map com = companyDAO.selectBs_companyByName(c_name, c_type);
 		if (FrameTool.isEmpty(com)) {

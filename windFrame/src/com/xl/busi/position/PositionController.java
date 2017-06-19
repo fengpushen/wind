@@ -370,7 +370,7 @@ public class PositionController {
 		ExecuteResult rst = new ExecuteResult();
 		try {
 			Map<String, Object> info = FrameTool.getRequestParameterMap(request);
-			rst = humanResourceService.saveJobInfo(BusiCommon.getLoginAccountId(session),
+			rst = humanResourceService.saveJobInfo(BusiCommon.getLoginAccountBusiId(session),
 					BusiCommon.getLoginAccountKind(session), info);
 			if (rst.isSucc()) {
 				rst = positionService.changeReqStatus(req_id, "05");

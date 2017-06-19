@@ -21,4 +21,6 @@ public interface CompanyService {
 	ExecuteResult addComAccount(String oprId, String cid, String account, String password);
 
 	List<Map> selectComanyMge(String c_id_mge);
+
+	ExecuteResult loadComRegJobList(Map params);
 }
