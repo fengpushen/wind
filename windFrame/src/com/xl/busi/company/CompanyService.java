@@ -23,4 +23,6 @@ public interface CompanyService {
 	List<Map> selectComanyMge(String c_id_mge);
 
 	ExecuteResult loadComRegJobList(Map params);
+
+	ExecuteResult loadComRegJobCountList(Map params);
 }

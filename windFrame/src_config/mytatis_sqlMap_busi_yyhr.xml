@@ -160,6 +160,38 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			&lt;= #{page} * #{rows}
 		</if>
 	</select>
+	
+	<select id="selectBs_job_nojob_tj" resultType="hashMap"
+		parameterType="hashMap">
+		<if test="record_count == null and page != null and page != ''">
+			select * from (select rownum as rowidx, qry.* from (
+		</if>
+		select
+		<if test="record_count == null">
+			aa.province_name,
+	       	aa.city_name,
+	       	aa.COUNTRY_name,
+	       	aa.street_name,
+	       	aa.village_name,
+	       	aa.AREA_CODE,
+	       	aa.AREA_NAME,
+	       	bb.job_count
+		</if>
+		<if test="record_count != null">
+			count(1) as record_count
+		</if>
+		  from v_com_area aa
+ 		  inner join (select hj_area, count(1) as job_count
+               from (
+		select *  <include refid="jobNojobDetail"/>
+		order by job_time desc
+		) group by hj_area) bb
+		    on aa.AREA_CODE = bb.hj_area
+		<if test="record_count == null and page != null and page != ''">
+			)qry ) where rowidx > (#{page} - 1) * #{rows} and rowidx
+			&lt;= #{page} * #{rows}
+		</if>
+	</select>
 
 	<select id="selectV_jobnojob_last_list" resultType="hashMap"
 		parameterType="hashMap">

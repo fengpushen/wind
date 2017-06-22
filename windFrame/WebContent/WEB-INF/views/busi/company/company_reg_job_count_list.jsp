@@ -6,7 +6,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>企业录用人员明细</title>
+<title>企业录用人员统计</title>
 <tags:commonHead />
 </head>
 <body class="easyui-layout">
@@ -56,7 +56,7 @@
 
 	<script type="text/javascript">
 		function loadDatagridData() {
-			$('#datagrid').datagrid('options').url = "busi/company/loadComRegJobList.do";
+			$('#datagrid').datagrid('options').url = "busi/company/loadComRegJobCountList.do";
 			$('#datagrid').datagrid('load', $("#qryForm").serializeJson());
 		}
 		$(function() {
@@ -100,39 +100,24 @@
 					pageSize : 20,
 					pageList : [ 20, 50, 100, 150, 200 ],
 					columns : [ [ {
-						field : 'HR_NAME',
-						title : '姓名',
-						width : '6%',
-						align : 'center'
-					}, {
-						field : 'HJ_AREA_NAME',
-						title : '户籍地',
+						field : 'COUNTRY_NAME',
+						title : '区县',
 						width : '10%',
 						align : 'center'
 					}, {
-						field : 'IN_TIME_JOB_STR',
-						title : '登记时间',
-						width : '8%',
-						align : 'center'
-					}, {
-						field : 'JOB_DW',
-						title : '单位',
+						field : 'STREET_NAME',
+						title : '街道/乡镇',
 						width : '10%',
 						align : 'center'
 					}, {
-						field : 'JOB_GW',
-						title : '岗位',
+						field : 'VILLAGE_NAME',
+						title : '社区/村',
 						width : '10%',
 						align : 'center'
 					}, {
-						field : 'JOB_TYPE_NAME',
-						title : '工作类型',
+						field : 'JOB_COUNT',
+						title : '录用人次',
 						width : '10%',
-						align : 'center'
-					}, {
-						field : 'INCOME',
-						title : '月收入',
-						width : '6%',
 						align : 'center'
 					} ] ]
 				});

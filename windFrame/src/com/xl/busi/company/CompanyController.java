@@ -281,5 +281,25 @@ public class CompanyController {
 		}
 		return null;
 	}
+	
+	@RequestMapping("/showComRegJobCountList")
+	public ModelAndView showComRegJobCountList() {
+		return new ModelAndView("/busi/company/company_reg_job_count_list");
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/loadComRegJobCountList.do")
+	public String loadComRegJobCountList(HttpSession session, HttpServletRequest request) {
+
+		Map<String, Object> info = FrameTool.getRequestParameterMap(request);
+		info.put("opr_id", BusiCommon.getLoginAccountBusiId(session));
+		BusiCommon.dealAreaBj(info, "HJ_AREA");
+		ExecuteResult rst = companyService.loadComRegJobCountList(info);
+		if (rst.isSucc()) {
+			Map map = (Map) rst.getInfoOne("info");
+			return FrameTool.toJson(map);
+		}
+		return null;
+	}
 
 }

@@ -13,4 +13,6 @@ public interface CompanyDAO {
 
 	List<Map> selectBs_h_job(Map params);
 
+	List<Map> selectBs_job_nojob_tj(Map params);
+
 }
