@@ -272,7 +272,7 @@ public class CompanyController {
 	public String loadComRegJobList(HttpSession session, HttpServletRequest request) {
 
 		Map<String, Object> info = FrameTool.getRequestParameterMap(request);
-		info.put("opr_id", BusiCommon.getLoginAccountBusiId(session));
+		info.put("opr_id", BusiCommon.getLoginAccountId(session));
 		BusiCommon.dealAreaBj(info, "HJ_AREA");
 		ExecuteResult rst = companyService.loadComRegJobList(info);
 		if (rst.isSucc()) {
@@ -312,7 +312,7 @@ public class CompanyController {
 	public String loadComRegJobCountList(HttpSession session, HttpServletRequest request) {
 
 		Map<String, Object> info = FrameTool.getRequestParameterMap(request);
-		info.put("opr_id", BusiCommon.getLoginAccountBusiId(session));
+		info.put("opr_id", BusiCommon.getLoginAccountId(session));
 		BusiCommon.dealAreaBj(info, "HJ_AREA");
 		ExecuteResult rst = companyService.loadComRegJobCountList(info);
 		if (rst.isSucc()) {
