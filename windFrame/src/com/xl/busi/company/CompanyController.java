@@ -281,7 +281,27 @@ public class CompanyController {
 		}
 		return null;
 	}
-	
+
+	@RequestMapping("/showComRegJobListAll")
+	public ModelAndView showComRegJobListAll() {
+		return new ModelAndView("/busi/company/company_reg_job_list_all");
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/loadComRegJobListAll.do")
+	public String loadComRegJobListAll(HttpSession session, HttpServletRequest request) {
+
+		Map<String, Object> info = FrameTool.getRequestParameterMap(request);
+		info.put("opr_type", FrameConstant.busi_user_kind_com);
+		BusiCommon.dealAreaBj(info, "HJ_AREA");
+		ExecuteResult rst = companyService.loadComRegJobList(info);
+		if (rst.isSucc()) {
+			Map map = (Map) rst.getInfoOne("info");
+			return FrameTool.toJson(map);
+		}
+		return null;
+	}
+
 	@RequestMapping("/showComRegJobCountList")
 	public ModelAndView showComRegJobCountList() {
 		return new ModelAndView("/busi/company/company_reg_job_count_list");
@@ -293,6 +313,26 @@ public class CompanyController {
 
 		Map<String, Object> info = FrameTool.getRequestParameterMap(request);
 		info.put("opr_id", BusiCommon.getLoginAccountBusiId(session));
+		BusiCommon.dealAreaBj(info, "HJ_AREA");
+		ExecuteResult rst = companyService.loadComRegJobCountList(info);
+		if (rst.isSucc()) {
+			Map map = (Map) rst.getInfoOne("info");
+			return FrameTool.toJson(map);
+		}
+		return null;
+	}
+
+	@RequestMapping("/showComRegJobCountListAll")
+	public ModelAndView showComRegJobCountListAll() {
+		return new ModelAndView("/busi/company/company_reg_job_count_list_all");
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/loadComRegJobCountListAll.do")
+	public String loadComRegJobCountListAll(HttpSession session, HttpServletRequest request) {
+
+		Map<String, Object> info = FrameTool.getRequestParameterMap(request);
+		info.put("opr_type", FrameConstant.busi_user_kind_com);
 		BusiCommon.dealAreaBj(info, "HJ_AREA");
 		ExecuteResult rst = companyService.loadComRegJobCountList(info);
 		if (rst.isSucc()) {

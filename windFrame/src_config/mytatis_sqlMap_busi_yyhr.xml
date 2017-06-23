@@ -98,13 +98,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<sql id="jobNojobDetail">
-		from v_jobnojob_list_name a inner join V_BUSI_HR b on a.hr_id = b.hr_id
+		from v_jobnojob_list_name a inner join V_BUSI_HR b on a.hr_id = b.hr_id left outer join v_company_account  c on a.OPR_ID = c.c_id
 		<where>
 			<if test="HR_ID != null and HR_ID != ''">
 				a.hr_id = #{HR_ID}
 			</if>
 			<if test="opr_id != null and opr_id != ''">
 				and a.opr_id = #{opr_id}
+			</if>
+			<if test="opr_type != null and opr_type != ''">
+				and a.opr_type = #{opr_type}
 			</if>
 			<if test="in_time_bgn != null and in_time_bgn != ''">
 				and a.in_time >= to_date(#{in_time_bgn}, 'yyyy-mm-dd')
@@ -148,7 +151,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		</if>
 		select
 		<if test="record_count == null">
-			a.*, b.hr_name, b.hj_area_name
+			a.*, b.hr_name, b.hj_area_name, c.c_name
 		</if>
 		<if test="record_count != null">
 			count(1) as record_count
@@ -175,17 +178,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	       	aa.village_name,
 	       	aa.AREA_CODE,
 	       	aa.AREA_NAME,
-	       	bb.job_count
+	       	bb.job_count,
+	       	bb.c_id,
+	       	bb.c_name
 		</if>
 		<if test="record_count != null">
 			count(1) as record_count
 		</if>
 		  from v_com_area aa
- 		  inner join (select hj_area, count(1) as job_count
+ 		  inner join (select hj_area, c_id, c_name, count(1) as job_count
                from (
 		select *  <include refid="jobNojobDetail"/>
 		order by job_time desc
-		) group by hj_area) bb
+		) group by hj_area, c_id, c_name) bb
 		    on aa.AREA_CODE = bb.hj_area
 		<if test="record_count == null and page != null and page != ''">
 			)qry ) where rowidx > (#{page} - 1) * #{rows} and rowidx
