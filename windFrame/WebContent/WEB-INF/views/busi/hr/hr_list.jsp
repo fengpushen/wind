@@ -340,7 +340,7 @@
 				});
 				var divForm = document.getElementById('divForm');
 				var tableHeight = document.body.clientHeight
-						- divForm.offsetHeight - 70;
+						- divForm.offsetHeight - 90;
 				$('#datagrid').datagrid({
 					method : 'POST',
 					rownumbers : true,
