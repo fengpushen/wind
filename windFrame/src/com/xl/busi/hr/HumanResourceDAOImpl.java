@@ -46,10 +46,22 @@ public class HumanResourceDAOImpl implements HumanResourceDAO {
 		return sqlSession.selectOne("selectV_jobnojob_last_list", params);
 	}
 
-	public List<Map> selectBs_h_need_service(String hr_id) {
+	public List<Map> selectBs_h_want_train_type(String hr_id) {
 		Map params = new HashMap();
 		params.put("HR_ID", hr_id);
-		return sqlSession.selectList("selectBs_h_need_service", params);
+		return sqlSession.selectList("selectBs_h_want_train_type", params);
+	}
+
+	public List<Map> selectHr_cbxx(String hr_id) {
+		Map params = new HashMap();
+		params.put("HR_ID", hr_id);
+		return sqlSession.selectList("selectHr_cbxx", params);
+	}
+
+	public Map selectV_last_h_job(String hr_id) {
+		Map params = new HashMap();
+		params.put("HR_ID", hr_id);
+		return sqlSession.selectOne("selectV_last_h_job", params);
 	}
 
 	public void insertBs_hr_imp_pre(String batchId, List<String[]> rows) {

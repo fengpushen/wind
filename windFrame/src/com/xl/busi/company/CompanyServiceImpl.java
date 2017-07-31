@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
-import com.xl.busi.BusiCommon;
+import com.xl.busi.common.CommonDAO;
 import com.xl.frame.FrameDAO;
 import com.xl.frame.FrameService;
 import com.xl.frame.util.ExecuteResult;
@@ -33,6 +33,9 @@ public class CompanyServiceImpl implements CompanyService {
 
 	@Autowired
 	private CompanyDAO companyDAO;
+
+	@Autowired
+	private CommonDAO commonDAO;
 
 	public ExecuteResult loadComList(Map<String, Object> params) {
 		ExecuteResult rtn = new ExecuteResult();
@@ -187,6 +190,22 @@ public class CompanyServiceImpl implements CompanyService {
 			rtn.setSucc(true);
 		} catch (Exception e) {
 			log.error("loadHrList", e);
+		}
+		return rtn;
+	}
+
+	public ExecuteResult loadAreaList(Map<String, Object> params) {
+		ExecuteResult rtn = new ExecuteResult();
+		try {
+			Map info = new HashMap();
+			int total = frameDAO.selectRecord_count("selectV_com_area", params);
+			info.put("total", total);
+			List<Map> rows = commonDAO.selectV_com_area(params);
+			info.put("rows", rows);
+			rtn.addInfo("info", info);
+			rtn.setSucc(true);
+		} catch (Exception e) {
+			log.error("loadAreaList", e);
 		}
 		return rtn;
 	}

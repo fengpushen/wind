@@ -342,4 +342,29 @@ public class CompanyController {
 		return null;
 	}
 
+	@RequestMapping("/showComAreaList")
+	public ModelAndView showComAreaList() {
+		Map trans = new HashMap();
+		trans.put("area_code_high", "430900000000");
+		trans.put("area_name_high", "益阳市");
+		return new ModelAndView("/busi/company/company_area_list", trans);
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/loadAreaList.do")
+	public String loadAreaList(HttpServletRequest request) {
+
+		Map<String, Object> info = FrameTool.getRequestParameterMap(request);
+		String area_code_high = (String) info.get("area_code_high");
+		if (!FrameTool.isEmpty(area_code_high)) {
+			info.put("area_code_high_level", BusiCommon.getAreaLevel(area_code_high));
+		}
+		ExecuteResult rst = companyService.loadAreaList(info);
+		if (rst.isSucc()) {
+			Map map = (Map) rst.getInfoOne("info");
+			return FrameTool.toJson(map);
+		}
+		return null;
+	}
+
 }

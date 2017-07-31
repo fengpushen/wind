@@ -19,3 +19,11 @@
 <script type="text/javascript">
 	var baseHref = "${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}/";
 </script>
+<style>
+body, td, th, input {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	color: #1d1007;
+	line-height: 24px
+}
+</style>

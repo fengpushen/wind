@@ -159,3 +159,62 @@ function closeOrpTip(id) {
 	$("#" + id).html('');
 	$("#" + id).panel('close');
 }
+function comboboxDefaultInit(id, codeName, required, height, multiple, addSpace) {
+	if (height == null || isNaN(height)) {
+		height = 'auto';
+	}
+	if (required == null) {
+		required = false;
+	}
+	if (multiple == null) {
+		multiple = false;
+	}
+	if (addSpace) {
+		$("#" + id).combobox({
+			method : 'post',
+			valueField : 'id',
+			textField : 'text',
+			panelHeight : height,
+			required : required,
+			editable : false,
+			multiple : multiple,
+			loader : function(param, success, error) {
+				$.ajax({
+					url : 'frame/loadCode.do?codeName=' + codeName,
+					dataType : 'json',
+					success : function(data) {
+						data.unshift({
+							"text" : "请选择",
+							"id" : ""
+						});
+						success(data);
+					},
+					error : function() {
+						error.apply(this, arguments);
+					}
+				});
+			}
+		});
+	} else {
+		$("#" + id).combobox({
+			url : 'frame/loadCode.do?codeName=' + codeName,
+			method : 'post',
+			valueField : 'id',
+			textField : 'text',
+			panelHeight : height,
+			required : required,
+			editable : false,
+			multiple : multiple
+		});
+	}
+}
+function disableEles(ids) {
+	for ( var i in ids) {
+		$("#" + ids[i]).textbox("disable");
+	}
+}
+function enableEles(ids) {
+	for ( var i in ids) {
+		$("#" + ids[i]).textbox("enable");
+	}
+}

@@ -29,9 +29,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="LD_TYPE != null and LD_TYPE != ''">
 				and ld_type = #{LD_TYPE}
 			</if>
-			<if test="IS_DELED == null || IS_DELED == '' || IS_DELED == 0">
-				and is_deled = '0'
-			</if>
 			<if test="HR_ID != null and HR_ID != ''">
 				and hr_id = #{HR_ID}
 			</if>
@@ -87,9 +84,29 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		</if>
 	</select>
 	
-	<select id="selectBs_h_need_service" resultType="hashMap"
+	<select id="selectBs_h_want_train_type" resultType="hashMap"
 		parameterType="hashMap">
-		select * from BS_H_NEED_SERVICE
+		select * from bs_h_want_train_type
+		<where>
+			<if test="HR_ID != null and HR_ID != ''">
+				hr_id = #{HR_ID}
+			</if>
+		</where>
+	</select>
+	
+	<select id="selectHr_cbxx" resultType="hashMap"
+		parameterType="hashMap">
+		select * from HR_CBXX
+		<where>
+			<if test="HR_ID != null and HR_ID != ''">
+				hr_id = #{HR_ID}
+			</if>
+		</where>
+	</select>
+	
+	<select id="selectV_last_h_job" resultType="hashMap"
+		parameterType="hashMap">
+		select * from v_last_h_job
 		<where>
 			<if test="HR_ID != null and HR_ID != ''">
 				hr_id = #{HR_ID}
@@ -346,7 +363,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				v_bs_position_req.P_ID = #{P_ID}
 			</if>
 			<if test="REQ_ID != null and REQ_ID != ''">
-				v_bs_position_req.REQ_ID = #{REQ_ID}
+				and v_bs_position_req.REQ_ID = #{REQ_ID}
 			</if>
 			<if test="HR_ID != null and HR_ID != ''">
 				and v_bs_position_req.HR_ID = #{HR_ID}
@@ -365,6 +382,50 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			</if>
 		</where>
 		order by v_bs_position_req.in_time desc
+		<if test="record_count == null and page != null and page != ''">
+			)qry ) where rowidx > (#{page} - 1) * #{rows} and rowidx
+			&lt;= #{page} * #{rows}
+		</if>
+	</select>
+	
+	<select id="selectV_com_area" resultType="hashMap"
+		parameterType="hashMap">
+		<if test="record_count == null and page != null and page != ''">
+			select * from (select rownum as rowidx, qry.* from (
+		</if>
+		select
+		<if test="record_count == null">
+			*
+		</if>
+		<if test="record_count != null">
+			count(1) as record_count
+		</if>
+		from v_com_area
+		<where>
+			<if test="area_name_like != null and area_name_like != ''">
+				area_name like '%' || #{area_name_like} || '%'
+			</if>
+			<if test="area_code_high != null and area_code_high != ''">
+				<choose>
+					<when test="area_code_high_level == 0">
+						and province_code = #{area_code_high_level}
+					</when>
+					<when test="area_code_high_level == 1">
+						and city_code = #{area_code_high_level}
+					</when>
+					<when test="area_code_high_level == 2">
+						and country_code = #{area_code_high_level}
+					</when>
+					<when test="area_code_high_level == 3">
+						and street_code = #{area_code_high_level}
+					</when>
+					<when test="area_code_high_level == 4">
+						and village_code = #{area_code_high_level}
+					</when>
+				</choose>
+			</if>
+		</where>
+		order by area_code
 		<if test="record_count == null and page != null and page != ''">
 			)qry ) where rowidx > (#{page} - 1) * #{rows} and rowidx
 			&lt;= #{page} * #{rows}

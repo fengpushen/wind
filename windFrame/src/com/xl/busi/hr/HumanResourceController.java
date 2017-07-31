@@ -117,8 +117,11 @@ public class HumanResourceController {
 		ExecuteResult rst = humanResourceService.loadHrInfo(hr_id);
 		if (rst.isSucc()) {
 			trans = (Map) rst.getInfoOne("hrInfo");
-			List<Map> needServices = (List<Map>) trans.get("needServices");
-			trans.put("needServicesJson", FrameTool.toJson(needServices));
+			List<Map> wantTrainTypes = (List<Map>) trans.get("wantTrainTypes");
+			trans.put("wantTrainTypesJson", FrameTool.toJson(wantTrainTypes));
+
+			List<Map> cbxxs = (List<Map>) trans.get("cbxxs");
+			trans.put("cbxxsJson", FrameTool.toJson(cbxxs));
 		}
 		return new ModelAndView("/busi/hr/hr_info_mdy", trans);
 	}
@@ -138,7 +141,7 @@ public class HumanResourceController {
 			Object delIds = info.get("ids[]");
 			if (!FrameTool.isEmpty(delIds)) {
 				rst = humanResourceService.delHrInfo(FrameTool.getStringArray(delIds),
-						BusiCommon.getLoginAccountId(session), BusiCommon.getLoginAccountKind(session));
+						BusiCommon.getLoginAccountId(session), BusiCommon.getLoginAccountStaffArea(session));
 			}
 		} catch (Exception e) {
 			rst.setDefaultValue("程序内部错误");

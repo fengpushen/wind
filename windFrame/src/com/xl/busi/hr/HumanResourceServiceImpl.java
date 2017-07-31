@@ -40,8 +40,8 @@ public class HumanResourceServiceImpl implements HumanResourceService {
 			throws SQLException {
 		ExecuteResult rtn = new ExecuteResult();
 		String hr_id = FrameTool.getUUID();
-		String idcard = (String) info.get("IDCARD");
-		String HJ_AREA = (String) info.get("HJ_AREA");
+		String idcard = (String) info.get("idcard");
+		String HJ_AREA = (String) info.get("hj_area");
 
 		if (FrameTool.isEmpty(HJ_AREA)) {
 			rtn.setDefaultValue("户籍地不能为空");
@@ -71,50 +71,43 @@ public class HumanResourceServiceImpl implements HumanResourceService {
 			return rtn;
 		}
 
-		info.put("IDCARD", idcard);
-		info.put("BIRTH", ToolForIdcard.getBirthFromIdcard(idcard, FrameConstant.busi_default_date_style));
-		info.put("SEX", BusiCommon.getSexCodeFromIdcard(idcard));
-		info.put("HR_ID", hr_id);
-		info.put("OPR_ID", orp_id);
-		info.put("OPR_TYPE", opr_type);
-		FrameTool.replaceMapValue(info, new String[] { "JNTC" }, "，", ",");
+		info.put("idcard", idcard);
+		info.put("birth", ToolForIdcard.getBirthFromIdcard(idcard, FrameConstant.busi_default_date_style));
+		info.put("sex", BusiCommon.getSexCodeFromIdcard(idcard));
+		info.put("hr_id", hr_id);
+		info.put("opr_id", orp_id);
+		info.put("opr_type", opr_type);
+		FrameTool.replaceMapValue(info, new String[] { "jntc" }, "，", ",");
 		frameDAO.anyInsert("busi_hr", info);
 
-		String isJob = (String) info.get("IS_JOB");
+		String isJob = (String) info.get("is_job");
 		if (FrameConstant.busi_com_boolean_true.equals(isJob)) {
 			Map<String, Object> job = (Map<String, Object>) info.get("job");
-			job.put("HR_ID", hr_id);
-			job.put("H_JOB_ID", FrameTool.getUUID());
-			job.put("OPR_ID", orp_id);
-			job.put("OPR_TYPE", opr_type);
+			job.put("hr_id", hr_id);
+			job.put("h_job_id", FrameTool.getUUID());
+			job.put("opr_id", orp_id);
+			job.put("opr_type", opr_type);
 			frameDAO.anyInsert("bs_h_job", job);
 		}
 
-		String IS_WANT_JOB = (String) info.get("IS_WANT_JOB");
-		if (FrameConstant.busi_com_boolean_true.equals(IS_WANT_JOB)) {
-			Map<String, Object> want_job = (Map<String, Object>) info.get("want_job");
-			FrameTool.replaceMapValue(want_job, new String[] { "WANT_JOB_NAME" }, "，", ",");
-			String area = (String) want_job.get("WANT_JOB_AREA");
-			if (!FrameTool.isEmpty(area)) {
-				saveWantJobArea(hr_id, new String[] { area });
-			}
-			Object needServices = want_job.get("service_codes");
-			if (!FrameTool.isEmpty(needServices)) {
-				saveNeedService(hr_id, FrameTool.getStringArray(needServices));
-			}
-			String want_income = (String) want_job.get("WANT_INCOME");
-			String want_job_name = (String) want_job.get("WANT_JOB_NAME");
-			Map<String, Object> params = new HashMap<String, Object>();
-			if (!FrameTool.isEmpty(want_income)) {
-				params.put("WANT_INCOME", want_income);
-			}
-			if (!FrameTool.isEmpty(want_job_name)) {
-				params.put("WANT_JOB_NAME", want_job_name);
-			}
-			if (!FrameTool.isEmpty(params)) {
-				frameDAO.anyUpdateByPk("busi_hr", params, hr_id);
+		Object want_train_types = info.get("want_train_type");
+		if (!FrameTool.isEmpty(want_train_types)) {
+			rtn = saveWant_train_type(hr_id, FrameTool.getStringArray(want_train_types));
+			if (!rtn.isSucc()) {
+				TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+				return rtn;
 			}
 		}
+
+		Object cbxx = info.get("cbxx");
+		if (!FrameTool.isEmpty(cbxx)) {
+			rtn = saveCbxx(hr_id, FrameTool.getStringArray(cbxx));
+			if (!rtn.isSucc()) {
+				TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+				return rtn;
+			}
+		}
+
 		rtn.setSucc(true);
 		return rtn;
 	}
@@ -123,9 +116,9 @@ public class HumanResourceServiceImpl implements HumanResourceService {
 	public ExecuteResult updateHrInfoStaff(String orp_id, String opr_type, String opr_area, Map<String, Object> info)
 			throws SQLException {
 		ExecuteResult rtn = new ExecuteResult();
-		String hr_id = (String) info.get("HR_ID");
-		String idcard = (String) info.get("IDCARD");
-		String hj_area = (String) info.get("HJ_AREA");
+		String hr_id = (String) info.get("hr_id");
+		String idcard = (String) info.get("idcard");
+		String hj_area = (String) info.get("hj_area");
 
 		if (FrameTool.isEmpty(hj_area)) {
 			rtn.setDefaultValue("户籍地不能为空");
@@ -158,24 +151,49 @@ public class HumanResourceServiceImpl implements HumanResourceService {
 		if (idcardChanged) {
 			Map idcardInfo = humanResourceDAO.selectBusi_hrByIdcard(idcard);
 			if (!FrameTool.isEmpty(idcardInfo) && !hr_id.equals(idcardInfo.get("HR_ID"))
-					&& idcard.equals(idcardInfo.get("IDCARD"))) {
+					&& idcard.equals(idcardInfo.get("idcard"))) {
 				rtn.setDefaultValue("相同的身份证号码已经存在");
 				return rtn;
 			}
-			info.put("BIRTH", ToolForIdcard.getBirthFromIdcard(idcard, FrameConstant.busi_default_date_style));
-			info.put("SEX", BusiCommon.getSexCodeFromIdcard(idcard));
+			info.put("birth", ToolForIdcard.getBirthFromIdcard(idcard, FrameConstant.busi_default_date_style));
+			info.put("sex", BusiCommon.getSexCodeFromIdcard(idcard));
 		}
-		FrameTool.replaceMapValue(info, new String[] { "JNTC", "WANT_JOB_NAME" }, "，", ",");
+		FrameTool.replaceMapValue(info, new String[] { "jntc", "want_job_name" }, "，", ",");
 		frameDAO.anyUpdateByPk("busi_hr", info, hr_id);
 
-		Map<String, Object> want_job = (Map<String, Object>) info.get("want_job");
-		String area = (String) want_job.get("WANT_JOB_AREA");
-		if (!FrameTool.isEmpty(area)) {
-			saveWantJobArea(hr_id, new String[] { area });
+		String isJob = (String) info.get("is_job");
+		if (FrameConstant.busi_com_boolean_true.equals(isJob)) {
+
+			Map<String, Object> job = (Map<String, Object>) info.get("job");
+
+			Map params = new HashMap();
+			params.put("hr_id", hr_id);
+			params.put("job_time", job.get("job_time"));
+			frameDAO.anyDelete("bs_h_job", params);
+
+			job.put("hr_id", hr_id);
+			job.put("h_job_id", FrameTool.getUUID());
+			job.put("opr_id", orp_id);
+			job.put("opr_type", opr_type);
+			frameDAO.anyInsert("bs_h_job", job);
 		}
-		Object needServices = want_job.get("service_codes");
-		if (!FrameTool.isEmpty(needServices)) {
-			saveNeedService(hr_id, FrameTool.getStringArray(needServices));
+
+		Object want_train_types = info.get("want_train_type");
+		if (!FrameTool.isEmpty(want_train_types)) {
+			rtn = saveWant_train_type(hr_id, FrameTool.getStringArray(want_train_types));
+			if (!rtn.isSucc()) {
+				TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+				return rtn;
+			}
+		}
+
+		Object cbxx = info.get("cbxx");
+		if (!FrameTool.isEmpty(cbxx)) {
+			rtn = saveCbxx(hr_id, FrameTool.getStringArray(cbxx));
+			if (!rtn.isSucc()) {
+				TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+				return rtn;
+			}
 		}
 		rtn.setSucc(true);
 		return rtn;
@@ -200,7 +218,7 @@ public class HumanResourceServiceImpl implements HumanResourceService {
 		}
 		Object needServices = want_job.get("service_codes");
 		if (!FrameTool.isEmpty(needServices)) {
-			saveNeedService(hr_id, FrameTool.getStringArray(needServices));
+			// saveNeedService(hr_id, FrameTool.getStringArray(needServices));
 		}
 		rtn.setSucc(true);
 		return rtn;
@@ -252,15 +270,30 @@ public class HumanResourceServiceImpl implements HumanResourceService {
 	}
 
 	@Transactional(rollbackFor = Exception.class)
-	public ExecuteResult saveNeedService(String hid, String[] services) throws SQLException {
+	public ExecuteResult saveWant_train_type(String hid, String[] train_types) throws SQLException {
 		ExecuteResult rtn = new ExecuteResult();
 		Map params = new HashMap();
 		params.put("hr_id", hid);
-		frameDAO.anyDelete("bs_h_need_service", params);
-		for (String service : services) {
-			params.put("need_service_id", FrameTool.getUUID());
-			params.put("service_code", service);
-			frameDAO.anyInsert("bs_h_need_service", params);
+		frameDAO.anyDelete("bs_h_want_train_type", params);
+		for (String train_type : train_types) {
+			params.put("want_train_type_id", FrameTool.getUUID());
+			params.put("train_type", train_type);
+			frameDAO.anyInsert("bs_h_want_train_type", params);
+		}
+		rtn.setSucc(true);
+		return rtn;
+	}
+
+	@Transactional(rollbackFor = Exception.class)
+	public ExecuteResult saveCbxx(String hid, String[] bx_types) throws SQLException {
+		ExecuteResult rtn = new ExecuteResult();
+		Map params = new HashMap();
+		params.put("hr_id", hid);
+		frameDAO.anyDelete("hr_cbxx", params);
+		for (String bx_type : bx_types) {
+			params.put("hr_cbxx_id", FrameTool.getUUID());
+			params.put("bx_type", bx_type);
+			frameDAO.anyInsert("hr_cbxx", params);
 		}
 		rtn.setSucc(true);
 		return rtn;
@@ -293,7 +326,8 @@ public class HumanResourceServiceImpl implements HumanResourceService {
 			Map params = new HashMap();
 			params.put("hr_id", hid);
 			frameDAO.anyDelete("BS_H_JOB", params);
-			frameDAO.anyDelete("BS_H_NEED_SERVICE", params);
+			frameDAO.anyDelete("HR_CBXX", params);
+			frameDAO.anyDelete("BS_H_WANT_TRAIN_TYPE", params);
 			frameDAO.anyDelete("BS_H_NOJOB", params);
 			frameDAO.anyDelete("BS_H_WANT_JOB_AREA", params);
 			frameDAO.anyDeleteByPk("busi_hr", hid);
@@ -357,8 +391,18 @@ public class HumanResourceServiceImpl implements HumanResourceService {
 		try {
 			Map info = humanResourceDAO.selectBusi_hr(hr_id);
 			if (!FrameTool.isEmpty(info)) {
-				List<Map> needServices = humanResourceDAO.selectBs_h_need_service(hr_id);
-				info.put("needServices", needServices);
+				List<Map> wantTrainTypes = humanResourceDAO.selectBs_h_want_train_type(hr_id);
+				info.put("wantTrainTypes", wantTrainTypes);
+
+				List<Map> cbxxs = humanResourceDAO.selectHr_cbxx(hr_id);
+				info.put("cbxxs", cbxxs);
+
+				String is_job = (String) info.get("IS_JOB");
+				if (FrameConstant.busi_com_boolean_true.equals(is_job)) {
+					Map job = humanResourceDAO.selectV_last_h_job(hr_id);
+					info.put("job", job);
+				}
+
 				rtn.addInfo("hrInfo", info);
 				rtn.setSucc(true);
 			}
@@ -417,16 +461,17 @@ public class HumanResourceServiceImpl implements HumanResourceService {
 			idcard = idcard.toUpperCase();
 			Map info = humanResourceDAO.selectBusi_hrByIdcard(idcard);
 			if (FrameTool.isEmpty(info)) {
-//				String hr_id = FrameTool.getUUID();
-//				Map params = new HashMap();
-//				params.put("HR_ID", hr_id);
-//				params.put("HR_NAME", hr_name);
-//				params.put("IDCARD", idcard);
-//				params.put("IS_WANT_JOB", FrameConstant.busi_com_boolean_true);
-//				params.put("OPR_ID", hr_id);
-//				params.put("OPR_TYPE", FrameConstant.busi_user_kind_hr);
-//				frameDAO.anyInsert("busi_hr", params);
-//				rtn.addInfo("hr_id", hr_id);
+				// String hr_id = FrameTool.getUUID();
+				// Map params = new HashMap();
+				// params.put("HR_ID", hr_id);
+				// params.put("HR_NAME", hr_name);
+				// params.put("IDCARD", idcard);
+				// params.put("IS_WANT_JOB",
+				// FrameConstant.busi_com_boolean_true);
+				// params.put("OPR_ID", hr_id);
+				// params.put("OPR_TYPE", FrameConstant.busi_user_kind_hr);
+				// frameDAO.anyInsert("busi_hr", params);
+				// rtn.addInfo("hr_id", hr_id);
 				rtn.setDefaultValue("没有此身份证号码的信息");
 				return rtn;
 			} else {

@@ -3,7 +3,11 @@
 	xmlns="http://xmlns.jcp.org/xml/ns/javaee"
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
 	id="WebApp_ID" version="3.1">
-	<display-name>windFrame</display-name>
+	<display-name>yyjob</display-name>
+
+	<session-config>
+		<session-timeout>28800</session-timeout>
+	</session-config>
 
 	<filter>
 		<filter-name>encodingFilter</filter-name>

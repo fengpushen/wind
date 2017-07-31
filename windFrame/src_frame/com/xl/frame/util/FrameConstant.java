@@ -14,7 +14,7 @@ public final class FrameConstant {
 	/**
 	 * 超级管理员的账号id
 	 */
-	public static final String busi_com_super_admin_account_id = "10001";
+	public static final String busi_com_super_admin_account_id = "account001";
 
 	/**
 	 * 超级管理员的后台用户id

@@ -16,4 +16,8 @@ public class CommonDAOImpl implements CommonDAO {
 	public List<Map> selectCom_area() {
 		return sqlSession.selectList("selectCom_area");
 	}
+
+	public List<Map> selectV_com_area(Map params) {
+		return sqlSession.selectList("selectV_com_area", params);
+	}
 }

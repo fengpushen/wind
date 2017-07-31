@@ -43,7 +43,11 @@
 			$("#infoDiv").click(function() {
 				$('#oprTip').panel('close');
 			});
-
+			$('#infoDiv').keydown(function(e) {
+				if (e.keyCode == 13) {
+					submitForm();
+				}
+			});
 		});
 		function submitForm() {
 			$('#ff').form(

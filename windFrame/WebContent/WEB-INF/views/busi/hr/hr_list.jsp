@@ -89,8 +89,8 @@
 							handler : function() {
 								$('#dd').dialog({
 									title : '新增人员',
-									width : 1000,
-									height : 500,
+									width : 1100,
+									height : 550,
 									closed : false,
 									cache : false,
 									href : 'busi/hr/showHrInfo.do',
@@ -174,8 +174,8 @@
 									var hr_id = rows[0].HR_ID;
 									$('#dd').dialog({
 										title : '修改',
-										width : 1000,
-										height : 420,
+										width : 1100,
+										height : 550,
 										closed : false,
 										cache : false,
 										href : 'busi/hr/showHrInfoMdy.do',
@@ -188,60 +188,6 @@
 										}
 									});
 								}
-							}
-						},
-						{
-							text : '入离职登记',
-							iconCls : 'icon-save',
-							handler : function() {
-								var rows = $('#datagrid').datagrid(
-										'getSelections');
-								if (rows == null || rows.length == 0) {
-									$.messager.alert("", "请选中要操作的记录");
-								} else if (rows.length > 1) {
-									$.messager.alert("", "请选中单条记录进行操作");
-								} else {
-									$('#dd').dialog({
-										title : '入离职登记',
-										width : 1000,
-										height : 500,
-										closed : false,
-										cache : false,
-										href : 'busi/hr/showHrJobnojobMge.do',
-										queryParams : {
-											'hr_id' : rows[0].HR_ID
-										},
-										modal : false,
-										onBeforeClose : function() {
-											loadDatagridData();
-										}
-									});
-								}
-							}
-						},
-						{
-							text : '下载批量模板',
-							iconCls : 'icon-save',
-							handler : function() {
-								window.location.href = baseHref
-										+ 'busi/hr/dwnBatchTemplate.do';
-							}
-						}, {
-							text : '人员批量导入',
-							iconCls : 'icon-save',
-							handler : function() {
-								$('#dd').dialog({
-									title : '人员批量导入',
-									width : 600,
-									height : 200,
-									closed : false,
-									cache : false,
-									href : 'busi/hr/showHrImpUI.do',
-									modal : false,
-									onBeforeClose : function() {
-										loadDatagridData();
-									}
-								});
 							}
 						} ];
 				$("#IS_JOB_LIST").combobox({

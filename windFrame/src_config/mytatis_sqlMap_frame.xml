@@ -21,7 +21,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <delete id="anyDelete" parameterType="hashMap" >
     	delete from ${tableName} where 1 = 1
-    	<foreach collection="params.keys" item="k" index="index" open="and">
+    	<foreach collection="params.keys" item="k" index="index" open="and" separator="and">
             ${k} = '${params[k]}'
         </foreach>
     </delete>

@@ -25,4 +25,6 @@ public interface CompanyService {
 	ExecuteResult loadComRegJobList(Map params);
 
 	ExecuteResult loadComRegJobCountList(Map params);
+
+	ExecuteResult loadAreaList(Map<String, Object> params);
 }
