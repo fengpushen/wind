@@ -34,8 +34,19 @@ public class CompanyDAOImpl implements CompanyDAO {
 	public List<Map> selectBs_h_job(Map params) {
 		return sqlSession.selectList("selectBs_job_nojob", params);
 	}
-	
-	public List<Map> selectBs_job_nojob_tj(Map params){
+
+	public List<Map> selectBs_job_nojob_tj(Map params) {
 		return sqlSession.selectList("selectBs_job_nojob_tj", params);
 	}
+
+	public List<Map> selectV_c_area_video_last(Map params) {
+		return sqlSession.selectList("selectV_c_area_video_last", params);
+	}
+
+	public Map selectV_c_area_video_last(String c_area_video_id) {
+		Map params = new HashMap();
+		params.put("c_area_video_id", c_area_video_id);
+		return sqlSession.selectOne("selectV_c_area_video_last", params);
+	}
+
 }

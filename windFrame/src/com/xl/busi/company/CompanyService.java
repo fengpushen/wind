@@ -27,4 +27,10 @@ public interface CompanyService {
 	ExecuteResult loadComRegJobCountList(Map params);
 
 	ExecuteResult loadAreaList(Map<String, Object> params);
+
+	ExecuteResult bgnAreaVideoChat(String c_id, String area_code, String host);
+
+	ExecuteResult loadAreaVideoList(String area_code);
+
+	ExecuteResult bgnAreaVideoChatCenter(String c_area_video_id, String area_code, String host);
 }

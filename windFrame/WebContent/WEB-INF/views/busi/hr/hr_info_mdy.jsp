@@ -256,10 +256,23 @@ body, td, th, input {
 				comboboxDefaultInit('job_type', 'job_type');
 				comboboxDefaultInit('is_want_job', 'boolean');
 				comboboxDefaultInit('hr_kind', 'hr_kind');
-				comboboxDefaultInit('hard_type', 'hard_type');
-				comboboxDefaultInit('want_industry', 'industry');
-				comboboxDefaultInit('want_work_area_kind', 'area_kind');
-				comboboxDefaultInit('want_job_type', 'job_type');
+				comboboxDefaultInit('hard_type', 'hard_type', false, 'auto', false,
+						true);
+				comboboxDefaultInit('want_industry', 'industry', false, 'auto',
+						false, true, {
+							"text" : "均可",
+							"id" : ""
+						});
+				comboboxDefaultInit('want_work_area_kind', 'area_kind', false, 'auto',
+						false, true, {
+							"text" : "均可",
+							"id" : ""
+						});
+				comboboxDefaultInit('want_job_type', 'job_type', false, 'auto',
+						false, true, {
+							"text" : "均可",
+							"id" : ""
+						});
 
 				var wantTrainTypesJson = '${wantTrainTypesJson}';
 				$("#want_train_type")
@@ -428,7 +441,7 @@ body, td, th, input {
 									validType : [
 											'equalTriggerRequired["是", "job_dw", "job_time", "job_gw", "job_area_name", "job_area", "job_industry", "job_type"]',
 											'equalTriggerRequired["否", "is_want_job", "hr_kind", "hard_type"]' ],
-									invalidMessage : '已就业必须填写就业信息，未就业必须填写就业意愿、人员身份、困难群体情况'
+									invalidMessage : '已就业必须填写就业信息，未就业必须填写就业意愿、人员身份'
 								});
 
 				$("#is_want_job")
@@ -454,8 +467,8 @@ body, td, th, input {
 											enableEles(wantJobIds);
 										}
 									},
-									validType : 'equalTriggerRequired["是", "want_job_name", "want_income", "want_industry", "want_work_area_kind", "want_job_type"]',
-									invalidMessage : '就业意向信息必须填写'
+									validType : 'equalTriggerRequired["是", "want_job_name", "want_income"]',
+									invalidMessage : '工种意愿、月工资期望必须填写'
 								});
 			} catch (e) {
 				alert(e);

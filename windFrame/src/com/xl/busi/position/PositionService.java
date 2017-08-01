@@ -29,11 +29,11 @@ public interface PositionService {
 
 	ExecuteResult loadPostionReqInfo(String req_id);
 
-	ExecuteResult bgnPostionReqInterview(String req_id);
+	ExecuteResult bgnPostionReqInterview(String req_id, String host);
 
-	ExecuteResult loadComPostionReqDetail(String req_id, String c_id);
+	ExecuteResult loadComPostionReqDetail(String req_id, String c_id, String host);
 
 	ExecuteResult changeReqStatus(String req_id, String req_status);
-	
+
 	ExecuteResult changeReqsStatus(String[] req_ids, String req_status);
 }

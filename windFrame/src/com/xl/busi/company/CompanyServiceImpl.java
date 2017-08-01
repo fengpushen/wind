@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
+import com.xl.busi.BusiCommon;
 import com.xl.busi.common.CommonDAO;
 import com.xl.frame.FrameDAO;
 import com.xl.frame.FrameService;
@@ -201,6 +202,65 @@ public class CompanyServiceImpl implements CompanyService {
 			int total = frameDAO.selectRecord_count("selectV_com_area", params);
 			info.put("total", total);
 			List<Map> rows = commonDAO.selectV_com_area(params);
+			info.put("rows", rows);
+			rtn.addInfo("info", info);
+			rtn.setSucc(true);
+		} catch (Exception e) {
+			log.error("loadAreaList", e);
+		}
+		return rtn;
+	}
+
+	public ExecuteResult bgnAreaVideoChat(String c_id, String area_code, String host) {
+		ExecuteResult rtn = new ExecuteResult();
+		try {
+			Map params = new HashMap();
+			String room = FrameTool.getUUID();
+			params.put("C_AREA_VIDEO_ID", room);
+			params.put("c_id", c_id);
+			params.put("area_code", area_code);
+			frameDAO.anyInsert("bs_c_area_video", params);
+
+			rtn.addInfo("rtmp_url", BusiCommon.getRtmpUrl(host));
+			rtn.addInfo("room", room);
+			rtn.setSucc(true);
+
+		} catch (Exception e) {
+			log.error("bgnAreaVideoChat", e);
+		}
+		return rtn;
+	}
+	
+	public ExecuteResult bgnAreaVideoChatCenter(String c_area_video_id, String area_code, String host) {
+		ExecuteResult rtn = new ExecuteResult();
+		try {
+			Map params = new HashMap();
+			Map videoInfo = companyDAO.selectV_c_area_video_last(c_area_video_id);
+			if(!FrameTool.isEmpty(videoInfo)){
+				String c_id = (String)videoInfo.get("C_ID");
+				Map comInfo = companyDAO.selectBs_companyById(c_id);
+				
+				params.put("VIDEO_STATUS", "1");
+				frameDAO.anyUpdateByPk("bs_c_area_video", params, c_area_video_id);
+				rtn.addInfo("rtmp_url", BusiCommon.getRtmpUrl(host));
+				rtn.addInfo("room", c_area_video_id);
+				rtn.setSucc(true);
+			}
+		} catch (Exception e) {
+			log.error("bgnAreaVideoChatCenter", e);
+		}
+		return rtn;
+	}
+
+	public ExecuteResult loadAreaVideoList(String area_code) {
+		ExecuteResult rtn = new ExecuteResult();
+		Map params = new HashMap();
+		params.put("area_code", area_code);
+		try {
+			Map info = new HashMap();
+			int total = frameDAO.selectRecord_count("selectV_c_area_video_last", params);
+			info.put("total", total);
+			List<Map> rows = companyDAO.selectV_c_area_video_last(params);
 			info.put("rows", rows);
 			rtn.addInfo("info", info);
 			rtn.setSucc(true);

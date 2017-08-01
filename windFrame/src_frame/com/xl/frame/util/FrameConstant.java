@@ -19,7 +19,7 @@ public final class FrameConstant {
 	/**
 	 * 超级管理员的后台用户id
 	 */
-	public static final String busi_com_super_admin_staff_id = "10001";
+	public static final String busi_com_super_admin_staff_id = "staff001";
 
 	// 全国地区树
 	public static final String busi_com_area_tree = "busi_com_area_tree";

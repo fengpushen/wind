@@ -51,36 +51,33 @@
 		}
 		$(function() {
 			var toolbar = [ {
-				text : '发起视频',
-				iconCls : 'icon-add',
+				text : '视频连线',
+				iconCls : 'icon-save',
 				handler : function() {
-					$('#dd').dialog({
-						title : '新增单位',
-						width : 1000,
-						height : 350,
-						closed : false,
-						cache : false,
-						href : 'busi/company/showComInfoSaveUI.do',
-						queryParams : {
-							'c_type' : ctype,
-							'c_id_wt' : c_id_wt
-						},
-						modal : false,
-						onBeforeClose : function() {
-							loadDatagridData();
-						}
-					});
+					var rows = $('#datagrid').datagrid(
+							'getSelections');
+					if (rows == null || rows.length == 0) {
+						$.messager.alert("", "请选中要操作的记录");
+					} else if (rows.length > 1) {
+						$.messager.alert("", "请选中单条记录进行操作");
+					} else {
+						var req_id = rows[0].AREA_CODE;
+						window
+								.open(
+										baseHref
+												+ "busi/company/showComAreaVideoUI.do?area_code="
+												+ req_id, "_blank");
+					}
 				}
 			} ];
 			var areaTree = new AreaTree('dlgList', 'HJ_AREA_LIST',
 					'HJ_AREA_NAME_LIST');
-			var accountArea = '${accountInfo.staffInfo.AREA_CODE}';
 			$('#areaTreeList').tree({
 				url : 'busi/common/loadTree.do',
 				method : 'post',
 				queryParams : {
 					'treeName' : 'busi_com_area_tree',
-					'rootId' : accountArea
+					'rootId' : '430900000000'
 				},
 				onClick : function(node) {
 					areaTree.nodeClick(node);
@@ -112,7 +109,6 @@
 					style : {
 						'height' : tableHeight + 'px'
 					},
-					singleSelect : false,
 					pageSize : 20,
 					pageList : [ 20, 50, 100, 150, 200 ],
 					columns : [ [ {

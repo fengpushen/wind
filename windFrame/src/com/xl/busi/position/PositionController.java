@@ -276,10 +276,12 @@ public class PositionController {
 	}
 
 	@RequestMapping("/showComPositionReqInterviewUI.do")
-	public ModelAndView showComPositionReqInterviewUI(@RequestParam(required = true) String req_id) {
+	public ModelAndView showComPositionReqInterviewUI(HttpServletRequest request,
+			@RequestParam(required = true) String req_id) {
 
 		Map trans = new HashMap();
-		ExecuteResult rst = positionService.bgnPostionReqInterview(req_id);
+		String host = request.getHeader("host");
+		ExecuteResult rst = positionService.bgnPostionReqInterview(req_id, host);
 		if (rst.isSucc()) {
 			trans = rst.getInfo();
 		}
@@ -323,10 +325,13 @@ public class PositionController {
 	}
 
 	@RequestMapping("/showComPositionReqDetail.do")
-	public ModelAndView showComPositionReqDetail(HttpSession session, @RequestParam(required = true) String req_id) {
+	public ModelAndView showComPositionReqDetail(HttpSession session, HttpServletRequest request,
+			@RequestParam(required = true) String req_id) {
 
 		Map trans = new HashMap();
-		ExecuteResult rst = positionService.loadComPostionReqDetail(req_id, BusiCommon.getLoginAccountBusiId(session));
+		String host = request.getHeader("host");
+		ExecuteResult rst = positionService.loadComPostionReqDetail(req_id, BusiCommon.getLoginAccountBusiId(session),
+				host);
 		if (rst.isSucc()) {
 			trans = rst.getInfo();
 		}

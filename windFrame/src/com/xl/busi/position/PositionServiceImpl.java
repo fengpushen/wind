@@ -215,7 +215,7 @@ public class PositionServiceImpl implements PositionService {
 		return rtn;
 	}
 
-	public ExecuteResult bgnPostionReqInterview(String req_id) {
+	public ExecuteResult bgnPostionReqInterview(String req_id, String host) {
 		ExecuteResult rtn = new ExecuteResult();
 		try {
 			Map reqInfo = positionDAO.selectBs_position_reqById(req_id);
@@ -229,7 +229,7 @@ public class PositionServiceImpl implements PositionService {
 					Map hrInfo = humanResourceDAO.selectBusi_hr(hr_id);
 					if (!FrameTool.isEmpty(hrInfo)) {
 						rtn.addInfo("hrInfo", hrInfo);
-						rtn.addInfo("rtmp_url", FrameCache.getFrameConfig("rtmp_url"));
+						rtn.addInfo("rtmp_url", BusiCommon.getRtmpUrl(host));
 						rtn.addInfo("room", req_id);
 						rtn.setSucc(true);
 					}
@@ -241,8 +241,8 @@ public class PositionServiceImpl implements PositionService {
 		return rtn;
 	}
 
-	public ExecuteResult loadComPostionReqDetail(String req_id, String c_id) {
-		ExecuteResult rtn = bgnPostionReqInterview(req_id);
+	public ExecuteResult loadComPostionReqDetail(String req_id, String c_id, String host) {
+		ExecuteResult rtn = bgnPostionReqInterview(req_id, host);
 		if (rtn.isSucc()) {
 			Map hrInfo = (Map) rtn.getInfoOne("hrInfo");
 			String hr_id = (String) hrInfo.get("HR_ID");

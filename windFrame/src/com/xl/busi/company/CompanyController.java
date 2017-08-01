@@ -367,4 +367,48 @@ public class CompanyController {
 		return null;
 	}
 
+	@RequestMapping("/showComAreaVedioList")
+	public ModelAndView showComAreaVedioList() {
+		return new ModelAndView("/busi/company/company_area_vedio_list");
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/loadAreaVideoList.do")
+	public String loadAreaVideoList(HttpSession session) {
+
+		ExecuteResult rst = companyService.loadAreaVideoList(BusiCommon.getLoginAccountStaffArea(session));
+		if (rst.isSucc()) {
+			Map map = (Map) rst.getInfoOne("info");
+			return FrameTool.toJson(map);
+		}
+		return null;
+	}
+
+	@RequestMapping("/showComAreaVideoUI.do")
+	public ModelAndView showComAreaVideoUI(HttpSession session, HttpServletRequest request,
+			@RequestParam(required = true) String area_code) {
+
+		Map trans = new HashMap();
+		String host = request.getHeader("host");
+		ExecuteResult rst = companyService.bgnAreaVideoChat(BusiCommon.getLoginAccountBusiId(session), area_code, host);
+		if (rst.isSucc()) {
+			trans = rst.getInfo();
+		}
+		return new ModelAndView("/busi/company/company_area_video", trans);
+	}
+
+	@RequestMapping("/showComAreaVideoCenterUI.do")
+	public ModelAndView showComAreaVideoCenterUI(HttpSession session, HttpServletRequest request,
+			@RequestParam(required = true) String c_area_video_id) {
+
+		Map trans = new HashMap();
+		String host = request.getHeader("host");
+		ExecuteResult rst = companyService.bgnAreaVideoChatCenter(c_area_video_id,
+				BusiCommon.getLoginAccountStaffArea(session), host);
+		if (rst.isSucc()) {
+			trans = rst.getInfo();
+		}
+		return new ModelAndView("/busi/company/company_area_video", trans);
+	}
+
 }

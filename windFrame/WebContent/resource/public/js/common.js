@@ -159,7 +159,8 @@ function closeOrpTip(id) {
 	$("#" + id).html('');
 	$("#" + id).panel('close');
 }
-function comboboxDefaultInit(id, codeName, required, height, multiple, addSpace) {
+function comboboxDefaultInit(id, codeName, required, height, multiple,
+		addSpace, spaceContent) {
 	if (height == null || isNaN(height)) {
 		height = 'auto';
 	}
@@ -170,6 +171,12 @@ function comboboxDefaultInit(id, codeName, required, height, multiple, addSpace)
 		multiple = false;
 	}
 	if (addSpace) {
+		if (spaceContent == null) {
+			spaceContent = {
+				"text" : "请选择",
+				"id" : ""
+			};
+		}
 		$("#" + id).combobox({
 			method : 'post',
 			valueField : 'id',
@@ -183,10 +190,7 @@ function comboboxDefaultInit(id, codeName, required, height, multiple, addSpace)
 					url : 'frame/loadCode.do?codeName=' + codeName,
 					dataType : 'json',
 					success : function(data) {
-						data.unshift({
-							"text" : "请选择",
-							"id" : ""
-						});
+						data.unshift(spaceContent);
 						success(data);
 					},
 					error : function() {

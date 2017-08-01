@@ -123,7 +123,7 @@ public class FrameDAOImpl implements FrameDAO {
 				DatabaseMetaData metadata = conn.getMetaData();
 				FrameTool.closeDbResource(results);
 				// TODO:这里写死了，应该需要直接从sqlsession的配置中读取出来
-				results = metadata.getPrimaryKeys(null, "WINDFRAME", tableName.toUpperCase());
+				results = metadata.getPrimaryKeys(null, "YYJOB", tableName.toUpperCase());
 				while (results.next()) {
 					table.addPkColName(results.getString("COLUMN_NAME"));
 				}
@@ -162,10 +162,11 @@ public class FrameDAOImpl implements FrameDAO {
 	}
 
 	private void removeNotExistsColumns(Map<String, Object> params, FrameDbTable table) {
-		if (!FrameTool.isEmpty(params)) {
+		if (!FrameTool.isEmpty(params) && !FrameTool.isEmpty(table)) {
 			Set<String> keys = new HashSet<String>();
 			for (String key : params.keySet()) {
-				if (!table.containsColName(key.toLowerCase()) && !table.containsColName(key.toUpperCase())) {
+				if (!table.containsColName(key.toLowerCase())
+						&& !table.containsColName(key.toUpperCase())) {
 					keys.add(key);
 				}
 			}

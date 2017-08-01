@@ -284,7 +284,7 @@ public class FrameServiceImpl implements FrameService {
 			rtn.setSucc(true);
 		} catch (Exception e) {
 			log.error("error", e);
-			rtn.setDefaultValue("程序内容错误");
+			rtn.setDefaultValue("程序内部错误");
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 		}
 		return rtn;

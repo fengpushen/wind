@@ -15,4 +15,8 @@ public interface CompanyDAO {
 
 	List<Map> selectBs_job_nojob_tj(Map params);
 
+	List<Map> selectV_c_area_video_last(Map params);
+
+	Map selectV_c_area_video_last(String c_area_video_id);
+
 }

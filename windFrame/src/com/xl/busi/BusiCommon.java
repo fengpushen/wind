@@ -64,6 +64,13 @@ public class BusiCommon {
 		return new ResponseEntity<byte[]>(bs, headers, HttpStatus.OK);
 	}
 
+	public static String getRtmpUrl(String host) {
+		if (host != null && host.equals(FrameCache.getFrameConfig("ip_inside"))) {
+			return FrameCache.getFrameConfig("rtmp_url_inside");
+		}
+		return FrameCache.getFrameConfig("rtmp_url");
+	}
+
 	public static boolean isLogined(HttpSession session) {
 		return !FrameTool.isEmpty(getLoginAccount(session));
 	}
