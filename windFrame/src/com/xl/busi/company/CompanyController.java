@@ -411,4 +411,26 @@ public class CompanyController {
 		return new ModelAndView("/busi/company/company_area_video", trans);
 	}
 
+	@RequestMapping("/showCenterMdyPhoneUI.do")
+	public ModelAndView showCenterMdyPhoneUI(HttpSession session) {
+
+		Map trans = new HashMap();
+		String area_code = BusiCommon.getLoginAccountStaffArea(session);
+		ExecuteResult rst = companyService.loadCenterPhone(area_code);
+		if (rst.isSucc()) {
+			trans = rst.getInfo();
+			trans.put("area_name", BusiCommon.getAreaName(area_code));
+		}
+		return new ModelAndView("/busi/center/center_area_phone_mdy", trans);
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/setCenterPhone.do")
+	public String setCenterPhone(HttpSession session, HttpServletRequest request) {
+
+		Map<String, Object> info = FrameTool.getRequestParameterMap(request);
+		ExecuteResult rst = companyService.setCenterPhone(BusiCommon.getLoginAccountStaffArea(session), info);
+		return FrameTool.toJson(rst);
+	}
+
 }

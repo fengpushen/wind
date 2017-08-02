@@ -33,4 +33,8 @@ public interface CompanyService {
 	ExecuteResult loadAreaVideoList(String area_code);
 
 	ExecuteResult bgnAreaVideoChatCenter(String c_area_video_id, String area_code, String host);
+
+	ExecuteResult loadCenterPhone(String area_code);
+
+	ExecuteResult setCenterPhone(String area_code, Map<String, Object> params);
 }

@@ -462,6 +462,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		</if>
 	</select>
 	
+	<select id="selectBs_s_area_phone" resultType="hashMap"
+		parameterType="hashMap">
+		select * from BS_S_AREA_PHONE
+		<where>
+			<if test="area_code != null and area_code != ''">
+				AREA_CODE = #{area_code}
+			</if>
+		</where>
+	</select>
+	
 	<insert id="insertBs_hr_imp_pre"  parameterType="hashMap">  
    		insert into BS_HR_IMP_PRE (  
    					batch_id,

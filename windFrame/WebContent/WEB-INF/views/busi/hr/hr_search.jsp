@@ -228,14 +228,9 @@
 						field : 'ck',
 						checkbox : true
 					}, {
-						field : 'HR_NAME',
+						field : 'HR_NAME_COVERD',
 						title : '姓名',
 						width : '6%',
-						align : 'center'
-					}, {
-						field : 'IDCARD_COVERD',
-						title : '身份证',
-						width : '14%',
 						align : 'center'
 					}, {
 						field : 'AGE',
@@ -294,7 +289,6 @@
 						align : 'center'
 					} ] ]
 				});
-				loadDatagridData();
 			} catch (e) {
 				alert(e);
 			}

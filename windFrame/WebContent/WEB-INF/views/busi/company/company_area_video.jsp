@@ -102,7 +102,7 @@ object:focus {
 	</noscript>
 
 	<table>
-		
+		<tr><td>${rtmp_url}</td></tr>
 	</table>
 
 	<script type="text/javascript">

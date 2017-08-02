@@ -230,16 +230,16 @@ public class CompanyServiceImpl implements CompanyService {
 		}
 		return rtn;
 	}
-	
+
 	public ExecuteResult bgnAreaVideoChatCenter(String c_area_video_id, String area_code, String host) {
 		ExecuteResult rtn = new ExecuteResult();
 		try {
 			Map params = new HashMap();
 			Map videoInfo = companyDAO.selectV_c_area_video_last(c_area_video_id);
-			if(!FrameTool.isEmpty(videoInfo)){
-				String c_id = (String)videoInfo.get("C_ID");
+			if (!FrameTool.isEmpty(videoInfo)) {
+				String c_id = (String) videoInfo.get("C_ID");
 				Map comInfo = companyDAO.selectBs_companyById(c_id);
-				
+
 				params.put("VIDEO_STATUS", "1");
 				frameDAO.anyUpdateByPk("bs_c_area_video", params, c_area_video_id);
 				rtn.addInfo("rtmp_url", BusiCommon.getRtmpUrl(host));
@@ -266,6 +266,35 @@ public class CompanyServiceImpl implements CompanyService {
 			rtn.setSucc(true);
 		} catch (Exception e) {
 			log.error("loadAreaList", e);
+		}
+		return rtn;
+	}
+
+	public ExecuteResult loadCenterPhone(String area_code) {
+		ExecuteResult rtn = new ExecuteResult();
+		try {
+			Map info = companyDAO.selectBs_s_area_phone(area_code);
+			rtn.addInfo("phoneInfo", info);
+			rtn.setSucc(true);
+		} catch (Exception e) {
+			log.error("loadCenterPhone", e);
+		}
+		return rtn;
+	}
+
+	@Transactional(rollbackFor = Exception.class)
+	public ExecuteResult setCenterPhone(String area_code, Map<String, Object> params) {
+		ExecuteResult rtn = new ExecuteResult();
+		try {
+			Map delMap = new HashMap();
+			delMap.put("area_code", area_code);
+			frameDAO.anyDelete("bs_s_area_phone", delMap);
+			params.put("area_code", area_code);
+			frameDAO.anyInsert("bs_s_area_phone", params);
+			rtn.setSucc(true);
+		} catch (Exception e) {
+			log.error("setCenterPhone", e);
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 		}
 		return rtn;
 	}

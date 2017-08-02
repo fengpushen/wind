@@ -17,57 +17,19 @@
 		data-options="noheader:true" id="infoDiv">
 		<table style="width: 100%">
 			<tr>
-				<td style="width: 10%; text-align: right">身份证:</td>
-				<td style="width: 23%; text-align: left"><input
-					class="easyui-textbox" value="${IDCARD_COVERD }"
-					style="width: 100%" data-options="disabled:true" /></td>
 				<td style="width: 10%; text-align: right">姓名:</td>
 				<td style="width: 23%; text-align: left"><input
 					class="easyui-textbox" value="${HR_NAME }" style="width: 100%"
 					data-options="disabled:true" /></td>
-				<td style="width: 10%; text-align: right">户籍地:</td>
+				<td style="width: 10%; text-align: right">性别:</td>
 				<td style="width: 23%; text-align: left"><input
-					class="easyui-textbox" value="${HJ_AREA_NAME }" style="width: 100%"
-					data-options="disabled:true"></td>
-			</tr>
-			<tr>
-				<td style="width: 10%; text-align: right">文化程度:</td>
-				<td style="width: 23%; text-align: left"><input
-					class="easyui-textbox" value="${DEGREE_NAME }" style="width: 100%"
+					class="easyui-textbox" value="${SEX_NAME }" style="width: 100%"
 					data-options="disabled:true" /></td>
-				<td style="width: 10%; text-align: right">毕业学校:</td>
+				<td style="width: 10%; text-align: right">年龄:</td>
 				<td style="width: 23%; text-align: left"><input
-					class="easyui-textbox" value="${SCHOOL }" style="width: 100%"
-					data-options="disabled:true" /></td>
-				<td style="width: 10%; text-align: right">毕业年份:</td>
-				<td style="width: 23%; text-align: left"><input
-					class="easyui-textbox" value="${GRA_YEAR }" style="width: 100%"
+					class="easyui-textbox" value="${AGE }" style="width: 100%"
 					data-options="disabled:true" /></td>
 
-			</tr>
-			<tr>
-				<td style="width: 10%; text-align: right">所学专业:</td>
-				<td style="width: 23%; text-align: left"><input
-					class="easyui-textbox" value="${PRO }" style="width: 100%"
-					data-options="disabled:true" /></td>
-				<td style="width: 10%; text-align: right">家庭地址:</td>
-				<td style="width: 56%; text-align: left" colspan="3"><input
-					class="easyui-textbox" value="${ADDRESS }" style="width: 95%"
-					data-options="disabled:true" /></td>
-			</tr>
-			<tr>
-				<td style="width: 10%; text-align: right">联系电话:</td>
-				<td style="width: 23%; text-align: left"><input
-					class="easyui-textbox" value="${PHONE }" style="width: 100%"
-					data-options="disabled:true" /></td>
-				<td style="width: 10%; text-align: right">QQ:</td>
-				<td style="width: 23%; text-align: left"><input
-					class="easyui-textbox" value="${QQ }" style="width: 100%"
-					data-options="disabled:true" /></td>
-				<td style="width: 10%; text-align: right">电子邮箱:</td>
-				<td style="width: 23%; text-align: left"><input
-					class="easyui-textbox" name="EMAIL" id="EMAIL" style="width: 100%"
-					value="${EMAIL }" data-options="disabled:true" /></td>
 			</tr>
 			<tr>
 				<td style="width: 10%; text-align: right">民族:</td>
@@ -75,27 +37,60 @@
 					class="easyui-textbox" name="NATION" id="nation"
 					value="${NATION_NAME }" style="width: 100%"
 					data-options="disabled:true" /></td>
-				<td style="width: 10%; text-align: right">已就业:</td>
+				<td style="width: 10%; text-align: right">文化程度:</td>
+				<td style="width: 23%; text-align: left"><input
+					class="easyui-textbox" value="${DEGREE_NAME }" style="width: 100%"
+					data-options="disabled:true" /></td>
+				<td style="width: 10%; text-align: right">是否就业:</td>
 				<td style="width: 23%; text-align: left"><input
 					class="easyui-textbox" value="${IS_JOB_NAME }" style="width: 100%"
 					data-options="disabled:true" /></td>
-				<td style="width: 10%; text-align: right">有就业意愿:</td>
-				<td style="width: 23%; text-align: left"><input
-					class="easyui-textbox" value="${IS_WANT_JOB_NAME }"
-					style="width: 100%" data-options="disabled:true" /></td>
-				<td style="width: 33%; text-align: right" colspan="2">&nbsp;</td>
+
 			</tr>
 			<tr>
 				<td style="width: 10%; text-align: right">技能特长:</td>
 				<td style="width: 56%; text-align: left" colspan="3"><input
 					class="easyui-textbox" name="JNTC" style="width: 95%"
-					data-options="disabled:true" value="${JNTC }"/></td>
+					data-options="disabled:true" value="${JNTC }" /></td>
+				<td style="width: 10%; text-align: right">技能等级:</td>
+				<td style="width: 23%; text-align: left"><input
+					class="easyui-textbox" value="${JOB_LV_NAME }" style="width: 100%"
+					data-options="disabled:true" /></td>
+			</tr>
+			<tr>
+				<td style="width: 10%; text-align: right">有就业意愿:</td>
+				<td style="width: 23%; text-align: left"><input
+					class="easyui-textbox" value="${IS_WANT_JOB_NAME }"
+					style="width: 100%" data-options="disabled:true" /></td>
+				<td style="width: 10%; text-align: right">意向薪资:</td>
+				<td style="width: 23%; text-align: left"><input
+					class="easyui-textbox" value="${WANT_INCOME }" style="width: 100%"
+					data-options="disabled:true" /></td>
+				<td style="width: 10%; text-align: right">意向职位:</td>
+				<td style="width: 23%; text-align: left"><input
+					class="easyui-textbox" value="${WANT_JOB_NAME }"
+					style="width: 100%" data-options="disabled:true" /></td>
+			</tr>
+			<tr>
+
+				<td style="width: 10%; text-align: right">户籍地:</td>
+				<td style="width: 23%; text-align: left"><input
+					class="easyui-textbox" value="${HJ_AREA_NAME }" style="width: 100%"
+					data-options="disabled:true"></td>
+				<td style="width: 10%; text-align: right">户籍地联系人:</td>
+				<td style="width: 23%; text-align: left"><input
+					class="easyui-textbox" value="${CONTRACTOR }" style="width: 100%"
+					data-options="disabled:true" /></td>
+				<td style="width: 10%; text-align: right">户籍地联系方式:</td>
+				<td style="width: 23%; text-align: left"><input
+					class="easyui-textbox" value="${CONTRACOR_PHONE }"
+					style="width: 100%" data-options="disabled:true" /></td>
 			</tr>
 		</table>
 
 
 	</div>
-	<div class="easyui-panel" title="入离职信息" style="width: 100%">
+	<div class="easyui-panel" title="历史入职信息" style="width: 100%">
 		<table id="datagridJob">
 		</table>
 	</div>
@@ -119,21 +114,13 @@
 					pageList : [ 20, 50, 100, 150, 200 ],
 					frozenColumns : [ [ {
 						field : 'JOB_TIME',
-						title : '入/离职时间',
+						title : '入职时间',
 						width : '10%',
-						align : 'center'
-					}, {
-						field : 'IS_JOB_NAME',
-						title : '类型',
-						width : '5%',
 						align : 'center'
 					} ] ],
 					columns : [ [ {
 						"title" : "入职信息",
 						"colspan" : 5
-					}, {
-						"title" : "离职信息",
-						"colspan" : 2
 					} ], [ {
 						field : 'JOB_AREA_NAME',
 						title : '工作地',
@@ -158,16 +145,6 @@
 						field : 'INCOME',
 						title : '月收入(元)',
 						width : '10%',
-						align : 'center'
-					}, {
-						field : 'NOJOB_DW',
-						title : '离职单位',
-						width : '15%',
-						align : 'center'
-					}, {
-						field : 'NOJOB_REASON',
-						title : '离职时间',
-						width : '15%',
 						align : 'center'
 					} ] ],
 				});

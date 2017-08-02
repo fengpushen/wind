@@ -21,34 +21,34 @@ insert into com_area
    where length(org_code) = 12
 /
 ---------------------------------------------------------------
-insert into frame_config
-  (config_name, config_value, memo, config_type)
-values
-  ('rtmp_url_inside',
-   'rtmp://10.137.5.189/myChat',
-   '视频流位置(内网)',
-   'busi_yyhr')
-/
-insert into frame_config
-  (config_name, config_value, memo, config_type)
-values
-  ('ip_inside',
-   '10.137.5.189:8088',
-   '内网访问ip',
-   'busi_yyhr')
-/
--- Add/modify columns 
-alter table BS_C_AREA_VIDEO add video_status varchar2(2) default 0;
+v_busi_hr
+-- Create table
+create table bs_s_area_phone
+(
+  area_phone_id varchar2(32) default sys_guid() not null,
+  area_code     varchar2(12) not null,
+  phone         varchar2(20) not null,
+  contractor    varchar2(20) not null
+)
+;
+-- Add comments to the table 
+comment on table bs_s_area_phone
+  is '行政区联系表';
 -- Add comments to the columns 
-comment on column BS_C_AREA_VIDEO.video_status
-  is '邀请状态，0：尚未回应邀请；1：已经进入';
+comment on column bs_s_area_phone.area_phone_id
+  is '主键';
+comment on column bs_s_area_phone.area_code
+  is '地区编码';
+comment on column bs_s_area_phone.phone
+  is '联系电话';
+comment on column bs_s_area_phone.contractor
+  is '联系人';
+-- Create/Recreate indexes 
+create unique index ux_area_phone on bs_s_area_phone (area_code);
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table bs_s_area_phone
+  add constraint pk_area_phone primary key (AREA_PHONE_ID);
 /
-create or replace view v_C_AREA_VIDEO_last as
-select *
-  from BS_C_AREA_VIDEO a
- where not exists (select 1
-          from BS_C_AREA_VIDEO b
-         where a.c_id = b.c_id
-           and a.area_code = b.area_code
-           and a.in_time < b.in_time)
+create or replace view v_code_map_job_lv as
+select "CODE_NAME","CODE_KEY","CODE_VALUE","CODE_VALUE_ORDER" from frame_code_map where code_name = 'job_lv';
 /
