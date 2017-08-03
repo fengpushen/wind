@@ -90,7 +90,7 @@
 								$('#dd').dialog({
 									title : '新增人员',
 									width : 1100,
-									height : 550,
+									height : 500,
 									closed : false,
 									cache : false,
 									href : 'busi/hr/showHrInfo.do',
@@ -175,7 +175,7 @@
 									$('#dd').dialog({
 										title : '修改',
 										width : 1100,
-										height : 550,
+										height : 500,
 										closed : false,
 										cache : false,
 										href : 'busi/hr/showHrInfoMdy.do',

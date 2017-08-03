@@ -135,10 +135,10 @@ body, td, th, input {
 				</tr>
 				<tr style="background-color: #F0F8FF">
 					<td style="width: 100%; font-size: 18px; text-align: center"
-						colspan="7">暂未就业信息</td>
+						colspan="7">就业意愿信息</td>
 				</tr>
 				<tr>
-					<td style="width: 10%; background-color: #F0F8FF;" rowspan="4">暂未就业信息</td>
+					<td style="width: 10%; background-color: #F0F8FF;" rowspan="4">就业意愿信息</td>
 					<td style="width: 10%; text-align: right">就业意愿:</td>
 					<td style="width: 20%; text-align: left"><input
 						class="easyui-combobox" name="is_want_job" id="is_want_job"
@@ -237,28 +237,28 @@ body, td, th, input {
 				$("body").click(function() {
 					$('#oprTip').panel('close');
 				});
-				comboboxDefaultInit('degree', 'degree', 'true');
-				comboboxDefaultInit('nation', 'nation', 'true', 200);
+				comboboxDefaultInit('degree', 'degree', true);
+				comboboxDefaultInit('nation', 'nation', true, 200);
 				comboboxDefaultInit('political_status', 'political_status',
-						'true');
-				comboboxDefaultInit('hj_type', 'hj_type', 'true');
-				comboboxDefaultInit('marry_status', 'marry_status', 'true');
-				comboboxDefaultInit('is_poor', 'boolean', 'true');
+						true);
+				comboboxDefaultInit('hj_type', 'hj_type', true);
+				comboboxDefaultInit('marry_status', 'marry_status', true);
+				comboboxDefaultInit('is_poor', 'boolean', true);
 				comboboxDefaultInit('job_lv', 'job_lv', false, 'auto', false,
 						true);
 				comboboxDefaultInit('job_industry', 'industry');
 				comboboxDefaultInit('job_type', 'job_type');
 				comboboxDefaultInit('is_want_job', 'boolean');
 				comboboxDefaultInit('hr_kind', 'hr_kind');
-				comboboxDefaultInit('hard_type', 'hard_type', false, 'auto', false,
-						true);
+				comboboxDefaultInit('hard_type', 'hard_type', false, 'auto',
+						false, true);
 				comboboxDefaultInit('want_industry', 'industry', false, 'auto',
 						false, true, {
 							"text" : "均可",
 							"id" : ""
 						});
-				comboboxDefaultInit('want_work_area_kind', 'area_kind', false, 'auto',
-						false, true, {
+				comboboxDefaultInit('want_work_area_kind', 'area_kind', false,
+						'auto', false, true, {
 							"text" : "均可",
 							"id" : ""
 						});
@@ -273,10 +273,6 @@ body, td, th, input {
 
 				var jobIds = [ "job_dw", "job_time", "job_gw", "job_area_name",
 						"job_industry", "job_type" ];
-				var noJobIds = [ "is_want_job", "hr_kind", "hard_type",
-						"want_job_name", "want_income", "want_industry",
-						"want_work_area_kind", "want_job_type",
-						"want_train_type" ];
 				var wantJobIds = [ "want_job_name", "want_income",
 						"want_industry", "want_work_area_kind",
 						"want_job_type", "want_train_type" ];
@@ -293,17 +289,13 @@ body, td, th, input {
 									onChange : function() {
 										if (this.value == '0') {
 											disableEles(jobIds);
-											enableEles(noJobIds);
 										} else {
-											disableEles(noJobIds);
 											enableEles(jobIds);
 										}
 									},
 									required : true,
-									validType : [
-											'equalTriggerRequired["是", "job_dw", "job_time", "job_gw", "job_area_name", "job_area", "job_industry", "job_type"]',
-											'equalTriggerRequired["否", "is_want_job", "hr_kind"]' ],
-									invalidMessage : '已就业必须填写就业信息，未就业必须填写就业意愿、人员身份'
+									validType : [ 'equalTriggerRequired["是", "job_dw", "job_time", "job_gw", "job_area_name", "job_area", "job_industry", "job_type"]' ],
+									invalidMessage : '必须填写就业相关信息'
 								});
 
 				$("#is_want_job")
@@ -315,6 +307,7 @@ body, td, th, input {
 									textField : 'text',
 									panelHeight : 'auto',
 									editable : false,
+									required : true,
 									onChange : function() {
 										if (this.value == '0') {
 											disableEles(wantJobIds);
