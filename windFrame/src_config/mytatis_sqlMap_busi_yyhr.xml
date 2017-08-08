@@ -346,7 +346,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<if test="record_count == null">
 			v_bs_position_req.*, V_BS_POSITION.p_name, V_BS_POSITION.p_work_area_name, V_BS_POSITION.p_work_area,V_BS_POSITION.p_pay_botton,
 			bs_company.c_name, V_BUSI_HR.hr_name, V_BUSI_HR.age, V_BUSI_HR.sex_name, V_BUSI_HR.degree_name, V_BUSI_HR.jntc, V_BUSI_HR.hj_area_name,
-			V_BUSI_HR.IDCARD_COVERD,V_BUSI_HR.IDCARD
+			V_BUSI_HR.IDCARD_COVERD,V_BUSI_HR.IDCARD, BS_POSITION_REQ_VIDEO.is_open
 		</if>
 		<if test="record_count != null">
 			count(1) as record_count
@@ -358,6 +358,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		on V_BS_POSITION.c_id = bs_company.c_id
 		inner join V_BUSI_HR
 		on V_BUSI_HR.hr_id = v_bs_position_req.HR_ID
+		left outer join BS_POSITION_REQ_VIDEO on BS_POSITION_REQ_VIDEO.req_id = v_bs_position_req.req_id
 		<where>
 			<if test="P_ID != null and P_ID != ''">
 				v_bs_position_req.P_ID = #{P_ID}

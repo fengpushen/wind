@@ -289,12 +289,12 @@ public class PositionController {
 	}
 
 	@RequestMapping("/showMobilePositionInterview.do")
-	public ModelAndView showMobilePositionInterview(@RequestParam(required = true) String room) {
+	public ModelAndView showMobilePositionInterview(HttpServletRequest request,
+			@RequestParam(required = true) String req_id) {
 
-		Map trans = new HashMap();
-		trans.put("room", room);
-		trans.put("rtmp_url", FrameCache.getFrameConfig("rtmp_url"));
-		return new ModelAndView("/busi/mobile/hr/mo_hr_interview", trans);
+		String host = request.getHeader("host");
+		ExecuteResult rst = positionService.personInPostionReqInterview(req_id, host);
+		return new ModelAndView("/busi/mobile/hr/mo_hr_interview", rst.getInfo());
 	}
 
 	@RequestMapping("/showMobilePositionSearch.do")
@@ -329,9 +329,7 @@ public class PositionController {
 			@RequestParam(required = true) String req_id) {
 
 		Map trans = new HashMap();
-		String host = request.getHeader("host");
-		ExecuteResult rst = positionService.loadComPostionReqDetail(req_id, BusiCommon.getLoginAccountBusiId(session),
-				host);
+		ExecuteResult rst = positionService.loadComPostionReqDetail(req_id, BusiCommon.getLoginAccountBusiId(session));
 		if (rst.isSucc()) {
 			trans = rst.getInfo();
 		}

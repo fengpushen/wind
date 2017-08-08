@@ -12,19 +12,19 @@
 <tags:commonMobileHead />
 </head>
 <body>
-	<div class="easyui-navpanel">
-		<header>
-			<div class="m-toolbar">
-				<span class="m-title">本网站为实名制网站，请先绑定您的身份证号码</span>
-			</div>
-		</header>
+	<div class="easyui-navpanel"
+		style="background-size: 100%; background-image: url(resource/public/images/mobile_bind_bg.jpg); width: 100%; height: 100%; text-align: center">
+
+		<p style="padding-top: 20px; font-size: 20px">益阳市劳动力资源信息管理平台</p>
+		<p style="font-size: 18px">移动个人端</p>
+
 		<div
 			style="margin: 20px auto; width: 100px; height: 100px; border-radius: 100px; overflow: hidden">
-			<img src="../images/login1.jpg"
+			<img src="resource/public/images/timg.jpg"
 				style="margin: 0; width: 100%; height: 100%;">
 		</div>
 		<div id="oprTip" class="easyui-panel"
-			style="width: 100%; text-align: center; "
+			style="width: 100%; text-align: center;"
 			data-options="noheader:false, closed:true, border:false"></div>
 		<div style="padding: 0 20px">
 			<form id="theForm" method="post" style="width: 100%">
@@ -39,6 +39,7 @@
 						style="width: 100%; height: 38px">
 				</div>
 			</form>
+			<p>本网站为实名制网站，请先绑定身份证号码<p>
 			<div style="text-align: center; margin-top: 30px">
 				<a href="javascript:void(0)" onclick="$('#theForm').form('submit');"
 					class="easyui-linkbutton" plain="true" outline="true"
@@ -56,7 +57,7 @@
 			var hr_id = localStorage.getItem("hr_id");
 			if (hr_id != null && hr_id != '') {
 				window.location.href = baseHref
-						+ "loginaccount/loginHr.do?hr_id=" + hr_id;
+						+ "loginaccount/showLoginHrUI.do?hr_id=" + hr_id;
 			}
 			$('#theForm')
 					.form(

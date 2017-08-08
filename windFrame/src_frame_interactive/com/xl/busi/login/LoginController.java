@@ -146,6 +146,20 @@ public class LoginController {
 		}
 
 	}
+	
+	@RequestMapping(value = "/showLoginHrUI.do")
+	public ModelAndView showLoginHrUI(@RequestParam(required = true) String hr_id) {
+
+		Map info = humanResourceService.getHrInfo(hr_id);
+		if (FrameTool.isEmpty(info)) {
+			Map trans = new HashMap();
+			trans.put("rebind", FrameConstant.busi_com_boolean_true);
+			return new ModelAndView("/busi/mobile/hr/mo_hr_bind", trans);
+		} else {
+			return new ModelAndView("/busi/mobile/hr/mo_hr_login", info);
+		}
+
+	}
 
 	@ResponseBody
 	@RequestMapping(value = "/logout.do")

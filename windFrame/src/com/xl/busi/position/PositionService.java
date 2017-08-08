@@ -31,9 +31,11 @@ public interface PositionService {
 
 	ExecuteResult bgnPostionReqInterview(String req_id, String host);
 
-	ExecuteResult loadComPostionReqDetail(String req_id, String c_id, String host);
+	ExecuteResult loadComPostionReqDetail(String req_id, String c_id);
 
 	ExecuteResult changeReqStatus(String req_id, String req_status);
 
 	ExecuteResult changeReqsStatus(String[] req_ids, String req_status);
+
+	ExecuteResult personInPostionReqInterview(String req_id, String host);
 }

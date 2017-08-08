@@ -97,6 +97,9 @@
 									modal : false,
 									onBeforeClose : function() {
 										loadDatagridData();
+									},
+									onLoad : function(){
+										hrInfoPageLoaded();
 									}
 								});
 							}

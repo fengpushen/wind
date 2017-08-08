@@ -65,12 +65,11 @@
 														+ row.IN_TIME_STR;
 												showValue += "<br />";
 												showValue += row.C_NAME;
-												var room_no = row.ROOM_NO;
-												if (room_no != null
-														&& room_no != '') {
+												var is_open = row.IS_OPEN;
+												if (is_open == '1') {
 													var url = baseHref
-															+ "busi/position/showMobilePositionInterview.do?room="
-															+ room_no;
+															+ "busi/position/showMobilePositionInterview.do?req_id="
+															+ row.REQ_ID;
 													showValue += "<br />";
 													showValue += "<a href='"+url+"'>视频面试</a>";
 												}

@@ -232,6 +232,15 @@ body, td, th, input {
 
 
 	<script type="text/javascript">
+		var jobIds = [ "job_dw", "job_time", "job_gw", "job_area_name",
+					"job_industry", "job_type" ];
+		var wantJobIds = [ "want_job_name", "want_income",
+					"want_industry", "want_work_area_kind",
+					"want_job_type", "want_train_type" ];
+		function hrInfoPageLoaded(){
+			disableEles(jobIds);
+			disableEles(wantJobIds);
+		}
 		$(function() {
 			try {
 				$("body").click(function() {
@@ -271,11 +280,7 @@ body, td, th, input {
 						'auto', true);
 				comboboxDefaultInit('cbxx', 'bx_type', false, 'auto', true);
 
-				var jobIds = [ "job_dw", "job_time", "job_gw", "job_area_name",
-						"job_industry", "job_type" ];
-				var wantJobIds = [ "want_job_name", "want_income",
-						"want_industry", "want_work_area_kind",
-						"want_job_type", "want_train_type" ];
+				
 
 				$("#is_job")
 						.combobox(

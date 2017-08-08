@@ -159,6 +159,15 @@ function closeOrpTip(id) {
 	$("#" + id).html('');
 	$("#" + id).panel('close');
 }
+function showOprTipBase(id, msg, color){
+	$("#" + id).html(msg);
+	$("#" + id).css('color', color);
+	$("#" + id).show();
+}
+function closeOrpTipBase(id) {
+	$("#" + id).html('');
+	$("#" + id).hide();
+}
 function comboboxDefaultInit(id, codeName, required, height, multiple,
 		addSpace, spaceContent) {
 	if (height == null || isNaN(height)) {

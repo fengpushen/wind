@@ -218,6 +218,43 @@ public class PositionServiceImpl implements PositionService {
 	public ExecuteResult bgnPostionReqInterview(String req_id, String host) {
 		ExecuteResult rtn = new ExecuteResult();
 		try {
+			Map params = new HashMap();
+			params.put("req_id", req_id);
+			frameDAO.anyDelete("bs_position_req_video", params);
+			frameDAO.anyInsert("bs_position_req_video", params);
+
+			rtn = loadPositionReqBothInfo(req_id);
+			if (!rtn.isSucc()) {
+				TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+				return rtn;
+			}
+			rtn.addInfo("rtmp_url", BusiCommon.getRtmpUrl(host));
+			rtn.addInfo("room", req_id);
+		} catch (Exception e) {
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+			log.error("bgnPostionReqInterview", e);
+		}
+		return rtn;
+	}
+
+	public ExecuteResult personInPostionReqInterview(String req_id, String host) {
+		ExecuteResult rtn = new ExecuteResult();
+		try {
+			Map params = new HashMap();
+			params.put("is_open", FrameConstant.busi_com_boolean_false);
+			frameDAO.anyUpdateByPk("bs_position_req_video", params, req_id);
+			rtn.addInfo("rtmp_url", BusiCommon.getRtmpUrl(host));
+			rtn.addInfo("room", req_id);
+		} catch (Exception e) {
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+			log.error("personInPostionReqInterview", e);
+		}
+		return rtn;
+	}
+
+	private ExecuteResult loadPositionReqBothInfo(String req_id) {
+		ExecuteResult rtn = new ExecuteResult();
+		try {
 			Map reqInfo = positionDAO.selectBs_position_reqById(req_id);
 			if (!FrameTool.isEmpty(reqInfo)) {
 				rtn.addInfo("req_id", req_id);
@@ -229,20 +266,18 @@ public class PositionServiceImpl implements PositionService {
 					Map hrInfo = humanResourceDAO.selectBusi_hr(hr_id);
 					if (!FrameTool.isEmpty(hrInfo)) {
 						rtn.addInfo("hrInfo", hrInfo);
-						rtn.addInfo("rtmp_url", BusiCommon.getRtmpUrl(host));
-						rtn.addInfo("room", req_id);
 						rtn.setSucc(true);
 					}
 				}
 			}
 		} catch (Exception e) {
-			log.error("bgnPostionReqInterview", e);
+			log.error("loadPositionReqBothInfo", e);
 		}
 		return rtn;
 	}
 
-	public ExecuteResult loadComPostionReqDetail(String req_id, String c_id, String host) {
-		ExecuteResult rtn = bgnPostionReqInterview(req_id, host);
+	public ExecuteResult loadComPostionReqDetail(String req_id, String c_id) {
+		ExecuteResult rtn = loadPositionReqBothInfo(req_id);
 		if (rtn.isSucc()) {
 			Map hrInfo = (Map) rtn.getInfoOne("hrInfo");
 			String hr_id = (String) hrInfo.get("HR_ID");
