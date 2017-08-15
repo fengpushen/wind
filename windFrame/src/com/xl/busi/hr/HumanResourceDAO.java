@@ -29,4 +29,6 @@ public interface HumanResourceDAO {
 
 	Map selectV_last_h_job(String hr_id);
 
+	List<Map> selectV_hr_position(Map params);
+
 }

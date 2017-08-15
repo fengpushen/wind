@@ -385,4 +385,24 @@ public class PositionController {
 		return FrameTool.toJson(rst);
 	}
 
+	@ResponseBody
+	@RequestMapping(value = "/sendPositionReqCenter.do")
+	public String sendPositionReqCenter(HttpSession session, HttpServletRequest request) {
+
+		ExecuteResult rst = new ExecuteResult();
+		try {
+			Map<String, Object> info = FrameTool.getRequestParameterMap(request);
+			Object pids = info.get("pids[]");
+			Object hr_ids = info.get("hr_ids[]");
+			if (!FrameTool.isEmpty(pids)) {
+				rst = positionService.sendPositionReqsCenter(BusiCommon.getLoginAccountId(session),
+						FrameTool.getStringArray(pids), FrameTool.getStringArray(hr_ids));
+			}
+		} catch (Exception e) {
+			rst.setDefaultValue("程序内部错误");
+			log.error("error", e);
+		}
+		return FrameTool.toJson(rst);
+	}
+
 }

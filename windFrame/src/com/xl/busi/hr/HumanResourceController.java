@@ -395,4 +395,34 @@ public class HumanResourceController {
 		return rst;
 	}
 
+	@RequestMapping("/showHrPositionMatchUI")
+	public ModelAndView showHrPositionMatchUI() {
+		return new ModelAndView("/busi/hr/hr_position_match_list");
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/loadHrPositionMatchList.do")
+	public String loadHrPositionMatchList(HttpSession session, HttpServletRequest request) {
+
+		Map<String, Object> info = FrameTool.getRequestParameterMap(request);
+		String hj_area = (String) info.get("HJ_AREA");
+		if (FrameTool.isEmpty(hj_area)) {
+			info.put("HJ_AREA", BusiCommon.getLoginAccountStaffArea(session));
+		}
+		BusiCommon.dealAreaBj(info, "HJ_AREA");
+		ExecuteResult rst = humanResourceService.selectV_hr_position(info);
+		if (rst.isSucc()) {
+			Map map = (Map) rst.getInfoOne("info");
+			return FrameTool.toJson(map);
+		}
+		return null;
+	}
+
+	@RequestMapping("/showHrListUI")
+	public ModelAndView showHrListUI() {
+		Map trans = new HashMap();
+		trans.put("LD_TYPE", "1");
+		return new ModelAndView("/busi/hr/hr_list_qry", trans);
+	}
+
 }

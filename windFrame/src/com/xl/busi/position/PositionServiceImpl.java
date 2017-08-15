@@ -177,6 +177,42 @@ public class PositionServiceImpl implements PositionService {
 		return rtn;
 	}
 
+	@Transactional(rollbackFor = Exception.class)
+	public ExecuteResult sendPositionReqCenter(String opr_id, String pid, String hr_id) throws SQLException {
+		ExecuteResult rtn = new ExecuteResult();
+		if (positionReqExists(pid, hr_id)) {
+			rtn.setDefaultValue("已经申请过此岗位，请勿重复申请");
+		} else {
+			Map params = new HashMap();
+			params.put("REQ_ID", FrameTool.getUUID());
+			params.put("P_ID", pid);
+			params.put("HR_ID", hr_id);
+			params.put("opr_id", opr_id);
+			frameDAO.anyInsert("bs_position_req", params);
+			rtn.setSucc(true);
+		}
+		return rtn;
+	}
+
+	@Transactional(rollbackFor = Exception.class)
+	public ExecuteResult sendPositionReqsCenter(String opr_id, String pids[], String hr_ids[]) throws SQLException {
+		ExecuteResult rtn = new ExecuteResult();
+		if (FrameTool.isEmpty(opr_id) || FrameTool.isEmpty(pids) || FrameTool.isEmpty(hr_ids)
+				|| pids.length != hr_ids.length) {
+			rtn.setDefaultValue("错误的参数");
+		} else {
+			for (int i = 0, len = pids.length; i < len; i++) {
+				rtn = sendPositionReqCenter(opr_id, pids[i], hr_ids[i]);
+				if (!rtn.isSucc()) {
+					TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+					return rtn;
+				}
+			}
+			rtn.setSucc(true);
+		}
+		return rtn;
+	}
+
 	public ExecuteResult loadHrReqList(String hr_id) {
 
 		Map params = new HashMap();

@@ -21,23 +21,9 @@ insert into com_area
    where length(org_code) = 12
 /
 ---------------------------------------------------------------
--- Create table
-create table bs_position_req_video
-(
-  req_id  varchar2(32) not null,
-  in_time date default sysdate not null,
-  is_open varchar2(2) default 1 not null
-)
-;
--- Add comments to the table 
-comment on table bs_position_req_video
-  is '职位申请视频表';
+v_hr_position
+-- Add/modify columns 
+alter table BS_POSITION_REQ add opr_id VARCHAR2(32);
 -- Add comments to the columns 
-comment on column bs_position_req_video.req_id
-  is '主键';
-comment on column bs_position_req_video.is_open
-  is '是否开放';
--- Create/Recreate primary, unique and foreign key constraints 
-alter table bs_position_req_video
-  add constraint pk_position_req_video primary key (REQ_ID);
-/
+comment on column BS_POSITION_REQ.opr_id
+  is '录入人id';

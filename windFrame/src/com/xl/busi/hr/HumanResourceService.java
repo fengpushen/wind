@@ -43,4 +43,6 @@ public interface HumanResourceService {
 	ExecuteResult searchHrListCom(Map<String, Object> params);
 
 	Map getHrInfoCom(String c_id, String hr_id) throws SQLException;
+
+	ExecuteResult selectV_hr_position(Map params);
 }

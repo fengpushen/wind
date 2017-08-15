@@ -15,7 +15,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<if test="record_count != null">
 			count(1) as record_count
 		</if>
-		from v_busi_hr
+		from v_busi_hr a
 		<where>
 			<if test="HR_NAME_LIKE != null and HR_NAME_LIKE != ''">
 				hr_name like #{HR_NAME_LIKE} || '%'
@@ -46,6 +46,42 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				<foreach collection="wantJobNameSet" index="index" item="item" open="(" separator="union all" close=")">
               		select hr_id from V_HR_WANT_JOB_NAME where UTL_MATCH.edit_distance_similarity(V_HR_WANT_JOB_NAME.WANT_JOB_NAME, #{item}) >= 60      
         		</foreach>  
+			</if>
+			<if test="nation != null and nation != ''">
+				and nation = #{nation}
+			</if>
+			<if test="political_status != null and political_status != ''">
+				and political_status = #{political_status}
+			</if>
+			<if test="marry_status != null and marry_status != ''">
+				and marry_status = #{marry_status}
+			</if>
+			<if test="degree != null and degree != ''">
+				and degree = #{degree}
+			</if>
+			<if test="is_poor != null and is_poor != ''">
+				and is_poor = #{is_poor}
+			</if>
+			<if test="job_lv != null and job_lv != ''">
+				and job_lv = #{job_lv}
+			</if>
+			<if test="hr_kind != null and hr_kind != ''">
+				and hr_kind = #{hr_kind}
+			</if>
+			<if test="hard_type != null and hard_type != ''">
+				and hard_type = #{hard_type}
+			</if>
+			<if test="want_industry != null and want_industry != ''">
+				and want_industry = #{want_industry}
+			</if>
+			<if test="want_work_area_kind != null and want_work_area_kind != ''">
+				and want_work_area_kind = #{want_work_area_kind}
+			</if>
+			<if test="want_job_type != null and want_job_type != ''">
+				and want_job_type = #{want_job_type}
+			</if>
+			<if test="want_train_type != null and want_train_type != ''">
+				and exists (select 1 from BS_H_WANT_TRAIN_TYPE b where a.hr_id = b.hr_id and b.train_type = #{want_train_type})
 			</if>
 			<if test="IS_WANT_JOB != null and IS_WANT_JOB != ''">
 				and IS_WANT_JOB = #{IS_WANT_JOB}
@@ -518,6 +554,63 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  	<select id="selectBs_hr_imp_pre" resultType="hashMap"
 		parameterType="string">
 		select row_no, error_info from BS_HR_IMP_PRE where batch_id = #{batch_id} and error_info is not null
+	</select>
+	
+	<select id="selectV_hr_position" resultType="hashMap"
+		parameterType="hashMap">
+		<if test="record_count == null and page != null and page != ''">
+			select * from (select rownum as rowidx, qry.* from (
+		</if>
+		select
+		<if test="record_count == null">
+			*
+		</if>
+		<if test="record_count != null">
+			count(1) as record_count
+		</if>
+		from v_hr_position a
+		<where>
+			<if test="HR_NAME_LIKE != null and HR_NAME_LIKE != ''">
+				hr_name like #{HR_NAME_LIKE} || '%'
+			</if>
+			<if test="IDCARD_LIKE != null and IDCARD_LIKE != ''">
+				and idcard like #{IDCARD_LIKE} || '%'
+			</if>
+			<if test="IS_JOB != null and IS_JOB != ''">
+				and IS_JOB = #{IS_JOB}
+			</if>
+			<if test="HJ_AREA != null and HJ_AREA != ''">
+				<choose>
+					<when test="HJ_AREA_BJ != null and HJ_AREA_BJ  != ''">
+						and hj_area = #{HJ_AREA}
+					</when>
+					<otherwise>
+						<choose>
+							<when test="HJ_AREA_LEVEL == 0">
+								and province_code_hj = #{HJ_AREA}
+							</when>
+							<when test="HJ_AREA_LEVEL == 1">
+								and city_code_hj = #{HJ_AREA}
+							</when>
+							<when test="HJ_AREA_LEVEL == 2">
+								and country_code_hj = #{HJ_AREA}
+							</when>
+							<when test="HJ_AREA_LEVEL == 3">
+								and street_code_hj = #{HJ_AREA}
+							</when>
+							<when test="HJ_AREA_LEVEL == 4">
+								and village_code_hj = #{HJ_AREA}
+							</when>
+						</choose>
+					</otherwise>
+				</choose>
+			</if>
+		</where>
+		order by a.hr_id, c_id
+		<if test="record_count == null and page != null and page != ''">
+			)qry ) where rowidx > (#{page} - 1) * #{rows} and rowidx
+			&lt;= #{page} * #{rows}
+		</if>
 	</select>
 
 </mapper>

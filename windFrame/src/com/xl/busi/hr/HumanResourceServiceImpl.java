@@ -541,4 +541,20 @@ public class HumanResourceServiceImpl implements HumanResourceService {
 		return BusiCommon.getFullPathOfTempDir() + batch_id + ".xls";
 	}
 
+	public ExecuteResult selectV_hr_position(Map params) {
+		ExecuteResult rtn = new ExecuteResult();
+		try {
+			Map info = new HashMap();
+			int total = frameDAO.selectRecord_count("selectV_hr_position", params);
+			info.put("total", total);
+			List<Map> rows = humanResourceDAO.selectV_hr_position(params);
+			info.put("rows", rows);
+			rtn.addInfo("info", info);
+			rtn.setSucc(true);
+		} catch (Exception e) {
+			log.error("loadHrList", e);
+		}
+		return rtn;
+	}
+
 }
