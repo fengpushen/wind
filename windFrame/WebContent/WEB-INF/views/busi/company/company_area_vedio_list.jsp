@@ -35,12 +35,12 @@
 					} else if (rows.length > 1) {
 						$.messager.alert("", "请选中单条记录进行操作");
 					} else {
-						var req_id = rows[0].C_AREA_VIDEO_ID;
+						var c_id = rows[0].C_ID;
 						window
 								.open(
 										baseHref
-												+ "busi/company/showComAreaVideoCenterUI.do?c_area_video_id="
-												+ req_id, "_blank");
+												+ "busi/company/showComAreaVideoCenterUI.do?c_id="
+												+ c_id, "_blank");
 					}
 				}
 			} ];

@@ -92,7 +92,11 @@ public class CompanyServiceImpl implements CompanyService {
 	public ExecuteResult delComInfo(String[] cids, String oprId, String oprArea) throws SQLException {
 		ExecuteResult rtn = new ExecuteResult();
 		for (String cid : cids) {
-			frameDAO.anyDeleteByPk("bs_company", cid);
+			rtn = delComInfo(cid, oprId, oprArea);
+			if (!rtn.isSucc()) {
+				TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+				return rtn;
+			}
 		}
 		rtn.setSucc(true);
 		return rtn;
@@ -215,10 +219,10 @@ public class CompanyServiceImpl implements CompanyService {
 		ExecuteResult rtn = new ExecuteResult();
 		try {
 			Map params = new HashMap();
-			String room = FrameTool.getUUID();
-			params.put("C_AREA_VIDEO_ID", room);
+			String room = c_id + area_code;
 			params.put("c_id", c_id);
 			params.put("area_code", area_code);
+			frameDAO.anyDelete("bs_c_area_video", params);
 			frameDAO.anyInsert("bs_c_area_video", params);
 
 			rtn.addInfo("rtmp_url", BusiCommon.getRtmpUrl(host));
@@ -231,19 +235,21 @@ public class CompanyServiceImpl implements CompanyService {
 		return rtn;
 	}
 
-	public ExecuteResult bgnAreaVideoChatCenter(String c_area_video_id, String area_code, String host) {
+	public ExecuteResult bgnAreaVideoChatCenter(String c_id, String area_code, String host) {
 		ExecuteResult rtn = new ExecuteResult();
 		try {
-			Map params = new HashMap();
-			Map videoInfo = companyDAO.selectV_c_area_video_last(c_area_video_id);
-			if (!FrameTool.isEmpty(videoInfo)) {
-				String c_id = (String) videoInfo.get("C_ID");
-				Map comInfo = companyDAO.selectBs_companyById(c_id);
 
+			Map videoInfo = companyDAO.selectV_c_area_video_last(c_id, area_code);
+			if (!FrameTool.isEmpty(videoInfo)) {
+				Map comInfo = companyDAO.selectBs_companyById(c_id);
+				Map params = new HashMap();
 				params.put("VIDEO_STATUS", "1");
-				frameDAO.anyUpdateByPk("bs_c_area_video", params, c_area_video_id);
+				Map qryParams = new HashMap();
+				qryParams.put("c_id", c_id);
+				qryParams.put("area_code", area_code);
+				frameDAO.anyUpdate("bs_c_area_video", params, qryParams);
 				rtn.addInfo("rtmp_url", BusiCommon.getRtmpUrl(host));
-				rtn.addInfo("room", c_area_video_id);
+				rtn.addInfo("room", c_id + area_code);
 				rtn.setSucc(true);
 			}
 		} catch (Exception e) {

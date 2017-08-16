@@ -481,7 +481,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<if test="record_count != null">
 			count(1) as record_count
 		</if>
-		from v_C_AREA_VIDEO_last a
+		from bs_c_area_video a
 		 inner join bs_company b
 		    on a.C_ID = b.c_id
 		<where>

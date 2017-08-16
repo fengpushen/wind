@@ -399,12 +399,12 @@ public class CompanyController {
 
 	@RequestMapping("/showComAreaVideoCenterUI.do")
 	public ModelAndView showComAreaVideoCenterUI(HttpSession session, HttpServletRequest request,
-			@RequestParam(required = true) String c_area_video_id) {
+			@RequestParam(required = true) String c_id) {
 
 		Map trans = new HashMap();
 		String host = request.getHeader("host");
-		ExecuteResult rst = companyService.bgnAreaVideoChatCenter(c_area_video_id,
-				BusiCommon.getLoginAccountStaffArea(session), host);
+		ExecuteResult rst = companyService.bgnAreaVideoChatCenter(c_id, BusiCommon.getLoginAccountStaffArea(session),
+				host);
 		if (rst.isSucc()) {
 			trans = rst.getInfo();
 		}

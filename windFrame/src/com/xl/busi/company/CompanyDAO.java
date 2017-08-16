@@ -17,8 +17,8 @@ public interface CompanyDAO {
 
 	List<Map> selectV_c_area_video_last(Map params);
 
-	Map selectV_c_area_video_last(String c_area_video_id);
-	
+	Map selectV_c_area_video_last(String c_id, String area_code);
+
 	Map selectBs_s_area_phone(String area_code);
 
 }

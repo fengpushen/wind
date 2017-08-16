@@ -39,7 +39,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         	</foreach>
     	</set>
     	where 1 = 1
-    	<foreach collection="qryParams.keys" item="k" index="index" open="and" separator=" ">
+    	<foreach collection="qryParams.keys" item="k" index="index" open="and" separator="and" >
             ${k} = '${qryParams[k]}'
         </foreach>
     </update>

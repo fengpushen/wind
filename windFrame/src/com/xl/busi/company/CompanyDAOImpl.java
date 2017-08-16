@@ -43,9 +43,10 @@ public class CompanyDAOImpl implements CompanyDAO {
 		return sqlSession.selectList("selectV_c_area_video_last", params);
 	}
 
-	public Map selectV_c_area_video_last(String c_area_video_id) {
+	public Map selectV_c_area_video_last(String c_id, String area_code) {
 		Map params = new HashMap();
-		params.put("c_area_video_id", c_area_video_id);
+		params.put("c_id", c_id);
+		params.put("area_code", area_code);
 		return sqlSession.selectOne("selectV_c_area_video_last", params);
 	}
 	
