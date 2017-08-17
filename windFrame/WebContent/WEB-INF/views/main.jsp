@@ -26,9 +26,10 @@
 
 		<ul class="easyui-tree" id="menuTree"></ul>
 	</div>
-	<div data-options="region:'center'">
+	<div data-options="region:'center'" style="overflow: hidden;">
 		<div class="easyui-tabs"
-			data-options="fit:true,border:false,plain:true" id="tabs">
+			data-options="fit:true,border:false,plain:true" id="tabs"
+			style="overflow: hidden;">
 			<div title="欢迎页"
 				data-options="href:'loginaccount/showWelcomeUI.do',closable:false"
 				style="padding: 1px"></div>
@@ -36,7 +37,7 @@
 		<div id="passwordDiv"></div>
 	</div>
 	<div data-options="region:'south'"
-		style="text-align: center; background-color: #B0C4DE">2017.${ownership_of_copyright }
+		style="text-align: center; background-color: #B0C4DE; overflow: hidden;">2017.${ownership_of_copyright }
 		All rights reserved.</div>
 	<script type="text/javascript">
 		$(function() {
@@ -105,16 +106,18 @@
 								url : 'loginaccount/loadUserMenu.do',
 								onClick : function(node) {
 									if (!(node.id in loadedMenu)) {
-										var content = '<iframe scrolling="auto"  frameborder="0"  src="'
+										var content = '<iframe frameborder="0"  src="'
 												+ node.attributes.menu_url
-												+ '" style="width:100%;height:99%"></iframe>';
+												+ '" style="width:100%;height:100%;"></iframe>';
 										$('#tabs').tabs('add', {
 											id : node.id,
 											title : node.text,
 											content : content,
 											closable : true,
+											fit : true,
 											style : {
-												"padding" : "1px"
+												"padding" : "1px",
+												"overflow" : "hidden"
 											}
 										});
 										loadedMenu[node.id] = node.id;

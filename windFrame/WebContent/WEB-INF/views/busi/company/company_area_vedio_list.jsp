@@ -10,9 +10,8 @@
 <tags:commonHead />
 </head>
 <body class="easyui-layout">
-	<div class="easyui-panel" data-options="noheader:true">
-		<div class="easyui-panel" data-options="noheader:true"
-			style="background-color: #E0EEEE;" id="divForm"></div>
+
+	<div data-options="region:'center', border:false">
 		<table id="datagrid">
 		</table>
 	</div>
@@ -45,9 +44,6 @@
 				}
 			} ];
 
-			var divForm = document.getElementById('divForm');
-			var tableHeight = document.body.clientHeight - divForm.offsetHeight
-					- 70;
 			try {
 				$('#datagrid').datagrid({
 					method : 'POST',
@@ -57,9 +53,6 @@
 					pagination : true,
 					striped : true,
 					fit : true,
-					style : {
-						'height' : tableHeight + 'px'
-					},
 					pageSize : 20,
 					pageList : [ 20, 50, 100, 150, 200 ],
 					columns : [ [ {

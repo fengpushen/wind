@@ -61,8 +61,8 @@ public class HumanResourceServiceImpl implements HumanResourceService {
 			rtn.setDefaultValue("不能录入超过退休年龄的人员");
 			return rtn;
 		}
-		if (BusiCommon.isTooYoungForWorkByIdcardYear(idcard)) {
-			rtn.setDefaultValue("不能录入未到法定工作年龄的人员");
+		if (BusiCommon.isTooYoungFoInputByIdcardYear(idcard)) {
+			rtn.setDefaultValue("不能录入太小年龄的人员");
 			return rtn;
 		}
 		Map idcardInfo = humanResourceDAO.selectBusi_hrByIdcard(idcard);

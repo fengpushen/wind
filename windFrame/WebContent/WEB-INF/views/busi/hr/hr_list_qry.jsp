@@ -10,105 +10,106 @@
 <tags:commonHead />
 </head>
 <body class="easyui-layout">
-	<div class="easyui-panel" data-options="noheader:true">
-		<div class="easyui-panel" data-options="noheader:true"
-			style="background-color: #E0EEEE;" id="divForm">
-			<form id="qryForm" method="post">
-				<input type="hidden" id="HJ_AREA_LIST" name="HJ_AREA" />
-				<table style="width: 100%">
-					<tr>
-						<td style="width: 10%; text-align: right">身份证:</td>
-						<td style="width: 23%; text-align: left"><input
-							class="easyui-textbox" name="IDCARD_LIKE" style="width: 100%" /></td>
-						<td style="width: 10%; text-align: right">姓名:</td>
-						<td style="width: 23%; text-align: left"><input
-							class="easyui-textbox" name="HR_NAME_LIKE" style="width: 100%" /></td>
-						<td style="width: 10%; text-align: right">户籍地:</td>
-						<td style="width: 23%; text-align: left"><input
-							class="easyui-textbox" id="HJ_AREA_NAME_LIST"
-							value="${accountInfo.staffInfo.AREA_NAME}" style="width: 100%"></td>
-					</tr>
-					<tr>
-						<td style="width: 10%; text-align: right">是否为劳动力:</td>
-						<td style="width: 23%; text-align: left"><input
-							class="easyui-combobox" name="LD_TYPE" id="LD_TYPE_LIST"
-							style="width: 100%" value="${LD_TYPE }" /></td>
-						<td style="width: 10%; text-align: right">是否就业:</td>
-						<td style="width: 23%; text-align: left"><input
-							class="easyui-combobox" name="IS_JOB" id="IS_JOB_LIST"
-							style="width: 100%" /></td>
-						<td style="width: 10%; text-align: right">是否有就业意愿:</td>
-						<td style="width: 23%; text-align: left"><input
-							class="easyui-combobox" name="IS_WANT_JOB" id="IS_WANT_JOB_LIST"
-							style="width: 100%" /></td>
-					</tr>
-					<tr>
-						<td style="width: 10%; text-align: right">民族:</td>
-						<td style="width: 23%; text-align: left"><input
-							class="easyui-combobox" name="nation" id="nation"
-							style="width: 100%" /></td>
-						<td style="width: 10%; text-align: right">政治面貌:</td>
-						<td style="width: 23%; text-align: left"><input
-							class="easyui-combobox" name="political_status"
-							id="political_status" style="width: 100%" /></td>
-						<td style="width: 10%; text-align: right">婚姻状况:</td>
-						<td style="width: 23%; text-align: left"><input
-							class="easyui-combobox" name="marry_status" id="marry_status"
-							style="width: 100%" /></td>
-					</tr>
-					<tr>
-						<td style="width: 10%; text-align: right">学历:</td>
-						<td style="width: 23%; text-align: left"><input
-							class="easyui-combobox" name="degree" id="degree"
-							style="width: 100%" /></td>
-						<td style="width: 10%; text-align: right">是否贫困户:</td>
-						<td style="width: 23%; text-align: left"><input
-							class="easyui-combobox" name="is_poor" id="is_poor"
-							style="width: 100%" /></td>
-						<td style="width: 10%; text-align: right">职业资格证书:</td>
-						<td style="width: 23%; text-align: left"><input
-							class="easyui-combobox" name="job_lv" id="job_lv"
-							style="width: 100%" /></td>
-					</tr>
-					<tr>
-						<td style="width: 10%; text-align: right">人员身份:</td>
-						<td style="width: 23%; text-align: left"><input
-							class="easyui-combobox" name="hr_kind" id="hr_kind"
-							style="width: 100%" /></td>
-						<td style="width: 10%; text-align: right">困难群体:</td>
-						<td style="width: 23%; text-align: left"><input
-							class="easyui-combobox" name="hard_type" id="hard_type"
-							style="width: 100%" /></td>
-						<td style="width: 10%; text-align: right">产业意向:</td>
-						<td style="width: 23%; text-align: left"><input
-							class="easyui-combobox" name="want_industry" id="want_industry"
-							style="width: 100%" /></td>
-					</tr>
-					<tr>
-						<td style="width: 10%; text-align: right">区域意向:</td>
-						<td style="width: 23%; text-align: left"><input
-							class="easyui-combobox" name="want_work_area_kind"
-							id="want_work_area_kind" style="width: 100%" /></td>
-						<td style="width: 10%; text-align: right">就业形式意向:</td>
-						<td style="width: 23%; text-align: left"><input
-							class="easyui-combobox" name="want_job_type" id="want_job_type"
-							style="width: 100%" /></td>
-						<td style="width: 10%; text-align: right">培训需求意向:</td>
-						<td style="width: 23%; text-align: left"><input
-							class="easyui-combobox" name="want_train_type"
-							id="want_train_type" style="width: 100%" /></td>
-					</tr>
-				</table>
-			</form>
-			<div style="text-align: center; padding: 5px 0">
-				<a href="javascript:void(0)" class="easyui-linkbutton"
-					onclick="loadDatagridData();" style="width: 80px">查询</a>
-			</div>
-		</div>
+	<div class="easyui-panel" data-options="region:'north',noheader:true"
+		style="background-color: #E0EEEE; overflow: hidden;">
 
+		<form id="qryForm" method="post">
+			<input type="hidden" id="HJ_AREA_LIST" name="HJ_AREA" />
+			<table style="width: 100%">
+				<tr>
+					<td style="width: 10%; text-align: right">身份证:</td>
+					<td style="width: 23%; text-align: left"><input
+						class="easyui-textbox" name="IDCARD_LIKE" style="width: 100%" /></td>
+					<td style="width: 10%; text-align: right">姓名:</td>
+					<td style="width: 23%; text-align: left"><input
+						class="easyui-textbox" name="HR_NAME_LIKE" style="width: 100%" /></td>
+					<td style="width: 10%; text-align: right">户籍地:</td>
+					<td style="width: 23%; text-align: left"><input
+						class="easyui-textbox" id="HJ_AREA_NAME_LIST"
+						value="${accountInfo.staffInfo.AREA_NAME}" style="width: 100%"></td>
+				</tr>
+				<tr>
+					<td style="width: 10%; text-align: right">是否为劳动力:</td>
+					<td style="width: 23%; text-align: left"><input
+						class="easyui-combobox" name="LD_TYPE" id="LD_TYPE_LIST"
+						style="width: 100%" value="${LD_TYPE }" /></td>
+					<td style="width: 10%; text-align: right">是否就业:</td>
+					<td style="width: 23%; text-align: left"><input
+						class="easyui-combobox" name="IS_JOB" id="IS_JOB_LIST"
+						style="width: 100%" /></td>
+					<td style="width: 10%; text-align: right">是否有就业意愿:</td>
+					<td style="width: 23%; text-align: left"><input
+						class="easyui-combobox" name="IS_WANT_JOB" id="IS_WANT_JOB_LIST"
+						style="width: 100%" /></td>
+				</tr>
+				<tr>
+					<td style="width: 10%; text-align: right">民族:</td>
+					<td style="width: 23%; text-align: left"><input
+						class="easyui-combobox" name="nation" id="nation"
+						style="width: 100%" /></td>
+					<td style="width: 10%; text-align: right">政治面貌:</td>
+					<td style="width: 23%; text-align: left"><input
+						class="easyui-combobox" name="political_status"
+						id="political_status" style="width: 100%" /></td>
+					<td style="width: 10%; text-align: right">婚姻状况:</td>
+					<td style="width: 23%; text-align: left"><input
+						class="easyui-combobox" name="marry_status" id="marry_status"
+						style="width: 100%" /></td>
+				</tr>
+				<tr>
+					<td style="width: 10%; text-align: right">学历:</td>
+					<td style="width: 23%; text-align: left"><input
+						class="easyui-combobox" name="degree" id="degree"
+						style="width: 100%" /></td>
+					<td style="width: 10%; text-align: right">是否贫困户:</td>
+					<td style="width: 23%; text-align: left"><input
+						class="easyui-combobox" name="is_poor" id="is_poor"
+						style="width: 100%" /></td>
+					<td style="width: 10%; text-align: right">职业资格证书:</td>
+					<td style="width: 23%; text-align: left"><input
+						class="easyui-combobox" name="job_lv" id="job_lv"
+						style="width: 100%" /></td>
+				</tr>
+				<tr>
+					<td style="width: 10%; text-align: right">人员身份:</td>
+					<td style="width: 23%; text-align: left"><input
+						class="easyui-combobox" name="hr_kind" id="hr_kind"
+						style="width: 100%" /></td>
+					<td style="width: 10%; text-align: right">困难群体:</td>
+					<td style="width: 23%; text-align: left"><input
+						class="easyui-combobox" name="hard_type" id="hard_type"
+						style="width: 100%" /></td>
+					<td style="width: 10%; text-align: right">产业意向:</td>
+					<td style="width: 23%; text-align: left"><input
+						class="easyui-combobox" name="want_industry" id="want_industry"
+						style="width: 100%" /></td>
+				</tr>
+				<tr>
+					<td style="width: 10%; text-align: right">区域意向:</td>
+					<td style="width: 23%; text-align: left"><input
+						class="easyui-combobox" name="want_work_area_kind"
+						id="want_work_area_kind" style="width: 100%" /></td>
+					<td style="width: 10%; text-align: right">就业形式意向:</td>
+					<td style="width: 23%; text-align: left"><input
+						class="easyui-combobox" name="want_job_type" id="want_job_type"
+						style="width: 100%" /></td>
+					<td style="width: 10%; text-align: right">培训需求意向:</td>
+					<td style="width: 23%; text-align: left"><input
+						class="easyui-combobox" name="want_train_type"
+						id="want_train_type" style="width: 100%" /></td>
+				</tr>
+				<tr>
+					<td colspan="6" style="text-align: center;"><a
+						href="javascript:void(0)" class="easyui-linkbutton"
+						onclick="loadDatagridData();" style="width: 80px">查询</a></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+
+	<div data-options="region:'center', border:false">
 		<table id="datagrid">
 		</table>
-
 	</div>
 
 	<div id="dd"></div>
@@ -349,7 +350,7 @@
 							"id" : ""
 						});
 				comboboxDefaultInit('want_train_type', 'train_type', false,
-						'auto', false , true);
+						'auto', false, true);
 
 				var areaTree = new AreaTree('dlgList', 'HJ_AREA_LIST',
 						'HJ_AREA_NAME_LIST');
@@ -376,9 +377,6 @@
 					editable : false,
 					required : true
 				});
-				var divForm = document.getElementById('divForm');
-				var tableHeight = document.body.clientHeight
-						- divForm.offsetHeight - 90;
 				$('#datagrid').datagrid({
 					method : 'POST',
 					rownumbers : true,
@@ -386,9 +384,6 @@
 					striped : true,
 					singleSelect : false,
 					fit : true,
-					style : {
-						'height' : tableHeight + 'px'
-					},
 					pageSize : 20,
 					pageList : [ 20, 50, 100, 150, 200 ],
 					columns : [ [ {

@@ -10,24 +10,26 @@
 <tags:commonHead />
 </head>
 <body class="easyui-layout">
-	<div class="easyui-panel" data-options="noheader:true">
-		<div class="easyui-panel" data-options="noheader:true"
-			style="background-color: #E0EEEE;" id="divForm">
-			<form id="qryForm" method="post">
-				<input type="hidden" name="C_TYPE" value="${C_TYPE }" /> <input
-					type="hidden" name="C_ID_WT" value="${C_ID_WT }" />
-				<table style="width: 100%">
-					<tr>
-						<td style="width: 10%; text-align: right">单位名称:</td>
-						<td style="width: 23%; text-align: left"><input
-							class="easyui-textbox" name="C_NAME_LIKE" style="width: 100%" /></td>
-						<td style="width: 66%; text-align: center"><a
-							href="javascript:void(0)" class="easyui-linkbutton"
-							onclick="loadDatagridData();" style="width: 80px">查询</a></td>
-					</tr>
-				</table>
-			</form>
-		</div>
+	<div class="easyui-panel" data-options="region:'north',noheader:true"
+		style="background-color: #E0EEEE; overflow: hidden;">
+
+		<form id="qryForm" method="post">
+			<input type="hidden" name="C_TYPE" value="${C_TYPE }" /> <input
+				type="hidden" name="C_ID_WT" value="${C_ID_WT }" />
+			<table style="width: 100%">
+				<tr>
+					<td style="width: 10%; text-align: right">单位名称:</td>
+					<td style="width: 23%; text-align: left"><input
+						class="easyui-textbox" name="C_NAME_LIKE" style="width: 100%" /></td>
+					<td style="width: 66%; text-align: center"><a
+						href="javascript:void(0)" class="easyui-linkbutton"
+						onclick="loadDatagridData();" style="width: 80px">查询</a></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+
+	<div data-options="region:'center', border:false">
 		<table id="datagrid">
 		</table>
 	</div>
@@ -197,9 +199,6 @@
 							}
 						});
 			}
-			var divForm = document.getElementById('divForm');
-			var tableHeight = document.body.clientHeight - divForm.offsetHeight
-					- 70;
 			try {
 				$('#datagrid').datagrid({
 					method : 'POST',
@@ -209,9 +208,6 @@
 					pagination : true,
 					striped : true,
 					fit : true,
-					style : {
-						'height' : tableHeight + 'px'
-					},
 					singleSelect : false,
 					pageSize : 20,
 					pageList : [ 20, 50, 100, 150, 200 ],

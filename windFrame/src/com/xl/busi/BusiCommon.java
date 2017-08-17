@@ -240,6 +240,15 @@ public class BusiCommon {
 	public static boolean isTooYoungForWork(int age) {
 		return age < 16;
 	}
+	
+	/**
+	 * 判断是否年龄太小不适合录入系统
+	 * @param age
+	 * @return
+	 */
+	public static boolean isTooYoungForInput(int age){
+		return age < 10;
+	}
 
 	/**
 	 * 根据身份证上的出生年份和性别判断当前是否超过了退休年龄
@@ -259,6 +268,16 @@ public class BusiCommon {
 	 */
 	public static boolean isTooYoungForWorkByIdcardYear(String idcard) {
 		return isTooYoungForWork(ToolForIdcard.getAgeFromIdcardYear(idcard));
+	}
+	
+	/**
+	 * 根据身份证上的出生年份判断是否未到数据录入限制
+	 * 
+	 * @param idcard
+	 * @return
+	 */
+	public static boolean isTooYoungFoInputByIdcardYear(String idcard) {
+		return isTooYoungForInput(ToolForIdcard.getAgeFromIdcardYear(idcard));
 	}
 
 }
