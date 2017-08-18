@@ -47,12 +47,15 @@ public class HumanResourceServiceImpl implements HumanResourceService {
 			rtn.setDefaultValue("户籍地不能为空");
 			return rtn;
 		}
+		if (FrameTool.isEmpty(idcard)) {
+			rtn.setDefaultValue("身份证不能为空");
+			return rtn;
+		}
+		idcard = idcard.toUpperCase();
 		ExecuteResult rst = ToolForIdcard.idcardValidate(idcard);
 		if (!rst.isSucc()) {
 			return rst;
-		} else {
-			idcard = idcard.toUpperCase();
-		}
+		} 
 		if (!BusiCommon.isInScope(opr_area, HJ_AREA)) {
 			rtn.setDefaultValue("不能管理非本地区人员");
 			return rtn;
@@ -78,6 +81,9 @@ public class HumanResourceServiceImpl implements HumanResourceService {
 		info.put("opr_id", orp_id);
 		info.put("opr_type", opr_type);
 		FrameTool.replaceMapValue(info, new String[] { "jntc" }, "，", ",");
+		if (BusiCommon.isTooYoungForWorkByIdcardYear(idcard)) {
+			info.put("ld_type", "0");
+		}
 		frameDAO.anyInsert("busi_hr", info);
 
 		String isJob = (String) info.get("is_job");
