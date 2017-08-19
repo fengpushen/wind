@@ -10,44 +10,45 @@
 <tags:commonHead />
 </head>
 <body class="easyui-layout">
-	<div class="easyui-panel" data-options="noheader:true">
-		<div class="easyui-panel" data-options="noheader:true"
-			style="background-color: #E0EEEE;" id="divForm">
-			<form id="qryForm" method="post">
-				<input type="hidden" id="HJ_AREA_LIST" name="HJ_AREA" />
-				<table style="width: 100%">
-					<tr>
-						<td style="width: 10%; text-align: right">身份证:</td>
-						<td style="width: 23%; text-align: left"><input
-							class="easyui-textbox" name="IDCARD_LIKE" style="width: 100%" /></td>
-						<td style="width: 10%; text-align: right">姓名:</td>
-						<td style="width: 23%; text-align: left"><input
-							class="easyui-textbox" name="HR_NAME_LIKE" style="width: 100%" /></td>
-						<td style="width: 10%; text-align: right">户籍地:</td>
-						<td style="width: 23%; text-align: left"><input
-							class="easyui-textbox" id="HJ_AREA_NAME_LIST"
-							value="${accountInfo.staffInfo.AREA_NAME}" style="width: 100%"></td>
-					</tr>
-					<tr>
-						<td style="width: 10%; text-align: right">是否就业:</td>
-						<td style="width: 23%; text-align: left"><input
-							class="easyui-combobox" name="IS_JOB" id="IS_JOB_LIST"
-							style="width: 100%" /></td>
-						<td style="width: 10%; text-align: right">技能特长:</td>
-						<td style="width: 23%; text-align: left"><input
-							class="easyui-textbox" name="JNTC" style="width: 100%" /></td>
-						<td style="width: 10%; text-align: right">期望职位:</td>
-						<td style="width: 23%; text-align: left"><input
-							class="easyui-textbox" name="WANT_JOB_NAME" style="width: 100%" /></td>
-					</tr>
-				</table>
-			</form>
-			<div style="text-align: center; padding: 5px 0">
-				<a href="javascript:void(0)" class="easyui-linkbutton"
-					onclick="loadDatagridData();" style="width: 80px">查询</a>
-			</div>
-		</div>
-
+	<div class="easyui-panel" data-options="region:'north',noheader:true"
+		style="overflow: hidden; background-color: #E0EEEE;">
+		<form id="qryForm" method="post">
+			<input type="hidden" id="HJ_AREA_LIST" name="HJ_AREA" />
+			<table style="width: 100%">
+				<tr>
+					<td style="width: 10%; text-align: right">身份证:</td>
+					<td style="width: 23%; text-align: left"><input
+						class="easyui-textbox" name="IDCARD_LIKE" style="width: 100%" /></td>
+					<td style="width: 10%; text-align: right">姓名:</td>
+					<td style="width: 23%; text-align: left"><input
+						class="easyui-textbox" name="HR_NAME_LIKE" style="width: 100%" /></td>
+					<td style="width: 10%; text-align: right">户籍地:</td>
+					<td style="width: 23%; text-align: left"><input
+						class="easyui-textbox" id="HJ_AREA_NAME_LIST"
+						value="${accountInfo.staffInfo.AREA_NAME}" style="width: 100%"></td>
+				</tr>
+				<tr>
+					<td style="width: 10%; text-align: right">是否就业:</td>
+					<td style="width: 23%; text-align: left"><input
+						class="easyui-combobox" name="IS_JOB" id="IS_JOB_LIST"
+						style="width: 100%" /></td>
+					<td style="width: 10%; text-align: right">技能特长:</td>
+					<td style="width: 23%; text-align: left"><input
+						class="easyui-textbox" name="JNTC" style="width: 100%" /></td>
+					<td style="width: 10%; text-align: right">期望职位:</td>
+					<td style="width: 23%; text-align: left"><input
+						class="easyui-textbox" name="WANT_JOB_NAME" style="width: 100%" /></td>
+				</tr>
+				<tr>
+					<td colspan="6" style="text-align: center;"><a
+						href="javascript:void(0)" class="easyui-linkbutton"
+						onclick="loadDatagridData();" style="width: 80px">查询</a></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	
+	<div data-options="region:'center', border:false">
 		<table id="datagrid">
 		</table>
 
@@ -137,7 +138,7 @@
 							});
 						}
 					}
-				}];
+				} ];
 				$("#IS_JOB_LIST").combobox({
 					method : 'post',
 					valueField : 'id',
@@ -208,9 +209,6 @@
 					},
 					editable : false
 				});
-				var divForm = document.getElementById('divForm');
-				var tableHeight = document.body.clientHeight
-						- divForm.offsetHeight - 70;
 				$('#datagrid').datagrid({
 					method : 'POST',
 					rownumbers : true,
@@ -219,9 +217,6 @@
 					striped : true,
 					singleSelect : false,
 					fit : true,
-					style : {
-						'height' : tableHeight + 'px'
-					},
 					pageSize : 20,
 					pageList : [ 20, 50, 100, 150, 200 ],
 					columns : [ [ {

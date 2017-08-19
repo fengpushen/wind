@@ -10,27 +10,31 @@
 <tags:commonHead />
 </head>
 <body class="easyui-layout">
-	<div class="easyui-panel" data-options="noheader:true">
-		<div class="easyui-panel" data-options="noheader:true"
-			style="background-color: #E0EEEE;" id="divForm">
-			<form id="qryForm" method="post">
-				<input type="hidden" id="HJ_AREA_LIST" name="area_code_high" value="${area_code_high }"/>
-				<table style="width: 100%">
-					<tr>
-						<td style="width: 10%; text-align: right">地区名称:</td>
-						<td style="width: 23%; text-align: left"><input
-							class="easyui-textbox" name="C_NAME_LIKE" style="width: 100%" /></td>
-						<td style="width: 10%; text-align: right">所在地:</td>
-						<td style="width: 23%; text-align: left"><input
-							class="easyui-textbox" id="HJ_AREA_NAME_LIST" name="area_name_high" 
-							style="width: 100%" value="${area_name_high }"></td>
-						<td style="width: 33%; text-align: center"><a
-							href="javascript:void(0)" class="easyui-linkbutton"
-							onclick="loadDatagridData();" style="width: 80px">查询</a></td>
-					</tr>
-				</table>
-			</form>
-		</div>
+	<div class="easyui-panel" data-options="region:'north',noheader:true"
+		style="overflow: hidden; background-color: #E0EEEE;">
+
+		<form id="qryForm" method="post">
+			<input type="hidden" id="HJ_AREA_LIST" name="area_code_high"
+				value="${area_code_high }" />
+			<table style="width: 100%">
+				<tr>
+					<td style="width: 10%; text-align: right">地区名称:</td>
+					<td style="width: 23%; text-align: left"><input
+						class="easyui-textbox" name="C_NAME_LIKE" style="width: 100%" /></td>
+					<td style="width: 10%; text-align: right">所在地:</td>
+					<td style="width: 23%; text-align: left"><input
+						class="easyui-textbox" id="HJ_AREA_NAME_LIST"
+						name="area_name_high" style="width: 100%"
+						value="${area_name_high }"></td>
+					<td style="width: 33%; text-align: center"><a
+						href="javascript:void(0)" class="easyui-linkbutton"
+						onclick="loadDatagridData();" style="width: 80px">查询</a></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+
+	<div data-options="region:'center', border:false">
 		<table id="datagrid">
 		</table>
 	</div>
@@ -54,8 +58,7 @@
 				text : '视频连线',
 				iconCls : 'icon-save',
 				handler : function() {
-					var rows = $('#datagrid').datagrid(
-							'getSelections');
+					var rows = $('#datagrid').datagrid('getSelections');
 					if (rows == null || rows.length == 0) {
 						$.messager.alert("", "请选中要操作的记录");
 					} else if (rows.length > 1) {
@@ -94,37 +97,28 @@
 				editable : false,
 				required : true
 			});
-			var divForm = document.getElementById('divForm');
-			var tableHeight = document.body.clientHeight - divForm.offsetHeight
-					- 70;
-			try {
-				$('#datagrid').datagrid({
-					method : 'POST',
-					rownumbers : true,
-					singleSelect : true,
-					toolbar : toolbar,
-					pagination : true,
-					striped : true,
-					fit : true,
-					style : {
-						'height' : tableHeight + 'px'
-					},
-					pageSize : 20,
-					pageList : [ 20, 50, 100, 150, 200 ],
-					columns : [ [ {
-						field : 'ck',
-						checkbox : true
-					}, {
-						field : 'AREA_NAME',
-						title : '地区名称',
-						width : '15%',
-						align : 'center'
-					} ] ],
-				});
-				loadDatagridData();
-			} catch (e) {
-				alert(e);
-			}
+
+			$('#datagrid').datagrid({
+				method : 'POST',
+				rownumbers : true,
+				singleSelect : true,
+				toolbar : toolbar,
+				pagination : true,
+				striped : true,
+				fit : true,
+				pageSize : 20,
+				pageList : [ 20, 50, 100, 150, 200 ],
+				columns : [ [ {
+					field : 'ck',
+					checkbox : true
+				}, {
+					field : 'AREA_NAME',
+					title : '地区名称',
+					width : '15%',
+					align : 'center'
+				} ] ],
+			});
+			loadDatagridData();
 		});
 	</script>
 

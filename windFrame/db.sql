@@ -21,9 +21,8 @@ insert into com_area
    where length(org_code) = 12
 /
 ---------------------------------------------------------------
-v_hr_position
 -- Add/modify columns 
-alter table BS_POSITION_REQ add opr_id VARCHAR2(32);
+alter table BS_H_JOB add sy_month INTEGER;
 -- Add comments to the columns 
-comment on column BS_POSITION_REQ.opr_id
-  is '录入人id';
+comment on column BS_H_JOB.sy_month
+  is '试用期';

@@ -92,7 +92,7 @@ function isValidIdcard(sId) {
 	return true;// aCity[parseInt(sId.substr(0,2))]+","+sBirthday+","+(sId.substr(16,1)%2?"男":"女")
 }
 function isPositiveInteger(str) {
-	var pattern = new RegExp(regexEnum.num1);
+	var pattern = new RegExp(regexEnum.intege1);
 	return pattern.test(str);
 }
 $.extend($.fn.validatebox.defaults.rules, {
@@ -126,6 +126,12 @@ $.extend($.fn.validatebox.defaults.rules, {
 			return valid;
 		},
 		message : '必须填写字段'
+	},
+	positiveInteger : {
+		validator : function(value, param) {
+			return isPositiveInteger(value);
+		},
+		message : '请输入正整数'
 	}
 });
 

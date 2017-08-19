@@ -10,32 +10,33 @@
 <tags:commonHead />
 </head>
 <body class="easyui-layout">
-	<div class="easyui-panel" data-options="noheader:true">
-		<div class="easyui-panel" data-options="noheader:true"
-			style="background-color: #E0EEEE;" id="divForm">
-			<form id="qryForm" method="post">
-				<table style="width: 100%">
-					<tr>
-						<td style="width: 10%; text-align: right">岗位名称:</td>
-						<td style="width: 23%; text-align: left"><input
-							class="easyui-textbox" name="P_NAME_LIKE" style="width: 100%" /></td>
-						<td style="width: 10%; text-align: right">申请状态:</td>
-						<td style="width: 23%; text-align: left"><input
-							class="easyui-combobox" name="req_status" id="req_status"
-							style="width: 100%"></td>
-						<td style="width: 33%; text-align: center"><a
-							href="javascript:void(0)" class="easyui-linkbutton"
-							onclick="loadDatagridData();" style="width: 80px">查询</a></td>
-					</tr>
-				</table>
-			</form>
-		</div>
+	<div class="easyui-panel" data-options="region:'north',noheader:true"
+		style="overflow: hidden; background-color: #E0EEEE;">
+
+		<form id="qryForm" method="post">
+			<table style="width: 100%">
+				<tr>
+					<td style="width: 10%; text-align: right">岗位名称:</td>
+					<td style="width: 23%; text-align: left"><input
+						class="easyui-textbox" name="P_NAME_LIKE" style="width: 100%" /></td>
+					<td style="width: 10%; text-align: right">申请状态:</td>
+					<td style="width: 23%; text-align: left"><input
+						class="easyui-combobox" name="req_status" id="req_status"
+						style="width: 100%"></td>
+					<td style="width: 33%; text-align: center"><a
+						href="javascript:void(0)" class="easyui-linkbutton"
+						onclick="loadDatagridData();" style="width: 80px">查询</a></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	
+	<div data-options="region:'center', border:false">
 		<table id="datagrid">
 		</table>
 	</div>
 
 	<div id="dd"></div>
-
 
 	<script type="text/javascript">
 		function loadDatagridData() {
@@ -199,21 +200,23 @@
 								} else if (rows.length > 1) {
 									$.messager.alert("", "请选中单条记录进行操作");
 								} else {
-									$('#dd').dialog({
-										title : '入职登记',
-										width : 1000,
-										height : 300,
-										closed : false,
-										cache : false,
-										href : 'busi/position/showPositionReqJobReg.do',
-										queryParams : {
-											'req_id' : rows[0].REQ_ID
-										},
-										modal : false,
-										onBeforeClose : function() {
-											loadDatagridData();
-										}
-									});
+									$('#dd')
+											.dialog(
+													{
+														title : '入职登记',
+														width : 1000,
+														height : 300,
+														closed : false,
+														cache : false,
+														href : 'busi/position/showPositionReqJobReg.do',
+														queryParams : {
+															'req_id' : rows[0].REQ_ID
+														},
+														modal : false,
+														onBeforeClose : function() {
+															loadDatagridData();
+														}
+													});
 								}
 							}
 						} ];
@@ -223,6 +226,7 @@
 					singleSelect : true,
 					iconCls : 'icon-ok',
 					toolbar : toolbar,
+					fit : true,
 					pagination : true,
 					striped : true,
 					singleSelect : false,

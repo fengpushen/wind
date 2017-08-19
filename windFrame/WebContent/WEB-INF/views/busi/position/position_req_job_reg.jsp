@@ -9,31 +9,29 @@
 <title>人力资源信息管理</title>
 <tags:commonHead />
 </head>
-<body>
+<body class="easyui-layout">
 	<div id="oprJobRegTip" class="easyui-panel"
 		style="width: 100%; text-align: center; font-size: 20px; background-color: #EEEEEE"
-		data-options="noheader:false, closed:true, border:false"></div>
-	<div class="easyui-panel" title="基本信息" style="width: 100%">
+		data-options="noheader:true, closed:true, border:false"></div>
+	<div class="easyui-panel" data-options="noheader:true"
+		style="width: 100%; background-color: #E0EEEE;">
 		<table style="width: 100%">
 			<tr>
-				<td style="width: 10%; text-align: right">身份证:</td>
-				<td style="width: 23%; text-align: left"><input
-					class="easyui-textbox" name="IDCARD" style="width: 100%"
-					data-options="disabled:true" value="${positionReqInfo.IDCARD }" /></td>
 				<td style="width: 10%; text-align: right">姓名:</td>
 				<td style="width: 23%; text-align: left"><input
 					class="easyui-textbox" name="HR_NAME" style="width: 100%"
 					data-options="disabled:true" value="${positionReqInfo.HR_NAME }" /></td>
+				<td colspan="4" style="width: 66%">&nbsp;</td>
 			</tr>
 		</table>
 	</div>
-	<form id="theForm" method="post" style="width: 100%">
+	<form id="theForm" method="post">
 		<input type="hidden" id="GZ_AREA" name="job.JOB_AREA"
 			value="${positionReqInfo.P_WORK_AREA }" /> <input type="hidden"
 			name="job.HR_ID" value="${positionReqInfo.HR_ID }" /><input
 			type="hidden" name="req_id" value="${positionReqInfo.REQ_ID }" />
-		<div class="easyui-panel" title="就业信息" style="width: 100%;"
-			id="jobInfoDiv" data-option="closed:true">
+		<div class="easyui-panel" data-option="noheader:true"
+			style="width: 100%; background-color: #E0EEEE;">
 			<table style="width: 100%">
 				<tr>
 					<td style="width: 10%; text-align: right">入职时间:</td>
@@ -50,7 +48,7 @@
 						style="width: 100%"></td>
 					<td style="width: 10%; text-align: right">工作类型:</td>
 					<td style="width: 23%; text-align: left"><input
-						class="easyui-combobox" name="job.JOB_TYPE" value="014"
+						class="easyui-combobox" name="job.JOB_TYPE" value="013"
 						style="width: 100%"
 						data-options="
 					url:'frame/loadCode.do?codeName=job_type',
@@ -73,6 +71,13 @@
 						class="easyui-textbox" name="job.INCOME" style="width: 100%"
 						value="${positionReqInfo.P_PAY_BOTTON }"
 						data-options="prompt:'元/月'" /></td>
+				</tr>
+				<tr>
+					<td style="width: 10%; text-align: right">试用期（月）:</td>
+					<td style="width: 23%; text-align: left"><input
+						class="easyui-textbox" name="job.sy_month" style="width: 100%"
+						value="3" data-options="required:true, validType:['length[1, 1]', 'positiveInteger']"></td>
+					<td colspan="4" style="width: 66%">&nbsp;</td>
 				</tr>
 			</table>
 		</div>
@@ -108,6 +113,9 @@
 		}
 
 		$(function() {
+			$("body").click(function() {
+				$('#oprJobRegTip').panel('close');
+			});
 			$('#areaGzTree').tree({
 				url : 'busi/common/loadTree.do',
 				method : 'post',
@@ -138,9 +146,6 @@
 					} catch (e) {
 						alert(e);
 					}
-				},
-				onSubmit : function() {
-					closeOrpTip('oprJobRegTip');
 				}
 			});
 
