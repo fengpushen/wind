@@ -8,6 +8,14 @@ public interface FrameDAO {
 
 	List<Map> anySelect(String sql);
 
+	List<Map> anySelectOneTable(String tableName, Map<String, Object> params);
+
+	Map anySelectOneTableOneRow(String tableName, Map<String, Object> params);
+
+	Map anySelectOneTableByPk(String tableName, String pkValue) throws SQLException;
+
+	boolean isRecordExists(String tableName, Map<String, Object> params);
+
 	int selectRecord_count(String sqlId, Map params);
 
 	int anyInsert(String tableName, Map<String, Object> params) throws SQLException;

@@ -10,12 +10,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		</if>
 		select
 		<if test="record_count == null">
-			*
+			a.*
+			<if test="lable_cid != null and lable_cid != ''">
+			, b.label_id, b.label_code, b.label_name, b.c_id
+			</if>
 		</if>
 		<if test="record_count != null">
 			count(1) as record_count
 		</if>
 		from v_busi_hr a
+			<if test="lable_cid != null and lable_cid != ''">
+				left outer join (select * from v_hr_label where c_id = #{lable_cid}
+				<if test="label_code != null and label_code != ''">
+					and label_code = #{label_code}
+				</if>
+				) b on a.hr_id = b.hr_id
+			</if>
 		<where>
 			<if test="HR_NAME_LIKE != null and HR_NAME_LIKE != ''">
 				hr_name like #{HR_NAME_LIKE} || '%'
@@ -79,6 +89,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			</if>
 			<if test="want_job_type != null and want_job_type != ''">
 				and want_job_type = #{want_job_type}
+			</if>
+			<if test='is_label != null and is_label == "0"'>
+				and not exists (select 1 from bs_hr_label cc where cc.hr_id = a.hr_id and cc.c_id = #{lable_cid})
+			</if>
+			<if test='is_label != null and is_label == "1"'>
+				and exists (select 1 from bs_hr_label cc where cc.hr_id = a.hr_id and cc.c_id = #{lable_cid})
 			</if>
 			<if test="want_train_type != null and want_train_type != ''">
 				and exists (select 1 from BS_H_WANT_TRAIN_TYPE b where a.hr_id = b.hr_id and b.train_type = #{want_train_type})

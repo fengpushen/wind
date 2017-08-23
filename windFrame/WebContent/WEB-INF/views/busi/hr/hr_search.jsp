@@ -40,6 +40,20 @@
 						class="easyui-textbox" name="WANT_JOB_NAME" style="width: 100%" /></td>
 				</tr>
 				<tr>
+					<td style="width: 10%; text-align: right">是否贫困户:</td>
+					<td style="width: 23%; text-align: left"><input
+						class="easyui-combobox" name="is_poor" id="is_poor"
+						style="width: 100%" /></td>
+					<td style="width: 10%; text-align: right">就业区域意向:</td>
+					<td style="width: 23%; text-align: left"><input
+						class="easyui-combobox" name="want_work_area_kind"
+						id="want_work_area_kind" style="width: 100%" /></td>
+					<td style="width: 10%; text-align: right">是否关注:</td>
+					<td style="width: 23%; text-align: left"><input
+						class="easyui-combobox" name="is_label" id="is_label"
+						style="width: 100%" /></td>
+				</tr>
+				<tr>
 					<td colspan="6" style="text-align: center;"><a
 						href="javascript:void(0)" class="easyui-linkbutton"
 						onclick="loadDatagridData();" style="width: 80px">查询</a></td>
@@ -47,7 +61,7 @@
 			</table>
 		</form>
 	</div>
-	
+
 	<div data-options="region:'center', border:false">
 		<table id="datagrid">
 		</table>
@@ -84,61 +98,149 @@
 		}
 		$(function() {
 			try {
-				var toolbar = [ {
-					text : '查看详情',
-					iconCls : 'icon-save',
-					handler : function() {
-						var rows = $('#datagrid').datagrid('getSelections');
-						if (rows == null || rows.length == 0) {
-							$.messager.alert("", "请选中要操作的记录");
-						} else if (rows.length > 1) {
-							$.messager.alert("", "请选中单条记录进行操作");
-						} else {
-							$('#dd').dialog({
-								title : '人员详情',
-								width : 1000,
-								height : 500,
-								closed : false,
-								cache : false,
-								href : 'busi/hr/showHrInfoDetailCom.do',
-								queryParams : {
-									'hr_id' : rows[0].HR_ID
-								},
-								modal : false,
-								onBeforeClose : function() {
-									loadDatagridData();
+				var toolbar = [
+						{
+							text : '查看详情',
+							iconCls : 'icon-save',
+							handler : function() {
+								var rows = $('#datagrid').datagrid(
+										'getSelections');
+								if (rows == null || rows.length == 0) {
+									$.messager.alert("", "请选中要操作的记录");
+								} else if (rows.length > 1) {
+									$.messager.alert("", "请选中单条记录进行操作");
+								} else {
+									$('#dd')
+											.dialog(
+													{
+														title : '人员详情',
+														width : 1000,
+														height : 500,
+														closed : false,
+														cache : false,
+														href : 'busi/hr/showHrInfoDetailCom.do',
+														queryParams : {
+															'hr_id' : rows[0].HR_ID
+														},
+														modal : false,
+														onBeforeClose : function() {
+															loadDatagridData();
+														}
+													});
 								}
-							});
-						}
-					}
-				}, {
-					text : '入职登记',
-					iconCls : 'icon-save',
-					handler : function() {
-						var rows = $('#datagrid').datagrid('getSelections');
-						if (rows == null || rows.length == 0) {
-							$.messager.alert("", "请选中要操作的记录");
-						} else if (rows.length > 1) {
-							$.messager.alert("", "请选中单条记录进行操作");
-						} else {
-							$('#dd').dialog({
-								title : '入职登记',
-								width : 1000,
-								height : 500,
-								closed : false,
-								cache : false,
-								href : 'busi/hr/showHrJobReg.do',
-								queryParams : {
-									'hr_id' : rows[0].HR_ID
-								},
-								modal : false,
-								onBeforeClose : function() {
-									loadDatagridData();
+							}
+						},
+						{
+							text : '入职登记',
+							iconCls : 'icon-save',
+							handler : function() {
+								var rows = $('#datagrid').datagrid(
+										'getSelections');
+								if (rows == null || rows.length == 0) {
+									$.messager.alert("", "请选中要操作的记录");
+								} else if (rows.length > 1) {
+									$.messager.alert("", "请选中单条记录进行操作");
+								} else {
+									$('#dd').dialog({
+										title : '入职登记',
+										width : 1000,
+										height : 500,
+										closed : false,
+										cache : false,
+										href : 'busi/hr/showHrJobReg.do',
+										queryParams : {
+											'hr_id' : rows[0].HR_ID
+										},
+										modal : false,
+										onBeforeClose : function() {
+											loadDatagridData();
+										}
+									});
 								}
-							});
-						}
-					}
-				} ];
+							}
+						},
+						{
+							text : '关注',
+							iconCls : 'icon-save',
+							handler : function() {
+								var rows = $('#datagrid').datagrid(
+										'getSelections');
+								if (rows == null || rows.length == 0) {
+									$.messager.alert("", "请选中要操作的记录");
+								} else {
+									var ids = [];
+									for (var i = 0; i < rows.length; i++) {
+										ids.push(rows[i].HR_ID);
+									}
+									$
+											.ajax({
+												type : "post",
+												url : "busi/hr/attentionHrs.do",
+												dataType : "json",
+												data : {
+													'ids' : ids
+												},
+												success : function(rst) {
+													if (rst.isSucc) {
+														$.messager.alert("",
+																"操作成功");
+													} else {
+														var msg = '操作失败';
+														if (rst.info.INFO_KEY_DEFAULT != null) {
+															msg = msg
+																	+ ','
+																	+ rst.info.INFO_KEY_DEFAULT;
+														}
+														$.messager.alert("",
+																msg);
+													}
+													loadDatagridData();
+												}
+											});
+								}
+							}
+						},
+						{
+							text : '取消关注',
+							iconCls : 'icon-save',
+							handler : function() {
+								var rows = $('#datagrid').datagrid(
+										'getSelections');
+								if (rows == null || rows.length == 0) {
+									$.messager.alert("", "请选中要操作的记录");
+								} else {
+									var ids = [];
+									for (var i = 0; i < rows.length; i++) {
+										ids.push(rows[i].LABEL_ID);
+									}
+									$
+											.ajax({
+												type : "post",
+												url : "busi/hr/unattentionHrs.do",
+												dataType : "json",
+												data : {
+													'ids' : ids
+												},
+												success : function(rst) {
+													if (rst.isSucc) {
+														$.messager.alert("",
+																"操作成功");
+													} else {
+														var msg = '操作失败';
+														if (rst.info.INFO_KEY_DEFAULT != null) {
+															msg = msg
+																	+ ','
+																	+ rst.info.INFO_KEY_DEFAULT;
+														}
+														$.messager.alert("",
+																msg);
+													}
+													loadDatagridData();
+												}
+											});
+								}
+							}
+						} ];
 				$("#IS_JOB_LIST").combobox({
 					method : 'post',
 					valueField : 'id',
@@ -185,6 +287,15 @@
 						});
 					}
 				});
+				comboboxDefaultInit('is_poor', 'boolean', false, 'auto', false,
+						true);
+				comboboxDefaultInit('want_work_area_kind', 'area_kind', false,
+						'auto', false, true, {
+							"text" : "均可",
+							"id" : ""
+						});
+				comboboxDefaultInit('is_label', 'boolean', false, 'auto',
+						false, true);
 				var areaTree = new AreaTree('dlgList', 'HJ_AREA_LIST',
 						'HJ_AREA_NAME_LIST');
 				var accountArea = '${accountInfo.staffInfo.AREA_CODE}';
@@ -281,6 +392,11 @@
 						field : 'WANT_INCOME',
 						title : '期望月薪',
 						width : '6%',
+						align : 'center'
+					}, {
+						field : 'LABEL_NAME',
+						title : '关注状态',
+						width : '15%',
 						align : 'center'
 					} ] ]
 				});

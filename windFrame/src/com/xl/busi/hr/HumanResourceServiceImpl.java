@@ -55,7 +55,7 @@ public class HumanResourceServiceImpl implements HumanResourceService {
 		ExecuteResult rst = ToolForIdcard.idcardValidate(idcard);
 		if (!rst.isSucc()) {
 			return rst;
-		} 
+		}
 		if (!BusiCommon.isInScope(opr_area, HJ_AREA)) {
 			rtn.setDefaultValue("不能管理非本地区人员");
 			return rtn;
@@ -361,10 +361,11 @@ public class HumanResourceServiceImpl implements HumanResourceService {
 		return rtn;
 	}
 
-	public ExecuteResult searchHrListCom(Map<String, Object> params) {
+	public ExecuteResult searchHrListCom(Map<String, Object> params, String c_id) {
 		// 企业查询人员信息只能查询有就业意愿的劳动力
 		params.put("LD_TYPE", FrameConstant.busi_com_boolean_true);
 		params.put("IS_WANT_JOB", FrameConstant.busi_com_boolean_true);
+		params.put("lable_cid", c_id);
 		return loadHrList(params);
 	}
 
@@ -560,6 +561,77 @@ public class HumanResourceServiceImpl implements HumanResourceService {
 		} catch (Exception e) {
 			log.error("loadHrList", e);
 		}
+		return rtn;
+	}
+
+	public ExecuteResult attentionHr(String c_id, String hr_id) {
+		ExecuteResult rtn = new ExecuteResult();
+		try {
+			Map params = new HashMap();
+			params.put("c_id", c_id);
+			params.put("hr_id", hr_id);
+			if (!frameDAO.isRecordExists("bs_hr_label", params)) {
+				frameDAO.anyInsert("bs_hr_label", params);
+			}
+			rtn.setSucc(true);
+		} catch (Exception e) {
+			log.error("attentionHr", e);
+		}
+		return rtn;
+	}
+
+	public ExecuteResult unattentionHr(String attention_id) {
+		ExecuteResult rtn = new ExecuteResult();
+		try {
+			frameDAO.anyDeleteByPk("bs_hr_label", attention_id);
+			rtn.setSucc(true);
+		} catch (Exception e) {
+			log.error("unattentionHr", e);
+		}
+		return rtn;
+	}
+
+	public ExecuteResult unattentionHr(String c_id, String hr_id) {
+		ExecuteResult rtn = new ExecuteResult();
+		try {
+			Map params = new HashMap();
+			params.put("c_id", c_id);
+			params.put("hr_id", hr_id);
+			frameDAO.anyDelete("bs_hr_label", params);
+			rtn.setSucc(true);
+		} catch (Exception e) {
+			log.error("attentionHr", e);
+		}
+		return rtn;
+	}
+
+	@Transactional(rollbackFor = Exception.class)
+	public ExecuteResult attentionHrs(String c_id, String[] hr_ids) {
+		ExecuteResult rtn = new ExecuteResult();
+
+		for (String hr_id : hr_ids) {
+			rtn = attentionHr(c_id, hr_id);
+			if (!rtn.isSucc()) {
+				TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+				return rtn;
+			}
+		}
+		rtn.setSucc(true);
+		return rtn;
+	}
+
+	@Transactional(rollbackFor = Exception.class)
+	public ExecuteResult unattentionHrs(String[] attention_ids) {
+		ExecuteResult rtn = new ExecuteResult();
+
+		for (String attention_id : attention_ids) {
+			rtn = unattentionHr(attention_id);
+			if (!rtn.isSucc()) {
+				TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+				return rtn;
+			}
+		}
+		rtn.setSucc(true);
 		return rtn;
 	}
 

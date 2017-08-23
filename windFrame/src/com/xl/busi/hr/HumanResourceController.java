@@ -72,7 +72,7 @@ public class HumanResourceController {
 			BusiCommon.dealAreaBj(info, "HJ_AREA");
 		}
 
-		ExecuteResult rst = humanResourceService.searchHrListCom(info);
+		ExecuteResult rst = humanResourceService.searchHrListCom(info, BusiCommon.getLoginAccountBusiId(session));
 		if (rst.isSucc()) {
 			Map map = (Map) rst.getInfoOne("info");
 			return FrameTool.toJson(map);
@@ -423,6 +423,43 @@ public class HumanResourceController {
 		Map trans = new HashMap();
 		trans.put("LD_TYPE", "1");
 		return new ModelAndView("/busi/hr/hr_list_qry", trans);
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/attentionHrs.do")
+	public String attentionHrs(HttpSession session, HttpServletRequest request) {
+
+		ExecuteResult rst = new ExecuteResult();
+		try {
+			Map<String, Object> info = FrameTool.getRequestParameterMap(request);
+			Object hrIds = info.get("ids[]");
+			if (!FrameTool.isEmpty(hrIds)) {
+				rst = humanResourceService.attentionHrs(BusiCommon.getLoginAccountBusiId(session),
+						FrameTool.getStringArray(hrIds));
+			}
+		} catch (Exception e) {
+			rst.setDefaultValue("程序内部错误");
+			log.error("error", e);
+		}
+		return FrameTool.toJson(rst);
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/unattentionHrs.do")
+	public String unattentionHrs(HttpSession session, HttpServletRequest request) {
+
+		ExecuteResult rst = new ExecuteResult();
+		try {
+			Map<String, Object> info = FrameTool.getRequestParameterMap(request);
+			Object hrIds = info.get("ids[]");
+			if (!FrameTool.isEmpty(hrIds)) {
+				rst = humanResourceService.unattentionHrs(FrameTool.getStringArray(hrIds));
+			}
+		} catch (Exception e) {
+			rst.setDefaultValue("程序内部错误");
+			log.error("error", e);
+		}
+		return FrameTool.toJson(rst);
 	}
 
 }

@@ -40,9 +40,14 @@ public interface HumanResourceService {
 
 	String getBatchImpHrErrorFilePath(String batch_id);
 
-	ExecuteResult searchHrListCom(Map<String, Object> params);
+	ExecuteResult searchHrListCom(Map<String, Object> params, String c_id);
 
 	Map getHrInfoCom(String c_id, String hr_id) throws SQLException;
 
 	ExecuteResult selectV_hr_position(Map params);
+
+	ExecuteResult attentionHrs(String c_id, String[] hr_ids);
+
+	ExecuteResult unattentionHrs(String[] attention_ids);
+	
 }

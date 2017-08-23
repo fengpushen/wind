@@ -46,6 +46,28 @@ public class FrameDAOImpl implements FrameDAO {
 		return count.intValue();
 	}
 
+	public List<Map> anySelectOneTable(String tableName, Map<String, Object> params) {
+		Map anySelectOneTableParams = new HashMap<String, Object>();
+		anySelectOneTableParams.put("tableName", tableName);
+		anySelectOneTableParams.put("params", params);
+		return sqlSession.selectList("anySelectOneTable", anySelectOneTableParams);
+	}
+
+	public Map anySelectOneTableOneRow(String tableName, Map<String, Object> params) {
+		Map anySelectOneTableParams = new HashMap<String, Object>();
+		anySelectOneTableParams.put("tableName", tableName);
+		anySelectOneTableParams.put("params", params);
+		return sqlSession.selectOne("anySelectOneTable", anySelectOneTableParams);
+	}
+
+	public Map anySelectOneTableByPk(String tableName, String pkValue) throws SQLException {
+		return anySelectOneTableOneRow(tableName, getPkParams(tableName, pkValue));
+	}
+
+	public boolean isRecordExists(String tableName, Map<String, Object> params) {
+		return !FrameTool.isEmpty(anySelectOneTableOneRow(tableName, params));
+	}
+
 	public int anyInsert(String tableName, Map<String, Object> params) throws SQLException {
 		Map<String, Object> paramsCopy = getFilteColumnsParams(tableName, params);
 		Map anyInsertParams = new HashMap<String, Object>();
@@ -165,8 +187,7 @@ public class FrameDAOImpl implements FrameDAO {
 		if (!FrameTool.isEmpty(params) && !FrameTool.isEmpty(table)) {
 			Set<String> keys = new HashSet<String>();
 			for (String key : params.keySet()) {
-				if (!table.containsColName(key.toLowerCase())
-						&& !table.containsColName(key.toUpperCase())) {
+				if (!table.containsColName(key.toLowerCase()) && !table.containsColName(key.toUpperCase())) {
 					keys.add(key);
 				}
 			}
