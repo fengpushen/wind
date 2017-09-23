@@ -31,4 +31,6 @@ public interface HumanResourceDAO {
 
 	List<Map> selectV_hr_position(Map params);
 
+	List<Map> selectBs_c_hire(Map params);
+
 }

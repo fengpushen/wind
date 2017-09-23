@@ -4,6 +4,8 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
+import com.xl.frame.util.ExecuteResult;
+
 public interface FrameDAO {
 
 	List<Map> anySelect(String sql);
@@ -27,6 +29,12 @@ public interface FrameDAO {
 	int anyUpdate(String tableName, Map<String, Object> params, Map<String, Object> qryParams) throws SQLException;
 
 	int anyUpdateByPk(String tableName, Map<String, Object> params, String pkValue) throws SQLException;
+
+	ExecuteResult qryPaginationInfo(String sqlId, Map<String, Object> params);
+
+	List<Map> selectList(String sqlId, Map params);
+
+	Map selectOne(String sqlId, Map params);
 
 	List<Map> selectFrame_account(Map params);
 

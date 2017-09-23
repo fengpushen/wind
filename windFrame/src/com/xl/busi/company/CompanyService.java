@@ -37,4 +37,6 @@ public interface CompanyService {
 	ExecuteResult loadCenterPhone(String area_code);
 
 	ExecuteResult setCenterPhone(String area_code, Map<String, Object> params);
+
+	ExecuteResult loadComHireList(Map<String, Object> params);
 }

@@ -272,9 +272,9 @@ public class CompanyController {
 	public String loadComRegJobList(HttpSession session, HttpServletRequest request) {
 
 		Map<String, Object> info = FrameTool.getRequestParameterMap(request);
-		info.put("opr_id", BusiCommon.getLoginAccountId(session));
+		info.put("c_id", BusiCommon.getLoginAccountBusiId(session));
 		BusiCommon.dealAreaBj(info, "HJ_AREA");
-		ExecuteResult rst = companyService.loadComRegJobList(info);
+		ExecuteResult rst = companyService.loadComHireList(info);
 		if (rst.isSucc()) {
 			Map map = (Map) rst.getInfoOne("info");
 			return FrameTool.toJson(map);

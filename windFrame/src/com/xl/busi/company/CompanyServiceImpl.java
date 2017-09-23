@@ -183,6 +183,11 @@ public class CompanyServiceImpl implements CompanyService {
 		return rtn;
 	}
 
+	public ExecuteResult loadComHireList(Map<String, Object> params) {
+
+		return frameDAO.qryPaginationInfo("selectBs_c_hire", params);
+	}
+
 	public ExecuteResult loadComRegJobCountList(Map params) {
 		ExecuteResult rtn = new ExecuteResult();
 		try {

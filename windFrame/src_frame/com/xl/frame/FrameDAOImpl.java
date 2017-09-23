@@ -18,6 +18,7 @@ import org.mybatis.spring.SqlSessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.xl.frame.util.ExecuteResult;
 import com.xl.frame.util.FrameCache;
 import com.xl.frame.util.FrameDbInfo;
 import com.xl.frame.util.FrameDbTable;
@@ -120,6 +121,30 @@ public class FrameDAOImpl implements FrameDAO {
 			throw new SQLException("未提供参数");
 		}
 		return anyUpdate(tableName, getColumnsParamsWithoutPk(tableName, params), getPkParams(tableName, pkValue));
+	}
+
+	public ExecuteResult qryPaginationInfo(String sqlId, Map<String, Object> params) {
+		ExecuteResult rtn = new ExecuteResult();
+		try {
+			Map info = new HashMap();
+			int total = selectRecord_count(sqlId, params);
+			info.put("total", total);
+			List<Map> rows = selectList(sqlId, params);
+			info.put("rows", rows);
+			rtn.addInfo("info", info);
+			rtn.setSucc(true);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return rtn;
+	}
+
+	public List<Map> selectList(String sqlId, Map params) {
+		return sqlSession.selectList(sqlId, params);
+	}
+
+	public Map selectOne(String sqlId, Map params) {
+		return sqlSession.selectOne(sqlId, params);
 	}
 
 	private FrameDbTable getTableMetaData(String tableName) throws SQLException {

@@ -139,6 +139,21 @@
 						title : '月收入',
 						width : '6%',
 						align : 'center'
+					}, {
+						field : 'JOB_TIME',
+						title : '入职时间',
+						width : '8%',
+						align : 'center'
+					}, {
+						field : 'SY_MONTH',
+						title : '试用期（月）',
+						width : '6%',
+						align : 'center'
+					}, {
+						field : 'WD_JOB_TIME_STR',
+						title : '稳定就业时间',
+						width : '8%',
+						align : 'center'
 					} ] ]
 				});
 				loadDatagridData();

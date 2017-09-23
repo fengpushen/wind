@@ -46,13 +46,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				and IS_JOB = #{IS_JOB}
 			</if>
 			<if test="jntcSet != null">
-				and hr_id in 
+				and a.hr_id in 
 				<foreach collection="jntcSet" index="index" item="item" open="(" separator="union all" close=")">
               		select hr_id from v_hr_jntc where UTL_MATCH.edit_distance_similarity(v_hr_jntc.jntc, #{item}) >= 60      
         		</foreach>  
 			</if>
 			<if test="wantJobNameSet != null">
-				and hr_id in 
+				and a.hr_id in 
 				<foreach collection="wantJobNameSet" index="index" item="item" open="(" separator="union all" close=")">
               		select hr_id from V_HR_WANT_JOB_NAME where UTL_MATCH.edit_distance_similarity(V_HR_WANT_JOB_NAME.WANT_JOB_NAME, #{item}) >= 60      
         		</foreach>  
@@ -129,7 +129,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				</choose>
 			</if>
 		</where>
-		order by hj_area, idcard
+		<if test="record_count == null and order != null and order != ''">
+				order by ${sort} ${order}
+		</if>
+		<if test="record_count == null and order == null or order == ''">
+				order by hj_area, idcard
+		</if>
 		<if test="record_count == null and page != null and page != ''">
 			)qry ) where rowidx > (#{page} - 1) * #{rows} and rowidx
 			&lt;= #{page} * #{rows}
@@ -623,6 +628,89 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			</if>
 		</where>
 		order by a.hr_id, c_id
+		<if test="record_count == null and page != null and page != ''">
+			)qry ) where rowidx > (#{page} - 1) * #{rows} and rowidx
+			&lt;= #{page} * #{rows}
+		</if>
+	</select>
+	
+	<select id="selectBs_c_hire" resultType="hashMap"
+		parameterType="hashMap">
+		<if test="record_count == null and page != null and page != ''">
+			select * from (select rownum as rowidx, qry.* from (
+		</if>
+		select
+		<if test="record_count == null">
+			a.*, b.HR_NAME, b.HJ_AREA, b.hj_area_name, c.c_name, 
+			to_char(a.in_time, 'yyyy-mm-dd') as in_time_str,
+			to_char(add_months(to_date(hire_time, 'yyyy-mm-dd'), nvl(sy_month, 0)), 'yyyy-mm-dd') as sy_end_time_str,
+			d.code_value as is_wd_name
+		</if>
+		<if test="record_count != null">
+			count(1) as record_count
+		</if>
+		  from bs_c_hire a
+		 inner join v_busi_hr b
+		    on a.hr_id = b.hr_id
+		 inner join bs_company c
+		    on c.c_id = a.c_id	
+		 inner join v_code_map_boolean d
+		 	on a.is_wd = d.code_key	    
+		<where>
+			<if test="in_time_bgn != null and in_time_bgn != ''">
+				a.in_time >= to_date(#{in_time_bgn}, 'yyyy-mm-dd')
+			</if>
+			<if test="in_time_end != null and in_time_end != ''">
+				and a.in_time &lt;= to_date(#{in_time_end}, 'yyyy-mm-dd')
+			</if>
+			<if test="c_id != null and c_id != ''">
+				and a.c_id = #{c_id}
+			</if>
+			<if test="is_zz != null and is_zz != ''" >
+				and a.is_wd = #{is_zz}
+			</if>
+			<if test='is_overtime == "0"' >
+				and a.hire_time > to_char(add_months(sysdate, sy_month * -1), 'yyyy-mm-dd')
+			</if>
+			<if test='is_overtime == "1"' >
+				and a.hire_time &lt; to_char(add_months(sysdate, sy_month * -1), 'yyyy-mm-dd')
+			</if>
+			<if test='is_quit == "0"' >
+				and a.quit_time is null
+			</if>
+			<if test='is_quit == "1"' >
+				and a.quit_time is not null
+			</if>
+			<if test="HJ_AREA != null and HJ_AREA != ''">
+				<choose>
+					<when test="HJ_AREA_BJ != null and HJ_AREA_BJ  != ''">
+						and hj_area = #{HJ_AREA}
+					</when>
+					<otherwise>
+						<choose>
+							<when test="HJ_AREA_LEVEL == 0">
+								and province_code_hj = #{HJ_AREA}
+							</when>
+							<when test="HJ_AREA_LEVEL == 1">
+								and city_code_hj = #{HJ_AREA}
+							</when>
+							<when test="HJ_AREA_LEVEL == 2">
+								and country_code_hj = #{HJ_AREA}
+							</when>
+							<when test="HJ_AREA_LEVEL == 3">
+								and street_code_hj = #{HJ_AREA}
+							</when>
+							<when test="HJ_AREA_LEVEL == 4">
+								and village_code_hj = #{HJ_AREA}
+							</when>
+						</choose>
+					</otherwise>
+				</choose>
+			</if>
+		</where>
+		<if test="record_count == null">
+		order by a.hire_time desc
+		</if>
 		<if test="record_count == null and page != null and page != ''">
 			)qry ) where rowidx > (#{page} - 1) * #{rows} and rowidx
 			&lt;= #{page} * #{rows}

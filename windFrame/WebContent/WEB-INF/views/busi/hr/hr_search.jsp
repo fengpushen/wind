@@ -144,7 +144,7 @@
 									$('#dd').dialog({
 										title : '入职登记',
 										width : 1000,
-										height : 500,
+										height : 300,
 										closed : false,
 										cache : false,
 										href : 'busi/hr/showHrJobReg.do',
@@ -337,17 +337,20 @@
 						field : 'HR_NAME_COVERD',
 						title : '姓名',
 						width : '6%',
-						align : 'center'
+						align : 'center',
+						sortable : true
 					}, {
 						field : 'AGE',
 						title : '年龄',
 						width : '4%',
-						align : 'center'
+						align : 'center',
+						sortable : true
 					}, {
 						field : 'SEX_NAME',
 						title : '性别',
 						width : '4%',
-						align : 'center'
+						align : 'center',
+						sortable : true
 					}, {
 						field : 'HJ_AREA_NAME',
 						title : '户籍地',
@@ -362,7 +365,8 @@
 						field : 'DEGREE_NAME',
 						title : '文化程度',
 						width : '8%',
-						align : 'center'
+						align : 'center',
+						sortable : true
 					}, {
 						field : 'JNTC',
 						title : '技能特长',
@@ -379,8 +383,8 @@
 						width : '6%',
 						align : 'center'
 					}, {
-						field : 'WANT_JOB_AREA_NAME',
-						title : '就业意愿地',
+						field : 'WANT_WORK_AREA_KIND_NAME',
+						title : '就业区域意向',
 						width : '6%',
 						align : 'center'
 					}, {
@@ -392,7 +396,8 @@
 						field : 'WANT_INCOME',
 						title : '期望月薪',
 						width : '6%',
-						align : 'center'
+						align : 'center',
+						sortable : true
 					}, {
 						field : 'LABEL_NAME',
 						title : '关注状态',

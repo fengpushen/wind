@@ -49,5 +49,12 @@ public interface HumanResourceService {
 	ExecuteResult attentionHrs(String c_id, String[] hr_ids);
 
 	ExecuteResult unattentionHrs(String[] attention_ids);
-	
+
+	ExecuteResult comHirePerson(String opr_id, String c_id, String hr_id, String hire_time, String sy_month, Map info);
+
+	ExecuteResult turnRegularEmployees(String[] hire_ids);
+
+	Map getHireHrInfo(String hire_id);
+
+	ExecuteResult quitHire(String opr_id, String hire_id, String quit_time, String quit_reason);
 }

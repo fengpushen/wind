@@ -230,6 +230,24 @@ public class HumanResourceController {
 	}
 
 	@ResponseBody
+	@RequestMapping(value = "/comHirePerson.do")
+	public String comHirePerson(HttpSession session, HttpServletRequest request) {
+
+		ExecuteResult rst = new ExecuteResult();
+		try {
+			Map<String, Object> info = FrameTool.getRequestParameterMap(request);
+			Map<String, Object> job = (Map<String, Object>) info.get("job");
+			rst = humanResourceService.comHirePerson(BusiCommon.getLoginAccountId(session),
+					BusiCommon.getLoginAccountBusiId(session), (String) job.get("HR_ID"), (String) job.get("JOB_TIME"),
+					(String) job.get("sy_month"), info);
+		} catch (Exception e) {
+			rst.setDefaultValue("程序内部错误");
+			log.error("error", e);
+		}
+		return FrameTool.toJson(rst);
+	}
+
+	@ResponseBody
 	@RequestMapping(value = "/saveNOjobInfo.do")
 	public String saveNOjobInfo(HttpSession session, HttpServletRequest request) {
 
@@ -455,6 +473,47 @@ public class HumanResourceController {
 			if (!FrameTool.isEmpty(hrIds)) {
 				rst = humanResourceService.unattentionHrs(FrameTool.getStringArray(hrIds));
 			}
+		} catch (Exception e) {
+			rst.setDefaultValue("程序内部错误");
+			log.error("error", e);
+		}
+		return FrameTool.toJson(rst);
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/turnRegularEmployees.do")
+	public String turnRegularEmployees(HttpSession session, HttpServletRequest request) {
+
+		ExecuteResult rst = new ExecuteResult();
+		try {
+			Map<String, Object> info = FrameTool.getRequestParameterMap(request);
+			Object hrIds = info.get("ids[]");
+			if (!FrameTool.isEmpty(hrIds)) {
+				rst = humanResourceService.turnRegularEmployees(FrameTool.getStringArray(hrIds));
+			}
+		} catch (Exception e) {
+			rst.setDefaultValue("程序内部错误");
+			log.error("error", e);
+		}
+		return FrameTool.toJson(rst);
+	}
+
+	@RequestMapping("/showHrQuitUI")
+	public ModelAndView showHrQuitUI(@RequestParam(required = true) String hire_id) {
+		Map trans = humanResourceService.getHireHrInfo(hire_id);
+		trans.put("hire_id", hire_id);
+		return new ModelAndView("/busi/hr/hr_quit_reg", trans);
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/quitHire.do")
+	public String quitHire(HttpSession session, HttpServletRequest request,
+			@RequestParam(required = true) String hire_id, @RequestParam(required = true) String quit_time,
+			@RequestParam(required = true) String quit_reason) {
+
+		ExecuteResult rst = new ExecuteResult();
+		try {
+			rst = humanResourceService.quitHire(BusiCommon.getLoginAccountId(session), hire_id, quit_time, quit_reason);
 		} catch (Exception e) {
 			rst.setDefaultValue("程序内部错误");
 			log.error("error", e);

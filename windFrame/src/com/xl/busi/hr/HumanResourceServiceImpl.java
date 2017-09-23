@@ -245,6 +245,29 @@ public class HumanResourceServiceImpl implements HumanResourceService {
 		return rtn;
 	}
 
+	@Transactional(rollbackFor = Exception.class)
+	public ExecuteResult comHirePerson(String opr_id, String c_id, String hr_id, String hire_time, String sy_month,
+			Map info) {
+		ExecuteResult rtn = new ExecuteResult();
+		try {
+			Map params = new HashMap();
+			params.put("c_id", c_id);
+			params.put("hr_id", hr_id);
+			params.put("hire_time", hire_time);
+			params.put("sy_month", sy_month);
+			params.put("in_c_name", info.get("JOB_DW"));
+			frameDAO.anyInsert("bs_c_hire", params);
+			rtn = saveJobInfo(opr_id, FrameConstant.busi_user_kind_com, info);
+			if (!rtn.isSucc()) {
+				TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+			}
+		} catch (Exception e) {
+			log.error("", e);
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+		}
+		return rtn;
+	}
+
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public ExecuteResult saveNOjobInfo(String orp_id, String opr_type, Map info) throws SQLException {
@@ -632,6 +655,101 @@ public class HumanResourceServiceImpl implements HumanResourceService {
 			}
 		}
 		rtn.setSucc(true);
+		return rtn;
+	}
+
+	@Transactional(rollbackFor = Exception.class)
+	public ExecuteResult turnRegularEmployees(String[] hire_ids) {
+		ExecuteResult rtn = new ExecuteResult();
+
+		for (String hire_id : hire_ids) {
+			rtn = turnRegularEmployee(hire_id);
+			if (!rtn.isSucc()) {
+				TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+				return rtn;
+			}
+		}
+		rtn.setSucc(true);
+		return rtn;
+	}
+
+	public ExecuteResult turnRegularEmployee(String hire_id) {
+		ExecuteResult rtn = new ExecuteResult();
+		try {
+			Map info = frameDAO.anySelectOneTableByPk("bs_c_hire", hire_id);
+			if (FrameTool.isEmpty(info)) {
+				rtn.setDefaultValue("没有相应的记录");
+				return rtn;
+			}
+			if (!FrameTool.isEmpty(info.get("QUIT_TIME"))) {
+				rtn.setDefaultValue("已经离职人员不能做转正操作");
+				return rtn;
+			}
+			Map params = new HashMap();
+			params.put("is_wd", FrameConstant.busi_com_boolean_true);
+			frameDAO.anyUpdateByPk("bs_c_hire", params, hire_id);
+			rtn.setSucc(true);
+		} catch (Exception e) {
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+			log.error("", e);
+		}
+		return rtn;
+	}
+
+	public Map getHireInfo(String hire_id) {
+		Map info = null;
+		try {
+			info = frameDAO.anySelectOneTableByPk("bs_c_hire", hire_id);
+		} catch (SQLException e) {
+			log.error("", e);
+		}
+		return info;
+	}
+
+	public Map getHireHrInfo(String hire_id) {
+		Map hireInfo = getHireInfo(hire_id);
+		if (!FrameTool.isEmpty(hireInfo)) {
+			String hr_id = (String) hireInfo.get("HR_ID");
+			if (!FrameTool.isEmpty(hireInfo)) {
+				return getHrInfo(hr_id);
+			}
+		}
+		return null;
+	}
+
+	@Transactional(rollbackFor = Exception.class)
+	public ExecuteResult quitHire(String opr_id, String hire_id, String quit_time, String quit_reason) {
+		ExecuteResult rtn = new ExecuteResult();
+		try {
+			Map info = frameDAO.anySelectOneTableByPk("bs_c_hire", hire_id);
+			if (FrameTool.isEmpty(info)) {
+				rtn.setDefaultValue("没有相应的记录");
+				return rtn;
+			}
+			if (!FrameTool.isEmpty(info.get("QUIT_TIME"))) {
+				rtn.setDefaultValue("不能重复做离职操作");
+				return rtn;
+			}
+			Map params = new HashMap();
+			params.put("quit_time", quit_time);
+			params.put("quit_reason", quit_reason);
+			frameDAO.anyUpdateByPk("bs_c_hire", params, hire_id);
+
+			Map<String, Object> nojob = new HashMap<String, Object>();
+			nojob.put("hr_id", info.get("HR_ID"));
+			nojob.put("nojob_time", quit_time);
+			nojob.put("nojob_reason", quit_reason);
+			nojob.put("nojob_dw", info.get("JOB_DW"));
+			rtn = saveNOjobInfo(opr_id, FrameConstant.busi_user_kind_com, nojob);
+			if (!rtn.isSucc()) {
+				TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+			} else {
+				rtn.setSucc(true);
+			}
+		} catch (Exception e) {
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+			log.error("", e);
+		}
 		return rtn;
 	}
 

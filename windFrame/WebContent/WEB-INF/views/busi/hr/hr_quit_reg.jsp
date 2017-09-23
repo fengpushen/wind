@@ -6,7 +6,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>人力资源信息管理</title>
+<title>离职登记</title>
 <tags:commonHead />
 </head>
 <body>
@@ -28,23 +28,20 @@
 	</div>
 	<form id="theForm" method="post"
 		style="width: 100%; background-color: #E0EEEE;">
-		<input type="hidden" id="HR_ID" name="nojob.HR_ID" value="${HR_ID }" />
+		<input type="hidden" name="hire_id" value="${hire_id }" />
 		<div class="easyui-panel" style="width: 100%;" id="jobInfoDiv"
 			data-option="noheader:true">
 			<table style="width: 100%">
 				<tr>
 					<td style="width: 10%; text-align: right">离职时间:</td>
 					<td style="width: 23%; text-align: left"><input
-						class="easyui-datebox" name="nojob.NOJOB_TIME"
+						class="easyui-datebox" name="quit_time"
 						data-options="sharedCalendar:'#cc', required:true"
 						style="width: 100%"></td>
-					<td style="width: 10%; text-align: right">离职单位:</td>
-					<td style="width: 23%; text-align: left"><input
-						class="easyui-textbox" name="nojob.NOJOB_DW" style="width: 100%"></td>
 					<td style="width: 10%; text-align: right">离职原因:</td>
-					<td style="width: 23%; text-align: left"><input
-						class="easyui-textbox" name="nojob.NOJOB_REASON"
-						style="width: 100%"></td>
+					<td style="width: 56%; text-align: left" colspan="3"><input
+						class="easyui-textbox" name="quit_reason"
+						data-options="required:true" style="width: 100%"></td>
 				</tr>
 			</table>
 		</div>
@@ -59,8 +56,11 @@
 
 	<script type="text/javascript">
 		$(function() {
+			$("body").click(function() {
+				closeJobnojobOpr();
+			});
 			$('#theForm').form({
-				url : 'busi/hr/saveNOjobInfo.do',
+				url : 'busi/hr/quitHire.do',
 				success : function(data) {
 					try {
 						var rst = eval('(' + data + ')');
@@ -77,9 +77,6 @@
 					} catch (e) {
 						alert(e);
 					}
-				},
-				onSubmit : function() {
-					closeOrpTip('oprNOjobRegTip');
 				}
 			});
 

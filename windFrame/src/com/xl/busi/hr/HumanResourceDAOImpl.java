@@ -100,4 +100,8 @@ public class HumanResourceDAOImpl implements HumanResourceDAO {
 	public List<Map> selectV_hr_position(Map params) {
 		return sqlSession.selectList("selectV_hr_position", params);
 	}
+	
+	public List<Map> selectBs_c_hire(Map params) {
+		return sqlSession.selectList("selectBs_c_hire", params);
+	}
 }
