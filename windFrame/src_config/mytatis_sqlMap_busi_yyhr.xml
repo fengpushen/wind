@@ -716,5 +716,105 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			&lt;= #{page} * #{rows}
 		</if>
 	</select>
+	
+	<select id="selectBusi_hr_job_tj" resultType="hashMap"
+		parameterType="hashMap">
+		<if test="record_count == null and page != null and page != ''">
+			select * from (select rownum as rowidx, qry.* from (
+		</if>
+		select
+		<if test="record_count == null">
+			a.area_name, b.*
+		</if>
+		<if test="record_count != null">
+			count(1) as record_count
+		</if>
+		  from (select *
+		          from com_area
+		         where area_level = #{area_level}
+		         <if test='area_scope_level == "1"'>and city_code = #{area_scope}</if>
+		         <if test='area_scope_level == "2"'>and country_code = #{area_scope}</if>
+		         <if test='area_scope_level == "3"'>and STREET_CODE = #{area_scope}</if>
+		         <if test='area_scope_level == "4"'>and VILLAGE_CODE = #{area_scope}</if>
+		           ) a
+		 inner join (select area_code,
+		                    all_count,
+		                    jobed,
+		                    want_job,
+		                    want_job_country,
+		                    want_job_city,
+		                    want_job_shen,
+		                    want_job_guo,
+		                    want_job_jw,
+		                    all_count - jobed as nojob,
+		                    all_count - jobed - want_job as no_want_job,
+		                    decode(all_count, 0, 100, ROUND(jobed*100/all_count, 2)) as jyl
+		               from (select area_code,
+		                            count(1) as all_count,
+		                            sum(jobed) as jobed,
+		                            sum(want_job) as want_job,
+		                            sum(want_job_country) as want_job_country,
+		                            sum(want_job_city) as want_job_city,
+		                            sum(want_job_shen) as want_job_shen,
+		                            sum(want_job_guo) as want_job_guo,
+		                            sum(want_job_jw) as want_job_jw
+		                       from (select <if test='area_level == "2"'>b.country_code</if>
+		                       <if test='area_level == "3"'>b.STREET_CODE</if>
+		                       <if test='area_level == "4"'>b.VILLAGE_CODE</if> as area_code,
+		                                    decode(is_job, '1', 1, 0) as jobed,
+		                                    case
+		                                      when is_job = '0' and is_want_job = '1' then
+		                                       1
+		                                      else
+		                                       0
+		                                    end as want_job,
+		                                    case
+		                                      when is_job = '0' and is_want_job = '1' and
+		                                           WANT_WORK_AREA_KIND = '10' then
+		                                       1
+		                                      else
+		                                       0
+		                                    end as want_job_country,
+		                                    case
+		                                      when is_job = '0' and is_want_job = '1' and
+		                                           WANT_WORK_AREA_KIND = '20' then
+		                                       1
+		                                      else
+		                                       0
+		                                    end as want_job_city,
+		                                    case
+		                                      when is_job = '0' and is_want_job = '1' and
+		                                           WANT_WORK_AREA_KIND = '30' then
+		                                       1
+		                                      else
+		                                       0
+		                                    end as want_job_shen,
+		                                    case
+		                                      when is_job = '0' and is_want_job = '1' and
+		                                           WANT_WORK_AREA_KIND = '40' then
+		                                       1
+		                                      else
+		                                       0
+		                                    end as want_job_guo,
+		                                    case
+		                                      when is_job = '0' and is_want_job = '1' and
+		                                           WANT_WORK_AREA_KIND = '50' then
+		                                       1
+		                                      else
+		                                       0
+		                                    end as want_job_jw
+		                               from busi_hr a
+		                              inner join v_com_area_all_name b
+		                                 on a.hj_area = b.AREA_CODE)
+		                      group by area_code)) b
+		    on a.area_code = b.AREA_CODE  
+		<if test="record_count == null">
+		order by a.area_code
+		</if>
+		<if test="record_count == null and page != null and page != ''">
+			)qry ) where rowidx > (#{page} - 1) * #{rows} and rowidx
+			&lt;= #{page} * #{rows}
+		</if>
+	</select>
 
 </mapper>

@@ -57,4 +57,6 @@ public interface HumanResourceService {
 	Map getHireHrInfo(String hire_id);
 
 	ExecuteResult quitHire(String opr_id, String hire_id, String quit_time, String quit_reason);
+
+	ExecuteResult loadHrJobTjList(String area_scope, String area_level);
 }

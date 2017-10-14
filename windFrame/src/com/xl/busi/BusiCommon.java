@@ -150,6 +150,18 @@ public class BusiCommon {
 		}
 		return Integer.toString(node.getLevel());
 	}
+	
+	public static String getAreaDownLevel(String areaCode){
+		TreeNode node = getAreaTreeNode(areaCode);
+		if (FrameTool.isEmpty(node)) {
+			return null;
+		}
+		int level = node.getLevel();
+		if(level < 4){
+			level ++;
+		}
+		return Integer.toString(level);
+	}
 
 	/**
 	 * 判断otherAreaCode是否为areaCode的范围之内

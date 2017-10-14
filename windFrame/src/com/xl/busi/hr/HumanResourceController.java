@@ -521,4 +521,28 @@ public class HumanResourceController {
 		return FrameTool.toJson(rst);
 	}
 
+	@RequestMapping("/showHrJobTjUI.do")
+	public ModelAndView showHrJobTjUI(HttpSession session) {
+		String area = BusiCommon.getLoginAccountStaffArea(session);
+		String area_level = BusiCommon.getAreaDownLevel(area);
+		Map trans = new HashMap();
+		trans.put("area_scope", area);
+		trans.put("area_level", area_level);
+		trans.put("area_scope_name", BusiCommon.getAreaName(area));
+		return new ModelAndView("/busi/center/center_hr_job_tj", trans);
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/loadHrJobTjList.do")
+	public String loadHrJobTjList(@RequestParam(required = true) String area_scope,
+			@RequestParam(required = true) String area_level) {
+
+		ExecuteResult rst = humanResourceService.loadHrJobTjList(area_scope, area_level);
+		if (rst.isSucc()) {
+			Map map = (Map) rst.getInfoOne("info");
+			return FrameTool.toJson(map);
+		}
+		return null;
+	}
+
 }
