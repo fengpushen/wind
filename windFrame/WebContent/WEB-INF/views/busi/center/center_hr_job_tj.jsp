@@ -128,6 +128,12 @@
 						align : 'center'
 					}, {
 						field : 'ALL_COUNT',
+						title : '采集总数',
+						width : '6%',
+						rowspan : 3,
+						align : 'center'
+					},{
+						field : 'LDL',
 						title : '劳动力',
 						width : '6%',
 						rowspan : 3,

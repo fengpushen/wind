@@ -739,6 +739,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		           ) a
 		 inner join (select area_code,
 		                    all_count,
+		                    ldl,
 		                    jobed,
 		                    want_job,
 		                    want_job_country,
@@ -746,11 +747,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		                    want_job_shen,
 		                    want_job_guo,
 		                    want_job_jw,
-		                    all_count - jobed as nojob,
-		                    all_count - jobed - want_job as no_want_job,
-		                    decode(all_count, 0, 100, ROUND(jobed*100/all_count, 2)) as jyl
+		                    ldl - jobed as nojob,
+		                    ldl - jobed - want_job as no_want_job,
+		                    decode(ldl, 0, 100, ROUND(jobed*100/ldl, 2)) as jyl
 		               from (select area_code,
 		                            count(1) as all_count,
+		                            sum(ldl) as ldl,
 		                            sum(jobed) as jobed,
 		                            sum(want_job) as want_job,
 		                            sum(want_job_country) as want_job_country,
@@ -761,43 +763,49 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		                       from (select <if test='area_level == "2"'>b.country_code</if>
 		                       <if test='area_level == "3"'>b.STREET_CODE</if>
 		                       <if test='area_level == "4"'>b.VILLAGE_CODE</if> as area_code,
-		                                    decode(is_job, '1', 1, 0) as jobed,
+		                       				decode(ld_type, '1', 1, 0) as ldl,
 		                                    case
-		                                      when is_job = '0' and is_want_job = '1' then
+		                                      when ld_type = '1' and is_job = '1' then
+		                                       1
+		                                      else
+		                                       0
+		                                    end as jobed,
+		                                    case
+		                                      when ld_type = '1' and is_job = '0' and is_want_job = '1' then
 		                                       1
 		                                      else
 		                                       0
 		                                    end as want_job,
 		                                    case
-		                                      when is_job = '0' and is_want_job = '1' and
+		                                      when ld_type = '1' and is_job = '0' and is_want_job = '1' and
 		                                           WANT_WORK_AREA_KIND = '10' then
 		                                       1
 		                                      else
 		                                       0
 		                                    end as want_job_country,
 		                                    case
-		                                      when is_job = '0' and is_want_job = '1' and
+		                                      when ld_type = '1' and is_job = '0' and is_want_job = '1' and
 		                                           WANT_WORK_AREA_KIND = '20' then
 		                                       1
 		                                      else
 		                                       0
 		                                    end as want_job_city,
 		                                    case
-		                                      when is_job = '0' and is_want_job = '1' and
+		                                      when ld_type = '1' and is_job = '0' and is_want_job = '1' and
 		                                           WANT_WORK_AREA_KIND = '30' then
 		                                       1
 		                                      else
 		                                       0
 		                                    end as want_job_shen,
 		                                    case
-		                                      when is_job = '0' and is_want_job = '1' and
+		                                      when ld_type = '1' and is_job = '0' and is_want_job = '1' and
 		                                           WANT_WORK_AREA_KIND = '40' then
 		                                       1
 		                                      else
 		                                       0
 		                                    end as want_job_guo,
 		                                    case
-		                                      when is_job = '0' and is_want_job = '1' and
+		                                      when ld_type = '1' and is_job = '0' and is_want_job = '1' and
 		                                           WANT_WORK_AREA_KIND = '50' then
 		                                       1
 		                                      else
