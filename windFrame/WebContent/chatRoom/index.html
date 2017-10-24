@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script type='text/javascript'
+	src='https://cdn.scaledrone.com/scaledrone.min.js'></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<style>
+.vid-wrap {
+	width: 100%;
+	height: 100%;
+	background: #000;
+}
+
+.vid-wrap #remoteVideo {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%
+}
+
+.vid-wrap #localVideo {
+	position: absolute;
+	right: 0px; bottom : 5px;
+    width : 30%;
+	height: 30%
+}
+</style>
+</head>
+<body>
+	<div class="vid-wrap">
+		<video id="remoteVideo" autoplay></video>
+		<video id="localVideo" autoplay muted></video>
+	</div>
+
+	<script src="webrtc.js"></script>
+</body>
+</html>
