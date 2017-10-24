@@ -281,6 +281,7 @@ public class PositionServiceImpl implements PositionService {
 			frameDAO.anyUpdateByPk("bs_position_req_video", params, req_id);
 			rtn.addInfo("rtmp_url", BusiCommon.getRtmpUrl(host));
 			rtn.addInfo("room", req_id);
+			rtn.setSucc(true);
 		} catch (Exception e) {
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 			log.error("personInPostionReqInterview", e);

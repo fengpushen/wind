@@ -285,7 +285,27 @@ public class PositionController {
 		if (rst.isSucc()) {
 			trans = rst.getInfo();
 		}
-		return new ModelAndView("/busi/position/position_req_interview_com", trans);
+		return new ModelAndView("/busi/position/position_req_interview_com_rtc", trans);
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/bgnPostionReqInterview.do")
+	public String bgnPostionReqInterview(HttpServletRequest request,
+			@RequestParam(required = true) String req_id) {
+
+		String host = request.getHeader("host");
+		ExecuteResult rst = positionService.bgnPostionReqInterview(req_id, host);
+		return FrameTool.toJson(rst);
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/personInPostionReqInterview.do")
+	public String personInPostionReqInterview(HttpServletRequest request,
+			@RequestParam(required = true) String req_id) {
+
+		String host = request.getHeader("host");
+		ExecuteResult rst = positionService.personInPostionReqInterview(req_id, host);
+		return FrameTool.toJson(rst);
 	}
 
 	@RequestMapping("/showMobilePositionInterview.do")
@@ -294,7 +314,7 @@ public class PositionController {
 
 		String host = request.getHeader("host");
 		ExecuteResult rst = positionService.personInPostionReqInterview(req_id, host);
-		return new ModelAndView("/busi/mobile/hr/mo_hr_interview", rst.getInfo());
+		return new ModelAndView("/busi/mobile/hr/mo_hr_interview_rtc", rst.getInfo());
 	}
 
 	@RequestMapping("/showMobilePositionSearch.do")

@@ -122,6 +122,36 @@ object:focus {
 		function showMobileHrCenterUI() {
 			window.location.href = baseHref + "busi/hr/showMobileHrCenterUI.do";
 		}
+		function inInterview(req_id){
+			$
+			.ajax({
+				type : "post",
+				url : "busi/position/personInPostionReqInterview.do",
+				dataType : "json",
+				data : {
+					'req_id' : req_id
+				},
+				success : function(rst) {
+					if (rst.isSucc) {
+						window
+								.open(
+										baseHref
+												+ "chatRoom/index.html#"
+												+ req_id,
+										"_blank");
+					} else {
+						var msg = '操作失败';
+						if (rst.info.INFO_KEY_DEFAULT != null) {
+							msg = msg
+									+ ','
+									+ rst.info.INFO_KEY_DEFAULT;
+						}
+						$.messager.alert("",
+								msg);
+					}
+				}
+			});
+		}
 		$(function() {
 			var hr_id = localStorage.getItem("hr_id");
 			$('#datagrid')
@@ -149,11 +179,9 @@ object:focus {
 												var room_no = row.ROOM_NO;
 												if (room_no != null
 														&& room_no != '') {
-													var url = baseHref
-															+ "busi/hr/showMobilePositionInterview.do?room="
-															+ room_no;
+													
 													showValue += "<br />";
-													showValue += "<a href='"+url+"'>视频面试</a>";
+													showValue += "<a href='javascript:void(0)' onclick='inInterview(\'" + room_no +"\')'>视频面试</a>";
 												}
 												return showValue;
 											}

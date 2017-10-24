@@ -30,7 +30,7 @@
 			</table>
 		</form>
 	</div>
-	
+
 	<div data-options="region:'center', border:false">
 		<table id="datagrid">
 		</table>
@@ -124,11 +124,35 @@
 									$.messager.alert("", "请选中单条记录进行操作");
 								} else {
 									var req_id = rows[0].REQ_ID;
-									window
-											.open(
-													baseHref
-															+ "busi/position/showComPositionReqInterviewUI.do?req_id="
-															+ req_id, "_blank");
+									$
+											.ajax({
+												type : "post",
+												url : "busi/position/bgnPostionReqInterview.do",
+												dataType : "json",
+												data : {
+													'req_id' : req_id
+												},
+												success : function(rst) {
+													if (rst.isSucc) {
+														window
+																.open(
+																		baseHref
+																				+ "chatRoom/index.html#"
+																				+ req_id,
+																		"_blank");
+													} else {
+														var msg = '操作失败';
+														if (rst.info.INFO_KEY_DEFAULT != null) {
+															msg = msg
+																	+ ','
+																	+ rst.info.INFO_KEY_DEFAULT;
+														}
+														$.messager.alert("",
+																msg);
+													}
+												}
+											});
+
 								}
 							}
 						},
