@@ -42,6 +42,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="HR_ID != null and HR_ID != ''">
 				and hr_id = #{HR_ID}
 			</if>
+			<if test="hj_type != null and hj_type != ''">
+				and hj_type = #{hj_type}
+			</if>
 			<if test="IS_JOB != null and IS_JOB != ''">
 				and IS_JOB = #{IS_JOB}
 			</if>
@@ -749,7 +752,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		                    want_job_jw,
 		                    ldl - jobed as nojob,
 		                    ldl - jobed - want_job as no_want_job,
-		                    decode(ldl, 0, 100, ROUND(jobed*100/ldl, 2)) as jyl
+		                    decode((jobed+want_job), 0, 100, ROUND(jobed*100/(jobed+want_job), 2)) as jyl
 		               from (select area_code,
 		                            count(1) as all_count,
 		                            sum(ldl) as ldl,

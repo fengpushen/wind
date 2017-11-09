@@ -99,6 +99,16 @@
 						id="want_train_type" style="width: 100%" /></td>
 				</tr>
 				<tr>
+					<td style="width: 10%; text-align: right">技能特长:</td>
+					<td style="width: 23%; text-align: left"><input
+						class="easyui-textbox" name="JNTC" style="width: 100%" /></td>
+						<td style="width: 10%; text-align: right">户口性质:</td>
+					<td style="width: 23%; text-align: left"><input
+						class="easyui-combobox" name="hj_type" id="hj_type"
+						style="width: 100%" /></td>
+				</tr>
+				
+				<tr>
 					<td colspan="6" style="text-align: center;"><a
 						href="javascript:void(0)" class="easyui-linkbutton"
 						onclick="loadDatagridData();" style="width: 80px">查询</a></td>
@@ -331,6 +341,8 @@
 				comboboxDefaultInit('job_lv', 'job_lv', false, 'auto', false,
 						true);
 				comboboxDefaultInit('hr_kind', 'hr_kind', false, 'auto', false,
+						true);
+				comboboxDefaultInit('hj_type', 'hj_type', false, 'auto', false,
 						true);
 				comboboxDefaultInit('hard_type', 'hard_type', false, 'auto',
 						false, true);
