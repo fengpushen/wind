@@ -102,12 +102,12 @@
 					<td style="width: 10%; text-align: right">技能特长:</td>
 					<td style="width: 23%; text-align: left"><input
 						class="easyui-textbox" name="JNTC" style="width: 100%" /></td>
-						<td style="width: 10%; text-align: right">户口性质:</td>
+					<td style="width: 10%; text-align: right">户口性质:</td>
 					<td style="width: 23%; text-align: left"><input
 						class="easyui-combobox" name="hj_type" id="hj_type"
 						style="width: 100%" /></td>
 				</tr>
-				
+
 				<tr>
 					<td colspan="6" style="text-align: center;"><a
 						href="javascript:void(0)" class="easyui-linkbutton"
@@ -417,40 +417,58 @@
 						width : '4%',
 						align : 'center'
 					}, {
-						field : 'SEX_NAME',
+						field : 'SEX',
 						title : '性别',
 						width : '4%',
-						align : 'center'
+						align : 'center',
+						formatter : function(val, row) {
+							return theFrameCode.getCodeValue('sex', val);
+						}
 					}, {
 						field : 'HJ_AREA_NAME',
 						title : '户籍地',
 						width : '8%',
 						align : 'center'
 					}, {
-						field : 'NATION_NAME',
+						field : 'NATION',
 						title : '民族',
 						width : '6%',
-						align : 'center'
+						align : 'center',
+						formatter : function(val, row) {
+							return theFrameCode.getCodeValue('nation', val);
+						}
 					}, {
-						field : 'LD_TYPE_NAME',
+						field : 'LD_TYPE',
 						title : '是否劳动力',
 						width : '6%',
-						align : 'center'
+						align : 'center',
+						formatter : function(val, row) {
+							return theFrameCode.getCodeValue('boolean', val);
+						}
 					}, {
-						field : 'IS_JOB_NAME',
+						field : 'IS_JOB',
 						title : '是否就业',
 						width : '5%',
-						align : 'center'
+						align : 'center',
+						formatter : function(val, row) {
+							return theFrameCode.getCodeValue('boolean', val);
+						}
 					}, {
 						field : 'IS_WANT_JOB_NAME',
 						title : '有就业意愿',
 						width : '6%',
-						align : 'center'
+						align : 'center',
+						formatter : function(val, row) {
+							return theFrameCode.getCodeValue('boolean', val);
+						}
 					}, {
-						field : 'DEGREE_NAME',
+						field : 'DEGREE',
 						title : '文化程度',
 						width : '8%',
-						align : 'center'
+						align : 'center',
+						formatter : function(val, row) {
+							return theFrameCode.getCodeValue('degree', val);
+						}
 					}, {
 						field : 'JNTC',
 						title : '技能特长',

@@ -403,7 +403,7 @@
 						title : '关注状态',
 						width : '15%',
 						align : 'center'
-					} ] ]
+					}] ]
 				});
 			} catch (e) {
 				alert(e);
