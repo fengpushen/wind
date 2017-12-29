@@ -50,45 +50,28 @@
 					return true;
 				}
 			});
-			$("#logoutBtn")
-					.bind(
-							'click',
-							function() {
-								$.messager
-										.confirm(
-												'确认',
-												'您确定要退出本系统吗？',
-												function(r) {
-													if (r) {
-														$
-																.ajax({
-																	type : "post",
-																	url : "loginaccount/logout.do",
-																	success : function(
-																			data) {
-																		var rst = eval('('
-																				+ data
-																				+ ')');
-																		if (rst.isSucc) {
-																			window.location.href = baseHref
-																					+ rst.info.INFO_KEY_DEFAULT;
-																		} else {
-																			var msg = '操作失败';
-																			if (rst.info.INFO_KEY_DEFAULT != null) {
-																				msg = msg
-																						+ ','
-																						+ rst.info.INFO_KEY_DEFAULT;
-																			}
-																			$.messager
-																					.alert(
-																							"",
-																							msg);
-																		}
-																	}
-																});
-													}
-												});
-							});
+			$("#logoutBtn").bind('click', function() {
+				$.messager.confirm('确认', '您确定要退出本系统吗？', function(r) {
+					if (r) {
+						$.ajax({
+							type : "post",
+							url : "loginaccount/logout.do",
+							success : function(data) {
+								var rst = eval('(' + data + ')');
+								if (rst.isSucc) {
+									window.location.href = baseHref + rst.info.INFO_KEY_DEFAULT;
+								} else {
+									var msg = '操作失败';
+									if (rst.info.INFO_KEY_DEFAULT != null) {
+										msg = msg + ',' + rst.info.INFO_KEY_DEFAULT;
+									}
+									$.messager.alert("", msg);
+								}
+							}
+						});
+					}
+				});
+			});
 			$("#changePwdBtn").bind('click', function() {
 				$('#passwordDiv').dialog({
 					title : '修改密码',
@@ -100,32 +83,28 @@
 					modal : false
 				});
 			});
-			$('#menuTree')
-					.tree(
-							{
-								url : 'loginaccount/loadUserMenu.do',
-								onClick : function(node) {
-									if (!(node.id in loadedMenu)) {
-										var content = '<iframe frameborder="0"  src="'
-												+ node.attributes.menu_url
-												+ '" style="width:100%;height:100%;"></iframe>';
-										$('#tabs').tabs('add', {
-											id : node.id,
-											title : node.text,
-											content : content,
-											closable : true,
-											fit : true,
-											style : {
-												"padding" : "1px",
-												"overflow" : "hidden"
-											}
-										});
-										loadedMenu[node.id] = node.id;
-									} else {
-										$('#tabs').tabs('select', node.text);
-									}
-								}
-							});
+			$('#menuTree').tree({
+				url : 'loginaccount/loadUserMenu.do',
+				onClick : function(node) {
+					if (!(node.id in loadedMenu)) {
+						var content = '<iframe frameborder="0"  src="' + node.attributes.menu_url + '" style="width:100%;height:100%;"></iframe>';
+						$('#tabs').tabs('add', {
+							id : node.id,
+							title : node.text,
+							content : content,
+							closable : true,
+							fit : true,
+							style : {
+								"padding" : "1px",
+								"overflow" : "hidden"
+							}
+						});
+						loadedMenu[node.id] = node.id;
+					} else {
+						$('#tabs').tabs('select', node.text);
+					}
+				}
+			});
 		});
 	</script>
 </body>

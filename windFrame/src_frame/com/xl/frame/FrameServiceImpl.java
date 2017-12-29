@@ -83,12 +83,12 @@ public class FrameServiceImpl implements FrameService {
 	public ExecuteResult getAccountMenuTreeJson(String account_id) {
 		ExecuteResult rst = new ExecuteResult();
 		try {
-			List<Map> menuGroups = new ArrayList<Map>();
+			//TODO:这里还不支持两层及其以上的父菜单，需要增加此支持
 			List<Map> menus = frameDAO.selectMenusOfAccount(account_id);
 			List<TreeNode> nodes = new ArrayList<TreeNode>();
 			for (Map menu : menus) {
 				TreeNode node = new TreeNode((String) menu.get("MENU_ID"), (String) menu.get("MENU_NAME"),
-						(String) menu.get("MENU_GROUP_ID"));
+						(String) menu.get("MENU_P_ID"));
 				node.addNodeInfo("menu_url", menu.get("MENU_URL"));
 				nodes.add(node);
 			}
@@ -101,24 +101,37 @@ public class FrameServiceImpl implements FrameService {
 		}
 		return rst;
 	}
+	
+	@Override
+	public ExecuteResult getMenuTreeJson() {
+		ExecuteResult rst = new ExecuteResult();
+		try {
+			TreeView menuTree = FrameCache.getTree(FrameConstant.frame_menu_base_tree);
+			rst.setDefaultValue(menuTree.toJson());
+			rst.setSucc(true);
+		} catch (Exception e) {
+			log.error("", e);
+		}
+		return rst;
+	}
 
 	private void initMenuBaseTree() {
 		BaseTree tree = new BaseTree();
 		List<Map> groups = frameDAO.selectFrame_menu_group();
 		for (Map group : groups) {
-			String pid = (String) group.get("GROUP_PID");
+			String pid = (String) group.get("MENU_P_ID");
 			TreeNode node = null;
-			if ("0".equals(pid)) {
-				node = new TreeNode((String) group.get("MENU_GROUP_ID"), (String) group.get("GROUP_NAME"));
+			if (FrameTool.isEmpty(pid)) {
+				node = new TreeNode((String) group.get("MENU_ID"), (String) group.get("MENU_NAME"));
 			} else {
-				node = new TreeNode((String) group.get("MENU_GROUP_ID"), (String) group.get("GROUP_NAME"), pid);
+				node = new TreeNode((String) group.get("MENU_ID"), (String) group.get("MENU_NAME"), pid);
 			}
 			tree.addNode(node);
 		}
 		List<Map> menus = frameDAO.selectFrame_menu();
 		for (Map menu : menus) {
 			TreeNode node = new TreeNode((String) menu.get("MENU_ID"), (String) menu.get("MENU_NAME"),
-					(String) menu.get("MENU_GROUP_ID"));
+					(String) menu.get("MENU_P_ID"));
 			node.addNodeInfo("menu_url", menu.get("MENU_URL"));
 			tree.addNode(node);
 		}

@@ -34,4 +34,6 @@ public interface FrameService {
 	ExecuteResult delAccount(String account_id) throws SQLException;
 
 	ExecuteResult changeAccountSelfPwd(String account_id, String passwordOld, String password);
+
+	ExecuteResult getMenuTreeJson();
 }

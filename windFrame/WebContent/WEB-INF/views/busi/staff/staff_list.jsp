@@ -10,37 +10,38 @@
 <tags:commonHead />
 </head>
 <body class="easyui-layout">
-	<div class="easyui-panel" data-options="noheader:true,region:'center'">
-		<div class="easyui-panel" data-options="noheader:true" id="divForm"
-			style="background-color: #E0EEEE;">
-			<form id="qryForm" method="post">
-				<input type="hidden" id="AREA_CODE_LIST" name="area_code"
-					value="${accountInfo.staffInfo.AREA_CODE}" />
-				<table style="width: 100%">
-					<tr>
-						<td style="width: 10%; text-align: right">账号:</td>
-						<td style="width: 23%; text-align: left"><input
-							class="easyui-textbox" name="account_like" style="width: 100%" /></td>
-						<td style="width: 10%; text-align: right">部门:</td>
-						<td style="width: 23%; text-align: left"><input
-							class="easyui-textbox" name="unit_name_like" style="width: 100%" /></td>
-						<td style="width: 10%; text-align: right">行政区划:</td>
-						<td style="width: 23%; text-align: left"><input
-							class="easyui-textbox" id="AREA_NAME_LIST"
-							value="${accountInfo.staffInfo.AREA_NAME}" style="width: 100%"></td>
-					</tr>
-				</table>
-			</form>
-			<div style="text-align: center; padding: 5px 0">
-				<a href="javascript:void(0)" class="easyui-linkbutton"
-					onclick="loadDatagridData();" style="width: 80px">查询</a>
-			</div>
-		</div>
-		<div class="easyui-panel" data-options="noheader:true"
-			style="background-color: #E0EEEE;">
-			<table id="datagrid">
+	<div class="easyui-panel" data-options="region:'north',noheader:true"
+		style="overflow: hidden; background-color: #E0EEEE;">
+
+		<form id="qryForm" method="post">
+			<input type="hidden" id="AREA_CODE_LIST" name="area_code"
+				value="${accountInfo.staffInfo.AREA_CODE}" />
+			<table style="width: 100%">
+				<tr>
+					<td style="width: 10%; text-align: right">账号:</td>
+					<td style="width: 23%; text-align: left"><input
+						class="easyui-textbox" name="account_like" style="width: 100%" /></td>
+					<td style="width: 10%; text-align: right">部门:</td>
+					<td style="width: 23%; text-align: left"><input
+						class="easyui-textbox" name="unit_name_like" style="width: 100%" /></td>
+					<td style="width: 10%; text-align: right">行政区划:</td>
+					<td style="width: 23%; text-align: left"><input
+						class="easyui-textbox" id="AREA_NAME_LIST"
+						value="${accountInfo.staffInfo.AREA_NAME}" style="width: 100%"></td>
+				</tr>
+				<tr>
+					<td colspan="6" style="text-align: center;"><a
+						href="javascript:void(0)" class="easyui-linkbutton"
+						onclick="loadDatagridData();" style="width: 80px">查询</a></td>
+				</tr>
 			</table>
-		</div>
+		</form>
+
+
+	</div>
+	<div data-options="region:'center', border:false">
+		<table id="datagrid">
+		</table>
 	</div>
 
 	<div id="dd"></div>
@@ -59,116 +60,93 @@
 		}
 		$(function() {
 			try {
-				var toolbar = [
-						{
-							text : '新增',
-							iconCls : 'icon-add',
-							handler : function() {
-								$('#dd').dialog({
-									title : '新增',
-									width : 800,
-									height : 250,
-									closed : false,
-									cache : false,
-									href : 'busi/staff/showStaffInfo.do',
-									modal : false,
-									onBeforeClose : function() {
-										loadDatagridData();
-									}
-								});
+				var toolbar = [{
+					text : '新增',
+					iconCls : 'icon-add',
+					handler : function() {
+						$('#dd').dialog({
+							title : '新增',
+							width : 800,
+							height : 250,
+							closed : false,
+							cache : false,
+							href : 'busi/staff/showStaffInfo.do',
+							modal : false,
+							onBeforeClose : function() {
+								loadDatagridData();
 							}
-						},
-						{
-							text : '删除',
-							iconCls : 'icon-remove',
-							handler : function() {
-								var rows = $('#datagrid').datagrid(
-										'getSelections');
-								if (rows == null || rows.length == 0) {
-									$.messager.alert("", "请选中要操作的记录");
-								} else {
-									var ids = [];
-									var names = [];
-									for (var i = 0; i < rows.length; i++) {
-										ids.push(rows[i].STAFF_ID);
-										names.push(rows[i].STAFF_NAME);
-									}
-									$.messager
-											.confirm(
-													'Confirm',
-													'你确定要删除' + names.join(',')
-															+ "这"
-															+ names.length
-															+ "条记录吗？",
-													function(r) {
-														if (r) {
-															$
-																	.ajax({
-																		type : "post",
-																		url : "busi/staff/delStaff.do",
-																		dataType : "json",
-																		data : {
-																			'ids' : ids
-																		},
-																		success : function(
-																				rst) {
-																			if (rst.isSucc) {
-																				$.messager
-																						.alert(
-																								"",
-																								"操作成功");
-																			} else {
-																				var msg = '操作失败';
-																				if (rst.info.INFO_KEY_DEFAULT != null) {
-																					msg = msg
-																							+ ':'
-																							+ rst.info.INFO_KEY_DEFAULT;
-																				}
-																				$.messager
-																						.alert(
-																								"",
-																								msg);
-																			}
-																			loadDatagridData();
-																		}
-																	});
-														}
-													});
-								}
+						});
+					}
+				}, {
+					text : '删除',
+					iconCls : 'icon-remove',
+					handler : function() {
+						var rows = $('#datagrid').datagrid('getSelections');
+						if (rows == null || rows.length == 0) {
+							$.messager.alert("", "请选中要操作的记录");
+						} else {
+							var ids = [];
+							var names = [];
+							for (var i = 0; i < rows.length; i++) {
+								ids.push(rows[i].STAFF_ID);
+								names.push(rows[i].STAFF_NAME);
 							}
-						},
-						{
-							text : '修改',
-							iconCls : 'icon-cut',
-							handler : function() {
-								var rows = $('#datagrid').datagrid(
-										'getSelections');
-								if (rows == null || rows.length == 0) {
-									$.messager.alert("", "请选中要操作的记录");
-								} else if (rows.length > 1) {
-									$.messager.alert("", "请选中单条记录进行操作");
-								} else {
-									var staff_id = rows[0].STAFF_ID;
-									$('#dd').dialog({
-										title : '修改',
-										width : 800,
-										height : 250,
-										closed : false,
-										cache : false,
-										href : 'busi/staff/showStaffMdy.do',
-										queryParams : {
-											'staff_id' : staff_id
+							$.messager.confirm('Confirm', '你确定要删除' + names.join(',') + "这" + names.length + "条记录吗？", function(r) {
+								if (r) {
+									$.ajax({
+										type : "post",
+										url : "busi/staff/delStaff.do",
+										dataType : "json",
+										data : {
+											'ids' : ids
 										},
-										modal : false,
-										onBeforeClose : function() {
+										success : function(rst) {
+											if (rst.isSucc) {
+												$.messager.alert("", "操作成功");
+											} else {
+												var msg = '操作失败';
+												if (rst.info.INFO_KEY_DEFAULT != null) {
+													msg = msg + ':' + rst.info.INFO_KEY_DEFAULT;
+												}
+												$.messager.alert("", msg);
+											}
 											loadDatagridData();
 										}
 									});
 								}
-							}
-						} ];
-				var areaTree = new AreaTree('dlgList', 'AREA_CODE_LIST',
-						'AREA_NAME_LIST');
+							});
+						}
+					}
+				}, {
+					text : '修改',
+					iconCls : 'icon-cut',
+					handler : function() {
+						var rows = $('#datagrid').datagrid('getSelections');
+						if (rows == null || rows.length == 0) {
+							$.messager.alert("", "请选中要操作的记录");
+						} else if (rows.length > 1) {
+							$.messager.alert("", "请选中单条记录进行操作");
+						} else {
+							var staff_id = rows[0].STAFF_ID;
+							$('#dd').dialog({
+								title : '修改',
+								width : 800,
+								height : 250,
+								closed : false,
+								cache : false,
+								href : 'busi/staff/showStaffMdy.do',
+								queryParams : {
+									'staff_id' : staff_id
+								},
+								modal : false,
+								onBeforeClose : function() {
+									loadDatagridData();
+								}
+							});
+						}
+					}
+				}];
+				var areaTree = new AreaTree('dlgList', 'AREA_CODE_LIST', 'AREA_NAME_LIST');
 				var accountArea = '${accountInfo.staffInfo.AREA_CODE}';
 				$('#areaTreeList').tree({
 					url : 'busi/common/loadTree.do',
@@ -192,9 +170,6 @@
 					editable : false,
 					required : true
 				});
-				var divForm = document.getElementById('divForm');
-				var tableHeight = document.body.clientHeight
-						- divForm.offsetHeight - 70;
 				$('#datagrid').datagrid({
 					method : 'POST',
 					rownumbers : true,
@@ -202,13 +177,10 @@
 					pagination : true,
 					striped : true,
 					fit : true,
-					style : {
-						'height' : tableHeight + 'px'
-					},
 					singleSelect : false,
 					pageSize : 20,
-					pageList : [ 20, 50, 100, 150, 200 ],
-					columns : [ [ {
+					pageList : [20, 50, 100, 150, 200],
+					columns : [[{
 						field : 'ck',
 						checkbox : true
 					}, {
@@ -236,7 +208,7 @@
 						title : '权限',
 						width : '50%',
 						align : 'left'
-					} ] ]
+					}]]
 				});
 				loadDatagridData();
 			} catch (e) {

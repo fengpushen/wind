@@ -6,6 +6,7 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 <configuration>
 	<mappers>
 		<mapper resource="mytatis_sqlMap_frame.xml" />
+		<mapper resource="mytatis_sqlMap_frame_self_busi.xml" />
 		<mapper resource="mytatis_sqlMap_login.xml" />
 		<mapper resource="mytatis_sqlMap_com.xml" />
 		<mapper resource="mytatis_sqlMap_busi_yyhr.xml" />

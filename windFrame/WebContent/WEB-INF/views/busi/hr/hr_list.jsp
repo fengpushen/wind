@@ -84,117 +84,95 @@
 		}
 		$(function() {
 			try {
-				var toolbar = [
-						{
-							text : '新增',
-							iconCls : 'icon-add',
-							handler : function() {
-								$('#dd').dialog({
-									title : '新增人员',
-									width : 1100,
-									height : 500,
-									closed : false,
-									cache : false,
-									href : 'busi/hr/showHrInfo.do',
-									modal : false,
-									onBeforeClose : function() {
-										loadDatagridData();
-									},
-									onLoad : function() {
-										hrInfoPageLoaded();
-									}
-								});
+				var toolbar = [{
+					text : '新增',
+					iconCls : 'icon-add',
+					handler : function() {
+						$('#dd').dialog({
+							title : '新增人员',
+							width : 1100,
+							height : 500,
+							closed : false,
+							cache : false,
+							href : 'busi/hr/showHrInfo.do',
+							modal : false,
+							onBeforeClose : function() {
+								loadDatagridData();
+							},
+							onLoad : function() {
+								hrInfoPageLoaded();
 							}
-						},
-						{
-							text : '删除',
-							iconCls : 'icon-remove',
-							handler : function() {
-								var rows = $('#datagrid').datagrid(
-										'getSelections');
-								if (rows == null || rows.length == 0) {
-									$.messager.alert("", "请选中要操作的记录");
-								} else {
-									var ids = [];
-									var names = [];
-									for (var i = 0; i < rows.length; i++) {
-										ids.push(rows[i].HR_ID);
-										names.push(rows[i].HR_NAME);
-									}
-									$.messager
-											.confirm(
-													'Confirm',
-													'你确定要删除' + names.join(',')
-															+ "这"
-															+ names.length
-															+ "人的记录吗？",
-													function(r) {
-														if (r) {
-															$
-																	.ajax({
-																		type : "post",
-																		url : "busi/hr/delHrInfo.do",
-																		dataType : "json",
-																		data : {
-																			'ids' : ids
-																		},
-																		success : function(
-																				rst) {
-																			if (rst.isSucc) {
-																				$.messager
-																						.alert(
-																								"",
-																								"操作成功");
-																			} else {
-																				var msg = '操作失败';
-																				if (rst.info.INFO_KEY_DEFAULT != null) {
-																					msg = msg
-																							+ ','
-																							+ rst.info.INFO_KEY_DEFAULT;
-																				}
-																				$.messager
-																						.alert(
-																								"",
-																								msg);
-																			}
-																			loadDatagridData();
-																		}
-																	});
-														}
-													});
-								}
+						});
+					}
+				}, {
+					text : '删除',
+					iconCls : 'icon-remove',
+					handler : function() {
+						var rows = $('#datagrid').datagrid('getSelections');
+						if (rows == null || rows.length == 0) {
+							$.messager.alert("", "请选中要操作的记录");
+						} else {
+							var ids = [];
+							var names = [];
+							for (var i = 0; i < rows.length; i++) {
+								ids.push(rows[i].HR_ID);
+								names.push(rows[i].HR_NAME);
 							}
-						},
-						{
-							text : '修改',
-							iconCls : 'icon-cut',
-							handler : function() {
-								var rows = $('#datagrid').datagrid(
-										'getSelections');
-								if (rows == null || rows.length == 0) {
-									$.messager.alert("", "请选中要操作的记录");
-								} else if (rows.length > 1) {
-									$.messager.alert("", "请选中单条记录进行操作");
-								} else {
-									var hr_id = rows[0].HR_ID;
-									$('#dd').dialog({
-										title : '修改',
-										width : 1100,
-										height : 500,
-										closed : false,
-										cache : false,
-										href : 'busi/hr/showHrInfoMdy.do',
-										queryParams : {
-											'hr_id' : hr_id
+							$.messager.confirm('Confirm', '你确定要删除' + names.join(',') + "这" + names.length + "人的记录吗？", function(r) {
+								if (r) {
+									$.ajax({
+										type : "post",
+										url : "busi/hr/delHrInfo.do",
+										dataType : "json",
+										data : {
+											'ids' : ids
 										},
-										modal : false,
-										onBeforeClose : function() {
+										success : function(rst) {
+											if (rst.isSucc) {
+												$.messager.alert("", "操作成功");
+											} else {
+												var msg = '操作失败';
+												if (rst.info.INFO_KEY_DEFAULT != null) {
+													msg = msg + ',' + rst.info.INFO_KEY_DEFAULT;
+												}
+												$.messager.alert("", msg);
+											}
 											loadDatagridData();
 										}
 									});
 								}
-							}
-						} ];
+							});
+						}
+					}
+				}, {
+					text : '修改',
+					iconCls : 'icon-cut',
+					handler : function() {
+						var rows = $('#datagrid').datagrid('getSelections');
+						if (rows == null || rows.length == 0) {
+							$.messager.alert("", "请选中要操作的记录");
+						} else if (rows.length > 1) {
+							$.messager.alert("", "请选中单条记录进行操作");
+						} else {
+							var hr_id = rows[0].HR_ID;
+							$('#dd').dialog({
+								title : '修改',
+								width : 1100,
+								height : 500,
+								closed : false,
+								cache : false,
+								href : 'busi/hr/showHrInfoMdy.do',
+								queryParams : {
+									'hr_id' : hr_id
+								},
+								modal : false,
+								onBeforeClose : function() {
+									loadDatagridData();
+								}
+							});
+						}
+					}
+				}];
 				$("#IS_JOB_LIST").combobox({
 					method : 'post',
 					valueField : 'id',
@@ -264,8 +242,7 @@
 						});
 					}
 				});
-				var areaTree = new AreaTree('dlgList', 'HJ_AREA_LIST',
-						'HJ_AREA_NAME_LIST');
+				var areaTree = new AreaTree('dlgList', 'HJ_AREA_LIST', 'HJ_AREA_NAME_LIST');
 				var accountArea = '${accountInfo.staffInfo.AREA_CODE}';
 				$('#areaTreeList').tree({
 					url : 'busi/common/loadTree.do',
@@ -299,8 +276,8 @@
 					striped : true,
 					singleSelect : false,
 					pageSize : 30,
-					pageList : [ 30, 50, 100, 150, 200 ],
-					columns : [ [ {
+					pageList : [30, 50, 100, 150, 200],
+					columns : [[{
 						field : 'ck',
 						checkbox : true
 					}, {
@@ -358,7 +335,7 @@
 						title : '技能特长',
 						width : '15%',
 						align : 'center'
-					} ] ]
+					}]]
 				});
 				loadDatagridData();
 			} catch (e) {

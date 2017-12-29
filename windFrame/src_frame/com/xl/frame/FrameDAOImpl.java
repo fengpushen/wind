@@ -169,14 +169,14 @@ public class FrameDAOImpl implements FrameDAO {
 				}
 				DatabaseMetaData metadata = conn.getMetaData();
 				FrameTool.closeDbResource(results);
-				// TODO:这里写死了，应该需要直接从sqlsession的配置中读取出来
-				results = metadata.getPrimaryKeys(null, "YYJOB", tableName.toUpperCase());
+				results = metadata.getPrimaryKeys(null, metadata.getUserName(), tableName.toUpperCase());
 				while (results.next()) {
 					table.addPkColName(results.getString("COLUMN_NAME"));
 				}
 				dbInfo.putTable(tableName, table);
 			} finally {
 				FrameTool.closeDbResource(results);
+				FrameTool.closeDbResource(conn);
 			}
 		}
 		return table;
