@@ -36,4 +36,8 @@ public interface FrameService {
 	ExecuteResult changeAccountSelfPwd(String account_id, String passwordOld, String password);
 
 	ExecuteResult getMenuTreeJson();
+
+	ExecuteResult getMenuJson(String menu_id);
+
+	ExecuteResult loadRoleList(Map<String, Object> params);
 }

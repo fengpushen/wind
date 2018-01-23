@@ -1,5 +1,6 @@
 package com.xl.busi.common;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.xl.frame.util.FrameCache;
 import com.xl.frame.util.FrameConstant;
 import com.xl.frame.util.tree.BaseTree;
+import com.xl.frame.util.tree.TreeEasyUIJsonMaker;
 import com.xl.frame.util.tree.TreeNode;
 
 @Service
@@ -30,9 +32,11 @@ public class CommonServiceImpl implements CommonService {
 	}
 
 	private void initAreaTree() {
-		BaseTree tree = new BaseTree();
-		BaseTree treeBj = new BaseTree();
+		BaseTree tree = new BaseTree(false, TreeEasyUIJsonMaker.getMaker());
+		BaseTree treeBj = new BaseTree(false, TreeEasyUIJsonMaker.getMaker());
 		List<Map> areas = commonDAO.selectCom_area();
+		List<TreeNode> nodes = new ArrayList<TreeNode>();
+		List<TreeNode> bjnodes = new ArrayList<TreeNode>();
 		for (Map area : areas) {
 			String pid = (String) area.get("PCODE");
 			String areaCode = (String) area.get("AREA_CODE");
@@ -47,13 +51,18 @@ public class CommonServiceImpl implements CommonService {
 				node = new TreeNode(areaCode, areaName, pid);
 				nodeBj = new TreeNode(areaCode, areaName, pid);
 			}
-			tree.addNode(node);
-			treeBj.addNode(nodeBj);
+			node.setOrderNo(node.getId());
+			nodeBj.setOrderNo(nodeBj.getId());
+			nodes.add(node);
+			bjnodes.add(nodeBj);
 			if (!"4".equals(areaLevel)) {
 				nodeBj = new TreeNode(areaCode + FrameConstant.busi_com_area_bj_add, areaName + "±¾¼¶", areaCode);
-				treeBj.addNode(nodeBj);
+				nodeBj.setOrderNo("0");
+				bjnodes.add(nodeBj);
 			}
 		}
+		tree.initTree(nodes);
+		treeBj.initTree(bjnodes);
 		FrameCache.addTree(FrameConstant.busi_com_area_tree, tree);
 		FrameCache.addTree(FrameConstant.busi_com_area_tree_bj, treeBj);
 	}

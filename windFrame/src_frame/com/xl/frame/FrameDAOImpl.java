@@ -269,11 +269,6 @@ public class FrameDAOImpl implements FrameDAO {
 	}
 
 	@Override
-	public List<Map> selectFrame_menu_group() {
-		return sqlSession.selectList("selectFrame_menu_group");
-	}
-
-	@Override
 	public List<Map> selectFrame_menu() {
 		return sqlSession.selectList("selectFrame_menu");
 	}

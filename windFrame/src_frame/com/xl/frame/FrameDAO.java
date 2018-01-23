@@ -48,8 +48,6 @@ public interface FrameDAO {
 
 	List<Map> selectMenusOfAccount(String account_id);
 
-	List<Map> selectFrame_menu_group();
-
 	List<Map> selectFrame_menu();
 
 	List<Map> selectFrame_code_map(String codeName);

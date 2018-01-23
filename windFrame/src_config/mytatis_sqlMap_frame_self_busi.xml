@@ -51,27 +51,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		with account_roles as
 		 (select role_id from frame_account_role where account_id = #{account_id})
 		select *
-		  from FRAME_MENU_TREE a
-		 where exists (select 1
-		          from frame_role_menu b
-		         where b.menu_id = a.menu_p_id
-		           and b.role_id in (select * from account_roles))
-		    or exists
-		 (select 1
-		          from frame_role_menu d
-		         where d.menu_id = a.menu_id
-		           and d.role_id in (select * from account_roles))
-		 order by  a.menu_order
-	</select>
-	
-	<select id="selectFrame_menu_group" parameterType="hashMap"
-		resultType="hashMap">
-		select * from FRAME_MENU_TREE where menu_url is null order by menu_p_id, menu_order
+		  from (select distinct *
+		          from FRAME_MENU_TREE a
+		         start with a.menu_id in
+		                    (select menu_id
+		                       from frame_role_menu b
+		                      where b.role_id in (select * from account_roles))
+		        connect by menu_p_id = prior menu_id)
+		 where is_leaf = '1'
+		 order by menu_order
 	</select>
 	
 	<select id="selectFrame_menu" parameterType="hashMap"
 		resultType="hashMap">
-		select * from FRAME_MENU_TREE where menu_url is not null
+		select * from FRAME_MENU_TREE 
 	</select>
 	
 	<select id="selectFrame_code_map" parameterType="string"
@@ -95,6 +88,28 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			</if>
 		</where>
 		order by role_order
+	</select>
+	
+	<select id="selectFrame_role" parameterType="hashMap"
+		resultType="hashMap">
+		<if test="record_count == null and page != null and page != ''">
+			select * from (select rownum as rowidx, qry.* from (
+		</if>
+		select 
+		<if test="record_count == null">
+			*
+		</if>
+		<if test="record_count != null">
+			count(1) as record_count
+		</if>
+		from frame_role 
+		<where>
+		
+		</where>
+		order by role_id
+		<if test="record_count == null and page != null and page != ''">
+			)qry ) where rowidx > (#{page} - 1) * #{rows} and   rowidx &lt;= #{page} * #{rows}
+		</if>
 	</select>
 
 </mapper>

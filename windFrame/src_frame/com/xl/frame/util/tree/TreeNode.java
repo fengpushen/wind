@@ -1,15 +1,15 @@
 package com.xl.frame.util.tree;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import com.xl.frame.util.FrameTool;
 
 public class TreeNode implements Comparable<TreeNode> {
 
-	private List<TreeNode> sonNodes;
+	private Set<String> sonIds;
 
 	private String id;
 
@@ -18,6 +18,8 @@ public class TreeNode implements Comparable<TreeNode> {
 	private String pid;
 
 	private int level;
+
+	private String orderNo;
 
 	private Map<String, Object> nodeInfo;
 
@@ -47,12 +49,12 @@ public class TreeNode implements Comparable<TreeNode> {
 		this.pid = pid;
 	}
 
-	public int getLevel() {
-		return level;
+	public String getOrderNo() {
+		return orderNo;
 	}
 
-	public void setLevel(int level) {
-		this.level = level;
+	public void setOrderNo(String orderNo) {
+		this.orderNo = orderNo;
 	}
 
 	public void setNodeInfo(Map<String, Object> nodeInfo) {
@@ -70,14 +72,45 @@ public class TreeNode implements Comparable<TreeNode> {
 		return nodeInfo;
 	}
 
+	public boolean hasNodeInfo() {
+		return nodeInfo != null && nodeInfo.size() > 0;
+	}
+
 	public int compareTo(TreeNode o) {
 
-		int pidOrder = getPid().compareTo(o.getPid());
-		if (pidOrder == 0) {
-			return getId().compareTo(o.getId());
-		} else {
-			return pidOrder;
+		if (level < o.getLevel()) {
+			return -1;
 		}
+		if (level > o.getLevel()) {
+			return 1;
+		}
+		if (orderNo == null || o.getOrderNo() == null) {
+			return -1;
+		}
+		return orderNo.compareTo(o.getOrderNo());
+	}
+
+	public boolean isParent() {
+		return !FrameTool.isEmpty(getSonIds());
+	}
+
+	public void addSonId(String sonId) {
+		if (sonIds == null) {
+			initSonIds();
+		}
+		sonIds.add(sonId);
+	}
+
+	public Set<String> getSonIds() {
+		return sonIds;
+	}
+
+	public int getLevel() {
+		return level;
+	}
+
+	public void setLevel(int level) {
+		this.level = level;
 	}
 
 	@Override
@@ -92,94 +125,9 @@ public class TreeNode implements Comparable<TreeNode> {
 		return id.equals(otherNode.getId());
 	}
 
-	public boolean isParent() {
-		return !FrameTool.isEmpty(getSonNodes());
-	}
-
-	/**
-	 * 判断本节点是否存在一个id等于传入参数的后代节点
-	 * 
-	 * @param unbornId
-	 * @return
-	 */
-	public boolean hasTheUnbornNode(String unbornId) {
-		boolean rst = false;
-		if (!getId().equals(unbornId)) {
-			if (isParent()) {
-				for (TreeNode node : getSonNodes()) {
-					if (node.getId().equals(unbornId) || node.hasTheUnbornNode(unbornId)) {
-						rst = true;
-						break;
-					}
-				}
-			}
-		} else {
-			rst = true;
+	private synchronized void initSonIds() {
+		if (sonIds == null) {
+			sonIds = new HashSet<String>();
 		}
-		return rst;
-	}
-
-	public void addSonNode(TreeNode node) {
-		if (node.getPid().equals(getId())) {
-			if (sonNodes == null) {
-				sonNodes = new ArrayList<TreeNode>();
-			}
-			if (!getSonNodes().contains(node)) {
-				getSonNodes().add(node);
-			}
-		}
-	}
-
-	public void addSonNode(String id, String name) {
-		TreeNode node = new TreeNode(id, name, getPid());
-		addSonNode(node);
-	}
-
-	public void addSonNode(String id, String name, Map<String, Object> nodeInfo) {
-		TreeNode node = new TreeNode(id, name, getPid());
-		node.setNodeInfo(nodeInfo);
-		addSonNode(node);
-	}
-
-	public List<TreeNode> getSonNodes() {
-		return sonNodes;
-	}
-
-	public String toJson() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("{");
-		sb.append("\"id\":").append("\"").append(id).append("\",");
-		sb.append("\"text\":").append("\"").append(name).append("\"");
-		if (nodeInfo != null && nodeInfo.size() > 0) {
-			sb.append(",");
-			sb.append("\"attributes\":");
-			sb.append("{");
-			for (Map.Entry<String, Object> entry : nodeInfo.entrySet()) {
-				sb.append("\"").append(entry.getKey()).append("\":");
-				sb.append("\"").append(entry.getValue()).append("\"");
-				sb.append(",");
-			}
-			sb.deleteCharAt(sb.length() - 1);
-			sb.append("}");
-		}
-		List<TreeNode> sons = getSonNodes();
-		if (sons != null && sons.size() > 0) {
-			sb.append(",");
-			sb.append("\"children\":");
-			sb.append("[");
-			for (TreeNode node : sons) {
-				sb.append(node.toJson());
-				sb.append(",");
-			}
-			sb.deleteCharAt(sb.length() - 1);
-			sb.append("]");
-		}
-		sb.append("}");
-		return sb.toString();
-	}
-
-	@Override
-	public String toString() {
-		return toJson();
 	}
 }

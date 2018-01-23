@@ -22,6 +22,7 @@ import com.xl.frame.util.FrameCode;
 import com.xl.frame.util.FrameConstant;
 import com.xl.frame.util.FrameTool;
 import com.xl.frame.util.tree.BaseTree;
+import com.xl.frame.util.tree.TreeEasyUIJsonMaker;
 import com.xl.frame.util.tree.TreeNode;
 import com.xl.frame.util.tree.TreeView;
 
@@ -32,6 +33,9 @@ public class FrameServiceImpl implements FrameService {
 
 	@Autowired
 	private FrameDAO frameDAO;
+
+	@Autowired
+	private FrameSelfDAO frameSelfDAO;
 
 	@PostConstruct
 	public void initFrame() {
@@ -55,6 +59,21 @@ public class FrameServiceImpl implements FrameService {
 			rtn.setSucc(true);
 		} catch (Exception e) {
 			log.error("loadComList", e);
+		}
+		return rtn;
+	}
+
+	public ExecuteResult loadRoleList(Map<String, Object> params) {
+		ExecuteResult rtn = new ExecuteResult();
+		try {
+
+			Map info = new HashMap();
+			List<Map> rows = frameSelfDAO.selectFrame_role(null);
+			info.put("rows", rows);
+			rtn.addInfo("info", info);
+			rtn.setSucc(true);
+		} catch (Exception e) {
+			log.error("loadRoleList", e);
 		}
 		return rtn;
 	}
@@ -83,31 +102,13 @@ public class FrameServiceImpl implements FrameService {
 	public ExecuteResult getAccountMenuTreeJson(String account_id) {
 		ExecuteResult rst = new ExecuteResult();
 		try {
-			//TODO:这里还不支持两层及其以上的父菜单，需要增加此支持
 			List<Map> menus = frameDAO.selectMenusOfAccount(account_id);
-			List<TreeNode> nodes = new ArrayList<TreeNode>();
+			List<String> ids = new ArrayList<String>();
 			for (Map menu : menus) {
-				TreeNode node = new TreeNode((String) menu.get("MENU_ID"), (String) menu.get("MENU_NAME"),
-						(String) menu.get("MENU_P_ID"));
-				node.addNodeInfo("menu_url", menu.get("MENU_URL"));
-				nodes.add(node);
+				ids.add((String) menu.get("MENU_ID"));
 			}
-			TreeView accountMenuTree = ((BaseTree) FrameCache.getTree(FrameConstant.frame_menu_base_tree))
-					.getLimitTree(nodes);
-			rst.setDefaultValue(accountMenuTree.toJson());
-			rst.setSucc(true);
-		} catch (Exception e) {
-			log.error("", e);
-		}
-		return rst;
-	}
-	
-	@Override
-	public ExecuteResult getMenuTreeJson() {
-		ExecuteResult rst = new ExecuteResult();
-		try {
-			TreeView menuTree = FrameCache.getTree(FrameConstant.frame_menu_base_tree);
-			rst.setDefaultValue(menuTree.toJson());
+			TreeView menuTree = ((BaseTree) FrameCache.getTree(FrameConstant.frame_menu_base_tree));
+			rst.setDefaultValue(menuTree.getJson(ids));
 			rst.setSucc(true);
 		} catch (Exception e) {
 			log.error("", e);
@@ -115,26 +116,55 @@ public class FrameServiceImpl implements FrameService {
 		return rst;
 	}
 
-	private void initMenuBaseTree() {
-		BaseTree tree = new BaseTree();
-		List<Map> groups = frameDAO.selectFrame_menu_group();
-		for (Map group : groups) {
-			String pid = (String) group.get("MENU_P_ID");
-			TreeNode node = null;
-			if (FrameTool.isEmpty(pid)) {
-				node = new TreeNode((String) group.get("MENU_ID"), (String) group.get("MENU_NAME"));
-			} else {
-				node = new TreeNode((String) group.get("MENU_ID"), (String) group.get("MENU_NAME"), pid);
-			}
-			tree.addNode(node);
+	@Override
+	public ExecuteResult getMenuTreeJson() {
+		ExecuteResult rst = new ExecuteResult();
+		try {
+			TreeView menuTree = FrameCache.getTree(FrameConstant.frame_menu_base_tree);
+			rst.setDefaultValue(menuTree.getJson());
+			rst.setSucc(true);
+		} catch (Exception e) {
+			log.error("", e);
 		}
+		return rst;
+	}
+
+	public ExecuteResult getMenuJson(String menu_id) {
+		ExecuteResult rst = new ExecuteResult();
+		try {
+			TreeView menuTree = FrameCache.getTree(FrameConstant.frame_menu_base_tree);
+			TreeNode node = menuTree.getNode(menu_id);
+			if (!FrameTool.isEmpty(node)) {
+				rst.addInfo("menu", node);
+				String pid = node.getPid();
+				if (!FrameTool.isEmpty(pid)) {
+					TreeNode pnode = menuTree.getNode(pid);
+					if (!FrameTool.isEmpty(pnode)) {
+						rst.addInfo("pmenu", pnode);
+					}
+				}
+				rst.setSucc(true);
+			}
+		} catch (Exception e) {
+			log.error("", e);
+		}
+		return rst;
+	}
+
+	private void initMenuBaseTree() {
+		BaseTree tree = new BaseTree(false, TreeEasyUIJsonMaker.getMaker());
 		List<Map> menus = frameDAO.selectFrame_menu();
+		List<TreeNode> nodes = new ArrayList<TreeNode>();
 		for (Map menu : menus) {
 			TreeNode node = new TreeNode((String) menu.get("MENU_ID"), (String) menu.get("MENU_NAME"),
 					(String) menu.get("MENU_P_ID"));
 			node.addNodeInfo("menu_url", menu.get("MENU_URL"));
-			tree.addNode(node);
+			node.addNodeInfo("is_leaf", menu.get("IS_LEAF"));
+			node.addNodeInfo("menu_memo", menu.get("MENU_MEMO"));
+			node.setOrderNo((String) menu.get("MENU_ORDER"));
+			nodes.add(node);
 		}
+		tree.initTree(nodes);
 		FrameCache.addTree(FrameConstant.frame_menu_base_tree, tree);
 	}
 

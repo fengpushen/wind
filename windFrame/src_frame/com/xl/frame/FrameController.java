@@ -57,10 +57,10 @@ public class FrameController {
 
 		return new ModelAndView("/frame/menu_list");
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(value = "/loadAllMenu.do")
-	public String loadUserMenu(HttpSession session) {
+	public String loadUserMenu() {
 
 		ExecuteResult rst = frameService.getMenuTreeJson();
 		String menuJson = "";
@@ -68,6 +68,26 @@ public class FrameController {
 			menuJson = rst.getDefaultValue();
 		}
 		return menuJson;
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/loadOneMenu.do")
+	public String loadOneMenu(@RequestParam(required = true) String menu_id) {
+
+		ExecuteResult rst = frameService.getMenuJson(menu_id);
+		return FrameTool.toJson(rst);
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/loadRoleList.do")
+	public String loadHrList() {
+
+		ExecuteResult rst = frameService.loadRoleList(null);
+		if (rst.isSucc()) {
+			Map map = (Map) rst.getInfoOne("info");
+			return FrameTool.toJson(map);
+		}
+		return null;
 	}
 
 }

@@ -57,7 +57,7 @@ public class CommonController {
 					root.put("text", node.getName());
 					root.put("state", "open");
 
-					List<Map> jsSonNodes = getTreeNodeMaps(node.getSonNodes(), limitLevel);
+					List<Map> jsSonNodes = getTreeNodeMaps(tree.getSons(node), limitLevel);
 					if (!FrameTool.isEmpty(jsSonNodes)) {
 						root.put("children", jsSonNodes);
 					}
