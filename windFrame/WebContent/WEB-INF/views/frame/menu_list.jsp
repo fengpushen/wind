@@ -112,14 +112,13 @@
 				pagination : false,
 				striped : true,
 				singleSelect : false,
-				pageSize : 30,
+				idField : 'ROLE_ID',
 				columns : [[{
 					field : 'ck',
 					checkbox : true
 				}, {
 					field : 'ROLE_NAME',
 					title : '角色名',
-					width : '6%',
 					align : 'center'
 				}]]
 			});
@@ -129,16 +128,26 @@
 		function showMenuInfo(rst) {
 			$('#menuInfo').panel('open');
 			$('#tip').panel('close');
+			
 			$("#menu_p_name").textbox("setValue", "");
 			$("#menu_name").textbox("setValue", "");
 			$("#menu_memo").textbox("setValue", "");
 			$("#menu_url").textbox("setValue", "");
+			
 			if (rst.info.pmenu != null) {
 				$("#menu_p_name").textbox("setValue", rst.info.pmenu.name);
 			}
 			$("#menu_name").textbox("setValue", rst.info.menu.name);
 			$("#menu_memo").textbox("setValue", rst.info.menu.nodeInfo.menu_memo);
 			$("#menu_url").textbox("setValue", rst.info.menu.nodeInfo.menu_url);
+			
+			$("#datagrid").datagrid('uncheckAll');
+			if(rst.info.ownTheMenuRoles != null){
+				$.each(rst.info.ownTheMenuRoles, function (n, ownTheMenuRole) {
+					//alert(ownTheMenuRole.ROLE_ID);
+		            $("#datagrid").datagrid('selectRecord', ownTheMenuRole.ROLE_ID);
+		        });
+			}
 		}
 	</script>
 

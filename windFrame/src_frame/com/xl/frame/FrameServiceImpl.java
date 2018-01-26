@@ -143,6 +143,10 @@ public class FrameServiceImpl implements FrameService {
 						rst.addInfo("pmenu", pnode);
 					}
 				}
+				Map params = new HashMap();
+				params.put("menu_id", menu_id);
+				List<Map> ownTheMenuRoles = frameSelfDAO.selectFrame_role(params);
+				rst.addInfo("ownTheMenuRoles", ownTheMenuRoles);
 				rst.setSucc(true);
 			}
 		} catch (Exception e) {

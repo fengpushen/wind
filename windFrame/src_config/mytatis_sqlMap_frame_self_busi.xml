@@ -102,9 +102,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<if test="record_count != null">
 			count(1) as record_count
 		</if>
-		from frame_role 
+		from frame_role a
 		<where>
-		
+			<if test="menu_id != null and menu_id != ''">
+				(exists (select 1
+                  from frame_role_menu b
+                 where a.role_id = b.role_id
+                   and b.menu_id = #{menu_id}) or exists
+			        (select 1
+			           from frame_role_menu c
+			          where a.role_id = c.role_id
+			            and c.menu_id = (select menu_p_id
+			                               from frame_menu_tree d
+			                              where d.menu_id = #{menu_id})))
+			</if>
 		</where>
 		order by role_id
 		<if test="record_count == null and page != null and page != ''">
