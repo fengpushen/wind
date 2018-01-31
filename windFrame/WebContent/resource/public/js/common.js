@@ -1,3 +1,19 @@
+var openWindow = function(url, windowName, options) {
+	var str = "";
+	if (options) {
+		options.height = options.height || 420;
+		options.width = options.width || 550;
+		options.left = options.left || ((screen.width - options.width) / 2); // 默认为居中
+		options.top = options.top || ((screen.height - options.height) / 2); // 默认为居中
+
+		for ( var i in options) {
+			str += ',' + i + '=' + options[i];
+		}
+		str = str.substr(1);
+	};
+	window.open(url, windowName, str);
+	str = null;
+};
 var regexEnum = {
 	intege : "^-?[1-9]\\d*$", // 整数
 	intege1 : "^[1-9]\\d*$", // 正整数
@@ -78,11 +94,9 @@ function isValidIdcard(sId) {
 	sId = sId.replace(/x$/i, "a");
 	if (aCity[parseInt(sId.substr(0, 2))] == null)
 		return false; // "你的身份证地区非法"
-	var sBirthday = sId.substr(6, 4) + "-" + Number(sId.substr(10, 2)) + "-"
-			+ Number(sId.substr(12, 2));
+	var sBirthday = sId.substr(6, 4) + "-" + Number(sId.substr(10, 2)) + "-" + Number(sId.substr(12, 2));
 	var d = new Date(sBirthday.replace(/-/g, "/"));
-	if (sBirthday != (d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d
-			.getDate()))
+	if (sBirthday != (d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate()))
 		return false; // "身份证上的出生日期非法"
 
 	for (var i = 17; i >= 0; i--)
@@ -116,8 +130,7 @@ $.extend($.fn.validatebox.defaults.rules, {
 			if (value == param[0]) {
 				for (var i = 1; i < param.length; i++) {
 
-					valid = $("#" + param[i]).val() != null
-							&& $("#" + param[i]).val() != '';
+					valid = $("#" + param[i]).val() != null && $("#" + param[i]).val() != '';
 					if (!valid) {
 						break;
 					}
@@ -140,19 +153,17 @@ $.extend($.fn.validatebox.defaults.rules, {
 		var serializeObj = {};
 		var array = this.serializeArray();
 		var str = this.serialize();
-		$(array).each(
-				function() {
-					if (serializeObj[this.name]) {
-						if ($.isArray(serializeObj[this.name])) {
-							serializeObj[this.name].push(this.value);
-						} else {
-							serializeObj[this.name] = [
-									serializeObj[this.name], this.value ];
-						}
-					} else {
-						serializeObj[this.name] = this.value;
-					}
-				});
+		$(array).each(function() {
+			if (serializeObj[this.name]) {
+				if ($.isArray(serializeObj[this.name])) {
+					serializeObj[this.name].push(this.value);
+				} else {
+					serializeObj[this.name] = [serializeObj[this.name], this.value];
+				}
+			} else {
+				serializeObj[this.name] = this.value;
+			}
+		});
 		return serializeObj;
 	};
 })(jQuery);
@@ -165,7 +176,7 @@ function closeOrpTip(id) {
 	$("#" + id).html('');
 	$("#" + id).panel('close');
 }
-function showOprTipBase(id, msg, color){
+function showOprTipBase(id, msg, color) {
 	$("#" + id).html(msg);
 	$("#" + id).css('color', color);
 	$("#" + id).show();
@@ -174,8 +185,7 @@ function closeOrpTipBase(id) {
 	$("#" + id).html('');
 	$("#" + id).hide();
 }
-function comboboxDefaultInit(id, codeName, required, height, multiple,
-		addSpace, spaceContent) {
+function comboboxDefaultInit(id, codeName, required, height, multiple, addSpace, spaceContent) {
 	if (height == null || isNaN(height)) {
 		height = 'auto';
 	}

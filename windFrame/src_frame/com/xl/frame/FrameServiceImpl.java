@@ -24,6 +24,7 @@ import com.xl.frame.util.FrameTool;
 import com.xl.frame.util.tree.BaseTree;
 import com.xl.frame.util.tree.TreeEasyUIJsonMaker;
 import com.xl.frame.util.tree.TreeNode;
+import com.xl.frame.util.tree.TreeNodeFilterHasSon;
 import com.xl.frame.util.tree.TreeView;
 
 @Service
@@ -129,6 +130,19 @@ public class FrameServiceImpl implements FrameService {
 		return rst;
 	}
 
+	public ExecuteResult getMenuGroupTreeJson() {
+		ExecuteResult rst = new ExecuteResult();
+		try {
+			TreeView menuTree = FrameCache.getTree(FrameConstant.frame_menu_base_tree);
+			// TODO:直接new了一个对象，看是否可以改造为某种获取方式
+			rst.setDefaultValue(menuTree.getJson(new TreeNodeFilterHasSon()));
+			rst.setSucc(true);
+		} catch (Exception e) {
+			log.error("", e);
+		}
+		return rst;
+	}
+
 	public ExecuteResult getMenuJson(String menu_id) {
 		ExecuteResult rst = new ExecuteResult();
 		try {
@@ -149,6 +163,17 @@ public class FrameServiceImpl implements FrameService {
 				rst.addInfo("ownTheMenuRoles", ownTheMenuRoles);
 				rst.setSucc(true);
 			}
+		} catch (Exception e) {
+			log.error("", e);
+		}
+		return rst;
+	}
+
+	public TreeNode getMenu(String menu_id) {
+		TreeNode rst = null;
+		try {
+			TreeView menuTree = FrameCache.getTree(FrameConstant.frame_menu_base_tree);
+			rst = menuTree.getNode(menu_id);
 		} catch (Exception e) {
 			log.error("", e);
 		}

@@ -1,5 +1,6 @@
 package com.xl.frame;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -75,7 +76,8 @@ public class FrameController {
 	public String loadOneMenu(@RequestParam(required = true) String menu_id) {
 
 		ExecuteResult rst = frameService.getMenuJson(menu_id);
-		return FrameTool.toJson(rst);
+		String jsonStr = FrameTool.toJson(rst);
+		return jsonStr;
 	}
 
 	@ResponseBody
@@ -88,6 +90,25 @@ public class FrameController {
 			return FrameTool.toJson(map);
 		}
 		return null;
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/loadAllMenuGroup.do")
+	public String loadAllMenuGroup() {
+
+		ExecuteResult rst = frameService.getMenuGroupTreeJson();
+		String menuJson = "";
+		if (rst.isSucc()) {
+			menuJson = rst.getDefaultValue();
+		}
+		return menuJson;
+	}
+
+	@RequestMapping("/showAddMenuUI.do")
+	public ModelAndView showAddMenuUI(@RequestParam String menu_p_id) {
+		Map trans = new HashMap();
+		trans.put("pmenu", frameService.getMenu(menu_p_id));
+		return new ModelAndView("/frame/menu_add", trans);
 	}
 
 }

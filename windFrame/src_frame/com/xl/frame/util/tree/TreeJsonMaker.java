@@ -33,4 +33,14 @@ public interface TreeJsonMaker {
 	 * @return
 	 */
 	String getJson(TreeView tree, List<String> ids);
+
+	/**
+	 * 生成这个树以node为根节点，所有节点都符合过滤器限制的子树的json
+	 * 
+	 * @param id
+	 * @return
+	 */
+	String getJson(TreeView tree, TreeNode node, TreeNodeFilter filter);
+
+	String getJson(TreeView tree, TreeNodeFilter filter);
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.xl.frame.util.ExecuteResult;
+import com.xl.frame.util.tree.TreeNode;
 
 public interface FrameService {
 
@@ -37,7 +38,11 @@ public interface FrameService {
 
 	ExecuteResult getMenuTreeJson();
 
+	ExecuteResult getMenuGroupTreeJson();
+
 	ExecuteResult getMenuJson(String menu_id);
 
 	ExecuteResult loadRoleList(Map<String, Object> params);
+
+	TreeNode getMenu(String menu_id);
 }

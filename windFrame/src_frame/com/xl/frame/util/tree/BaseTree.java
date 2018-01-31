@@ -260,6 +260,18 @@ public class BaseTree implements TreeView {
 		return treeJsonMaker.getJson(this, node, limitLevel);
 	}
 
+	public String getJson(String id, TreeNodeFilter filter) {
+		return getJson(getNode(id), filter);
+	}
+
+	public String getJson(TreeNode node, TreeNodeFilter filter) {
+		return treeJsonMaker.getJson(this, node, filter);
+	}
+
+	public String getJson(TreeNodeFilter filter) {
+		return treeJsonMaker.getJson(this, filter);
+	}
+
 	public String getJson() {
 		return getJson(maxLevel);
 	}

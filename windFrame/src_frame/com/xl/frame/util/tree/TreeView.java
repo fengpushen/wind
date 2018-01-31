@@ -64,6 +64,12 @@ public interface TreeView {
 
 	Set<TreeNode> getRelatedHigherTreeNode(List<String> ids);
 
+	/**
+	 * 获取id所有的上级节点，包括id自己
+	 * 
+	 * @param id
+	 * @return
+	 */
 	Set<TreeNode> getRelatedHigherTreeNode(String id);
 
 	Set<TreeNode> getRelatedHigherTreeNode(TreeNode node);
@@ -81,6 +87,12 @@ public interface TreeView {
 	String getJson(int limitLevel);
 
 	String getJson(List<String> ids);
+
+	String getJson(String id, TreeNodeFilter filter);
+
+	String getJson(TreeNode node, TreeNodeFilter filter);
+
+	String getJson(TreeNodeFilter filter);
 
 	boolean isRoot(TreeNode node);
 
