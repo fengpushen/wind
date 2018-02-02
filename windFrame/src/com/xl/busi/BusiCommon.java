@@ -150,15 +150,15 @@ public class BusiCommon {
 		}
 		return Integer.toString(node.getLevel());
 	}
-	
-	public static String getAreaDownLevel(String areaCode){
+
+	public static String getAreaDownLevel(String areaCode) {
 		TreeNode node = getAreaTreeNode(areaCode);
 		if (FrameTool.isEmpty(node)) {
 			return null;
 		}
 		int level = node.getLevel();
-		if(level < 4){
-			level ++;
+		if (level < 4) {
+			level++;
 		}
 		return Integer.toString(level);
 	}
@@ -178,11 +178,13 @@ public class BusiCommon {
 		if (otherAreaCode.equals(areaCode)) {
 			return true;
 		}
-		TreeNode node = BusiCommon.getAreaTreeNode(areaCode);
-		if (FrameTool.isEmpty(node)) {
-			return false;
+		TreeView tree = FrameCache.getTree(FrameConstant.busi_com_area_tree);
+		try {
+			return tree.isTheUnbornNode(areaCode, otherAreaCode);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		return node.hasTheUnbornNode(otherAreaCode);
+		return false;
 	}
 
 	/**
@@ -252,13 +254,14 @@ public class BusiCommon {
 	public static boolean isTooYoungForWork(int age) {
 		return age < 16;
 	}
-	
+
 	/**
 	 * 判断是否年龄太小不适合录入系统
+	 * 
 	 * @param age
 	 * @return
 	 */
-	public static boolean isTooYoungForInput(int age){
+	public static boolean isTooYoungForInput(int age) {
 		return age < 10;
 	}
 
@@ -281,7 +284,7 @@ public class BusiCommon {
 	public static boolean isTooYoungForWorkByIdcardYear(String idcard) {
 		return isTooYoungForWork(ToolForIdcard.getAgeFromIdcardYear(idcard));
 	}
-	
+
 	/**
 	 * 根据身份证上的出生年份判断是否未到数据录入限制
 	 * 

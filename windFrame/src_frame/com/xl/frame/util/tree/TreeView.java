@@ -74,6 +74,17 @@ public interface TreeView {
 
 	Set<TreeNode> getRelatedHigherTreeNode(TreeNode node);
 
+	/**
+	 * 判断unbornNode节点是否为node节点的子孙节点
+	 * 
+	 * @param nodeId
+	 * @param unbornNodeId
+	 * @return
+	 */
+	boolean isTheUnbornNode(String nodeId, String unbornNodeId);
+
+	boolean isTheUnbornNode(TreeNode node, TreeNode unbornNode);
+
 	String getJson(String id);
 
 	String getJson(TreeNode node);

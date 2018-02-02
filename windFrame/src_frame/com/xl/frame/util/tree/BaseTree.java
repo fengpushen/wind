@@ -174,6 +174,27 @@ public class BaseTree implements TreeView {
 		return nodes;
 	}
 
+	public boolean isTheUnbornNode(String nodeId, String unbornNodeId) {
+		return isTheUnbornNode(getNode(nodeId), getNode(unbornNodeId));
+	}
+
+	public boolean isTheUnbornNode(TreeNode node, TreeNode unbornNode) {
+		if (!inited) {
+			throw new RuntimeException(NOT_INITED_TIP);
+		}
+		if (!isTreeNodeExists(node) || !isTreeNodeExists(unbornNode)) {
+			throw new RuntimeException(TREE_NODE_NOT_EXISTS_TIP);
+		}
+		if (node.equals(unbornNode)) {
+			return false;
+		}
+		Set<TreeNode> higherNodes = getRelatedHigherTreeNode(unbornNode);
+		if (!FrameTool.isEmpty(higherNodes) && higherNodes.contains(node)) {
+			return true;
+		}
+		return false;
+	}
+
 	public int getMaxLevel() {
 		if (inited) {
 			return maxLevel;
