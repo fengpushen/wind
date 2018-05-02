@@ -106,6 +106,10 @@
 					<td style="width: 23%; text-align: left"><input
 						class="easyui-combobox" name="hj_type" id="hj_type"
 						style="width: 100%" /></td>
+					<td style="width: 10%; text-align: right">性别:</td>
+					<td style="width: 23%; text-align: left"><input
+						class="easyui-combobox" name="sex" id="sex"
+						style="width: 100%" /></td>
 				</tr>
 
 				<tr>
@@ -363,6 +367,8 @@
 						});
 				comboboxDefaultInit('want_train_type', 'train_type', false,
 						'auto', false, true);
+				comboboxDefaultInit('sex', 'sex', false, 'auto', false,
+						true);
 
 				var areaTree = new AreaTree('dlgList', 'HJ_AREA_LIST',
 						'HJ_AREA_NAME_LIST');

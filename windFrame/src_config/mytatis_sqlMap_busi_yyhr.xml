@@ -63,6 +63,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="nation != null and nation != ''">
 				and nation = #{nation}
 			</if>
+			<if test="sex != null and sex != ''">
+				and sex = #{sex}
+			</if>
 			<if test="political_status != null and political_status != ''">
 				and political_status = #{political_status}
 			</if>
