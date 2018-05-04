@@ -44,6 +44,12 @@
 						style="width: 100%" /></td>
 				</tr>
 				<tr>
+					<td style="width: 10%; text-align: right">性别:</td>
+					<td style="width: 23%; text-align: left"><input
+						class="easyui-combobox" name="sex" id="sex"
+						style="width: 100%" /></td>
+				</tr>
+				<tr>
 					<td colspan="6" style="text-align: center;"><a
 						href="javascript:void(0)" class="easyui-linkbutton"
 						onclick="loadDatagridData();" style="width: 80px">查询</a></td>
@@ -242,6 +248,8 @@
 						});
 					}
 				});
+				comboboxDefaultInit('sex', 'sex', false, 'auto', false,
+						true);
 				var areaTree = new AreaTree('dlgList', 'HJ_AREA_LIST', 'HJ_AREA_NAME_LIST');
 				var accountArea = '${accountInfo.staffInfo.AREA_CODE}';
 				$('#areaTreeList').tree({

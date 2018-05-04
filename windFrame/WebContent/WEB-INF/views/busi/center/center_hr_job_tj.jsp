@@ -150,7 +150,7 @@
 						colspan : 8
 					},{
 						field : 'JYL',
-						title : '就业率',
+						title : '就业占比',
 						width : '8%',
 						align : 'center',
 						rowspan : 3

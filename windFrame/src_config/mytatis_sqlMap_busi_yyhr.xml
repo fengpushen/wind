@@ -755,7 +755,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		                    want_job_jw,
 		                    ldl - jobed as nojob,
 		                    ldl - jobed - want_job as no_want_job,
-		                    decode((jobed+want_job), 0, 100, ROUND(jobed*100/(jobed+want_job), 2)) as jyl
+		                    decode(ldl, 0, 100, ROUND(jobed*100/ldl, 2)) as jyl
 		               from (select area_code,
 		                            count(1) as all_count,
 		                            sum(ldl) as ldl,
