@@ -34,11 +34,11 @@ body, td, th, input {
 					<td style="width: 10%; text-align: right">联系人:</td>
 					<td style="width: 20%; text-align: left"><input
 						class="easyui-textbox" name="CONTRACTOR" style="width: 100%"
-						data-options="required:true" value="${CONTRACTOR }" /></td>
+						data-options="required:true" value="${phoneInfo.CONTRACTOR }" /></td>
 					<td style="width: 10%; text-align: right">联系电话:</td>
 					<td style="width: 20%; text-align: left"><input
 						class="easyui-textbox" name="phone"  data-options="required:true"
-						value="${PHONE}" style="width: 100%" /></td>
+						value="${phoneInfo.PHONE}" style="width: 100%" /></td>
 				</tr>
 			</table>
 

@@ -280,6 +280,16 @@ public class CompanyServiceImpl implements CompanyService {
 		}
 		return rtn;
 	}
+	
+	public ExecuteResult loadAreaPhoneTjList(Map trans) {
+		Map params = new HashMap();
+		String area_code = (String)trans.get("area_code");
+		
+		params.put("area_scope", area_scope);
+		params.put("area_scope_level", BusiCommon.getAreaLevel(area_scope));
+		params.put("area_level", area_level);
+		return frameDAO.qryPaginationInfo("selectBusi_hr_job_tj", params);
+	}
 
 	public ExecuteResult loadCenterPhone(String area_code) {
 		ExecuteResult rtn = new ExecuteResult();

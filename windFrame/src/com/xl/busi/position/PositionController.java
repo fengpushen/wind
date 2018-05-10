@@ -43,6 +43,12 @@ public class PositionController {
 
 		return new ModelAndView("/busi/position/position_list_com");
 	}
+	
+	@RequestMapping("/showCenterPositionUI")
+	public ModelAndView showCenterPositionUI() {
+
+		return new ModelAndView("/busi/position/position_list_center");
+	}
 
 	@ResponseBody
 	@RequestMapping(value = "/loadComPositionList.do")
@@ -97,6 +103,22 @@ public class PositionController {
 			positionInfo.put("comInfo", rst.getInfoOne("comInfo"));
 		}
 		return new ModelAndView("/busi/position/position_info_com", positionInfo);
+	}
+	
+	@RequestMapping("/showPositionInfoUI")
+	public ModelAndView showPositionInfoUI(HttpSession session, @RequestParam(required = true) String pid) {
+		Map positionInfo = null;
+		ExecuteResult rst = positionService.loadPostionInfo(pid);
+		if (rst.isSucc()) {
+			positionInfo = (Map) rst.getInfoOne("positionInfo");
+		}
+
+		String c_id = (String)positionInfo.get("C_ID");
+		rst = companyService.loadComInfo(c_id);
+		if (rst.isSucc()) {
+			positionInfo.put("comInfo", rst.getInfoOne("comInfo"));
+		}
+		return new ModelAndView("/busi/position/position_info_center", positionInfo);
 	}
 
 	@ResponseBody

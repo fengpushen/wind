@@ -347,6 +347,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="P_NAME_LIKE != null and P_NAME_LIKE != ''">
 				P_NAME like #{P_NAME_LIKE} || '%'
 			</if>
+			<if test="c_name_like != null and c_name_like != ''">
+				c_name like '%' || #{c_name_like} || '%'
+			</if>
 			<if test="P_ID != null and P_ID != ''">
 				and P_ID = #{P_ID}
 			</if>
@@ -371,7 +374,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				'yyyy-mm-dd')
 			</if>
 			<if test="pay_botton_bgn != null and pay_botton_bgn != ''">
-				and pay_botton >= #{pay_botton_bgn}
+				and (p_pay_botton >= #{pay_botton_bgn} or p_pay_top >= #{pay_botton_bgn})
 			</if>
 			<if test="P_WORK_AREA != null and P_WORK_AREA != ''">
 				<choose>
@@ -825,6 +828,48 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<if test="record_count == null">
 		order by a.area_code
 		</if>
+		<if test="record_count == null and page != null and page != ''">
+			)qry ) where rowidx > (#{page} - 1) * #{rows} and rowidx
+			&lt;= #{page} * #{rows}
+		</if>
+	</select>
+	
+	<select id="selectCom_area_phone" resultType="hashMap"
+		parameterType="hashMap">
+		<if test="record_count == null and page != null and page != ''">
+			select * from (select rownum as rowidx, qry.* from (
+		</if>
+		select
+		<if test="record_count == null">
+			a.*, b.contractor, b.phone
+		</if>
+		<if test="record_count != null">
+			count(1) as record_count
+		</if>
+		from com_area a
+		  left outer join bs_s_area_phone b
+		    on a.area_code = b.area_code
+		where a.city_code = '430900000000'
+			<if test="has_phone != null and has_phone == '1'">
+				and b.phone is not null
+			</if>
+			<if test="area_code != null and area_code != ''">
+				<choose>
+					<when test="area_code_level == 1">
+						and city_code = #{area_code}
+					</when>
+					<when test="area_code_level == 2">
+						and country_code = #{area_code}
+					</when>
+					<when test="area_code_level == 3">
+						and street_code = #{area_code}
+					</when>
+					<when test="area_code_level == 4">
+						and village_code = #{area_code}
+					</when>
+				</choose>
+			</if>
+		order by a.area_code
 		<if test="record_count == null and page != null and page != ''">
 			)qry ) where rowidx > (#{page} - 1) * #{rows} and rowidx
 			&lt;= #{page} * #{rows}

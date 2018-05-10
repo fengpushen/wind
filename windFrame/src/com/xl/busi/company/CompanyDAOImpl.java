@@ -55,5 +55,9 @@ public class CompanyDAOImpl implements CompanyDAO {
 		params.put("area_code", area_code);
 		return sqlSession.selectOne("selectBs_s_area_phone", params);
 	}
+	
+	public List<Map> selectCom_area_phone(Map params) {
+		return sqlSession.selectList("selectCom_area_phone", params);
+	}
 
 }

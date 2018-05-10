@@ -90,7 +90,7 @@ body, td, th, input {
 						colspan="7">劳动技能信息</td>
 				</tr>
 				<tr>
-					<td style="width: 10%; background-color: #F0F8FF;">劳动技能信息</td>
+					<td style="width: 10%; background-color: #F0F8FF;"  rowspan="2">劳动技能信息</td>
 					<td style="width: 10%; text-align: right">技能类型:</td>
 					<td style="width: 50%; text-align: left" colspan="3"><input
 						class="easyui-textbox" name="jntc" style="width: 90%"
@@ -99,6 +99,12 @@ body, td, th, input {
 					<td style="width: 20%; text-align: left"><input
 						class="easyui-combobox" name="job_lv" id="job_lv"
 						style="width: 100%" /></td>
+				</tr>
+				<tr>
+					<td style="width: 10%; text-align: right">培训需求意向:</td>
+					<td style="width: 50%; text-align: left" colspan="3"><input
+						class="easyui-combobox" name="want_train_type"
+						id="want_train_type" style="width: 90%" /></td>
 				</tr>
 				<tr style="background-color: #F0F8FF">
 					<td style="width: 100%; font-size: 18px; text-align: center"
@@ -138,7 +144,7 @@ body, td, th, input {
 						colspan="7">就业意愿信息</td>
 				</tr>
 				<tr>
-					<td style="width: 10%; background-color: #F0F8FF;" rowspan="4">就业意愿信息</td>
+					<td style="width: 10%; background-color: #F0F8FF;" rowspan="3">就业意愿信息</td>
 					<td style="width: 10%; text-align: right">就业意愿:</td>
 					<td style="width: 20%; text-align: left"><input
 						class="easyui-combobox" name="is_want_job" id="is_want_job"
@@ -176,12 +182,7 @@ body, td, th, input {
 						class="easyui-combobox" name="want_job_type" id="want_job_type"
 						style="width: 100%" /></td>
 				</tr>
-				<tr>
-					<td style="width: 10%; text-align: right">培训需求意向:</td>
-					<td style="width: 50%; text-align: left" colspan="3"><input
-						class="easyui-combobox" name="want_train_type"
-						id="want_train_type" style="width: 90%" /></td>
-				</tr>
+				
 				<tr style="background-color: #F0F8FF">
 					<td style="width: 100%; font-size: 18px; text-align: center"
 						colspan="7">参加社会保险信息</td>
@@ -236,7 +237,7 @@ body, td, th, input {
 					"job_industry", "job_type" ];
 		var wantJobIds = [ "want_job_name", "want_income",
 					"want_industry", "want_work_area_kind",
-					"want_job_type", "want_train_type" ];
+					"want_job_type" ];
 		function hrInfoPageLoaded(){
 			disableEles(jobIds);
 			disableEles(wantJobIds);
