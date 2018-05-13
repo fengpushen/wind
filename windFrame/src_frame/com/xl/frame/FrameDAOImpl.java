@@ -20,6 +20,7 @@ import org.springframework.stereotype.Repository;
 
 import com.xl.frame.util.ExecuteResult;
 import com.xl.frame.util.FrameCache;
+import com.xl.frame.util.FrameConstant;
 import com.xl.frame.util.FrameDbInfo;
 import com.xl.frame.util.FrameDbTable;
 import com.xl.frame.util.FrameTool;
@@ -126,12 +127,13 @@ public class FrameDAOImpl implements FrameDAO {
 	public ExecuteResult qryPaginationInfo(String sqlId, Map<String, Object> params) {
 		ExecuteResult rtn = new ExecuteResult();
 		try {
-			Map info = new HashMap();
+			Map paginationData = new HashMap();
 			int total = selectRecord_count(sqlId, params);
-			info.put("total", total);
+			paginationData.put("total", total);
+			setSelectAllParam(params, total);
 			List<Map> rows = selectList(sqlId, params);
-			info.put("rows", rows);
-			rtn.addInfo("info", info);
+			paginationData.put("rows", rows);
+			rtn.addInfo("info", paginationData);
 			rtn.setSucc(true);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -145,6 +147,29 @@ public class FrameDAOImpl implements FrameDAO {
 
 	public Map selectOne(String sqlId, Map params) {
 		return sqlSession.selectOne(sqlId, params);
+	}
+
+	/**
+	 * 根据参数判断此查询是否需要查询所有的数据
+	 * 
+	 * @param params
+	 * @return
+	 */
+	private boolean isSelectAll(Map params) {
+		return !FrameTool.isEmpty(params) && params.containsKey(FrameConstant.frame_select_all_label);
+	}
+
+	/**
+	 * 设置查询所有数据的参数
+	 * 
+	 * @param params
+	 * @param total
+	 */
+	private void setSelectAllParam(Map params, int total) {
+		if (isSelectAll(params)) {
+			params.put("rows", total);
+			params.put("page", 1);
+		}
 	}
 
 	private FrameDbTable getTableMetaData(String tableName) throws SQLException {

@@ -66,13 +66,13 @@ public class PositionController {
 
 	@ResponseBody
 	@RequestMapping(value = "/loadPositionValidList.do")
-	public String loadPositionValidList(HttpServletRequest request) {
+	public Object loadPositionValidList(HttpServletRequest request) {
 
 		Map<String, Object> info = FrameTool.getRequestParameterMap(request);
 		ExecuteResult rst = positionService.loadPositionValidList(info);
 		if (rst.isSucc()) {
 			Map map = (Map) rst.getInfoOne("info");
-			return FrameTool.toJson(map);
+			return map;
 		}
 		return null;
 	}

@@ -9,14 +9,17 @@ import java.io.InputStream;
 import java.io.PushbackInputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.DocumentFactoryHelper;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -26,6 +29,7 @@ public class ToolForExcel {
 
 	public static final String excel_type_2003 = "2003";
 	public static final String excel_type_2007 = "2007";
+	private static final String sheet_name_default = "sheet1";
 
 	public static Workbook getWorkbookFromExcelFile(String filePath) {
 		File excelFile = new File(filePath);
@@ -259,6 +263,57 @@ public class ToolForExcel {
 			return value;
 		}
 
+	}
+
+	public static void makeExlFile(File exlFile, List<Map> datas, List<String> keys) throws IOException {
+		makeExlFile(exlFile, null, datas, keys);
+	}
+
+	public static void makeExlFile(File exlFile, String sheetName, List<Map> datas, List<String> keys)
+			throws IOException {
+		HSSFWorkbook workbook = fillExlWorkBook(getSheetName(sheetName), datas, keys);
+		writeWorkbookToFile(exlFile, workbook);
+	}
+
+	private static void writeWorkbookToFile(File exlFile, HSSFWorkbook workbook) throws IOException {
+		FileOutputStream fos = null;
+		try {
+			fos = new FileOutputStream(exlFile);
+			workbook.write(fos);
+		} finally {
+			if (fos != null) {
+				fos.close();
+			}
+		}
+	}
+
+	private static HSSFWorkbook fillExlWorkBook(String sheetName, List<Map> datas, List<String> keys) {
+		HSSFWorkbook workbook = new HSSFWorkbook();
+		HSSFSheet sheet = workbook.createSheet(getSheetName(sheetName));
+		fillExlSheet(sheet, datas, keys);
+		return workbook;
+	}
+
+	private static void fillExlSheet(HSSFSheet sheet, List<Map> datas, List<String> keys) {
+		for (int i = 0, len = datas.size(); i < len; i++) {
+			fillExcelOneRow(sheet.createRow(i), datas.get(i), keys);
+		}
+
+	}
+
+	private static void fillExcelOneRow(HSSFRow row, Map data, List<String> keys) {
+		for (int i = 0, len = keys.size(); i < len; i++) {
+			Cell cell = row.createCell(i);
+			cell.setCellType(CellType.STRING);
+			cell.setCellValue(data.get(keys.get(i)).toString());
+		}
+	}
+
+	private static String getSheetName(String sheetName) {
+		if (FrameTool.isEmpty(sheetName)) {
+			return ToolForExcel.sheet_name_default;
+		}
+		return sheetName;
 	}
 
 }

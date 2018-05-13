@@ -37,10 +37,7 @@
 	</bean>
 
 	<context:component-scan base-package="com.xl">
-		<context:include-filter type="annotation"
-			expression="org.springframework.stereotype.Controller" />
-		<context:exclude-filter type="annotation"
-			expression="org.springframework.stereotype.Service" />
+
 	</context:component-scan>
 
 	<bean id="multipartResolver"

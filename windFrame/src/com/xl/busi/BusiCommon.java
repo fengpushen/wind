@@ -45,8 +45,13 @@ public class BusiCommon {
 	 * 
 	 * @return
 	 */
+	// TODO:这里应该进一步优化，这个是跟业务有关的，但是框架里面需要用到，应该有某种方法让框架不直接调用此类
 	public static String getFullPathOfTempDir() {
 		return System.getProperty("realPath.webcontent") + temp_file_dir;
+	}
+
+	public static String getTempFileFullName(String shortName) {
+		return getFullPathOfTempDir() + shortName;
 	}
 
 	public static ResponseEntity<byte[]> getFileDwnResponseEntity(String fileFullPath, String showName)

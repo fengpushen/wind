@@ -6,6 +6,8 @@ public final class FrameConstant {
 
 	public static final String frame_menu_base_tree = "frame_menu_base_tree";
 
+	public static final String frame_select_all_label = "frame_select_all_label";
+
 	/**
 	 * 系统运行环境的字符集
 	 */
@@ -85,7 +87,7 @@ public final class FrameConstant {
 	 * 女性码值
 	 */
 	public static final String busi_sex_code_female = "2";
-	
+
 	/**
 	 * 求职申请状态之待处理的码值
 	 */

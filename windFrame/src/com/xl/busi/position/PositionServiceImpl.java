@@ -35,9 +35,6 @@ public class PositionServiceImpl implements PositionService {
 	@Autowired
 	private HumanResourceDAO humanResourceDAO;
 
-	@Autowired
-	private CompanyDAO companyDAO;
-
 	public ExecuteResult loadPositionList(Map<String, Object> params) {
 		ExecuteResult rtn = new ExecuteResult();
 		try {
@@ -66,13 +63,7 @@ public class PositionServiceImpl implements PositionService {
 			if (!FrameTool.isEmpty(p_work_area)) {
 				params.put("P_WORK_AREA_LEVEL", BusiCommon.getAreaLevel(p_work_area));
 			}
-			Map info = new HashMap();
-			int total = frameDAO.selectRecord_count("selectBs_position", params);
-			info.put("total", total);
-			List<Map> rows = positionDAO.selectBs_position(params);
-			info.put("rows", rows);
-			rtn.addInfo("info", info);
-			rtn.setSucc(true);
+			return frameDAO.qryPaginationInfo("selectBs_position", params);
 		} catch (Exception e) {
 			log.error("loadPositionValidList", e);
 		}

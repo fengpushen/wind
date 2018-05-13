@@ -86,9 +86,9 @@ public class StaffServiceImpl implements StaffService {
 			rtn.setDefaultValue("操作账号不存在");
 			return rtn;
 		}
-		String orpAreaCode = (String)orpStaff.get("AREA_CODE");
-		String staffAreaCode = (String)staffInfo.get("AREA_CODE");
-		if(!BusiCommon.isInScope(orpAreaCode, staffAreaCode)){
+		String orpAreaCode = (String) orpStaff.get("AREA_CODE");
+		String staffAreaCode = (String) staffInfo.get("AREA_CODE");
+		if (!BusiCommon.isInScope(orpAreaCode, staffAreaCode)) {
 			rtn.setDefaultValue("不能操作非本地区账号");
 			return rtn;
 		}
@@ -165,7 +165,7 @@ public class StaffServiceImpl implements StaffService {
 			}
 			TreeNode node = FrameCache.getTree(FrameConstant.busi_com_area_tree).getNode(areaStaff);
 			if (!FrameTool.isEmpty(node)) {
-				if (node.hasTheUnbornNode(areaStaffMgd)) {
+				if (FrameCache.getTree(FrameConstant.busi_com_area_tree).isTheUnbornNode(node.getId(), areaStaffMgd)) {
 					rtn.setSucc(true);
 				} else {
 					rtn.setDefaultValue(staffMgdInfo.get("STAFF_NAME") + "：不能管理非本地区账号");
