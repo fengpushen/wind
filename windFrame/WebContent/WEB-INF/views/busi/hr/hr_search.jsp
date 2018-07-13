@@ -8,7 +8,7 @@
 <head>
 <title>劳动力资源信息查询</title>
 <tags:commonHead />
-</head>
+</head> 
 <body class="easyui-layout">
 	<div class="easyui-panel" data-options="region:'north',noheader:true"
 		style="overflow: hidden; background-color: #E0EEEE;">
