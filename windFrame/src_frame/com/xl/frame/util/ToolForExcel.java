@@ -265,13 +265,14 @@ public class ToolForExcel {
 
 	}
 
-	public static void makeExlFile(File exlFile, List<Map> datas, List<String> keys) throws IOException {
-		makeExlFile(exlFile, null, datas, keys);
+	public static void makeExlFile(File exlFile, List<String> heads, List<Map> datas, List<String> keys)
+			throws IOException {
+		makeExlFile(exlFile, null, heads, datas, keys);
 	}
 
-	public static void makeExlFile(File exlFile, String sheetName, List<Map> datas, List<String> keys)
-			throws IOException {
-		HSSFWorkbook workbook = fillExlWorkBook(getSheetName(sheetName), datas, keys);
+	public static void makeExlFile(File exlFile, String sheetName, List<String> heads, List<Map> datas,
+			List<String> keys) throws IOException {
+		HSSFWorkbook workbook = fillExlWorkBook(getSheetName(sheetName), heads, datas, keys);
 		writeWorkbookToFile(exlFile, workbook);
 	}
 
@@ -287,16 +288,21 @@ public class ToolForExcel {
 		}
 	}
 
-	private static HSSFWorkbook fillExlWorkBook(String sheetName, List<Map> datas, List<String> keys) {
+	private static HSSFWorkbook fillExlWorkBook(String sheetName, List<String> heads, List<Map> datas,
+			List<String> keys) {
 		HSSFWorkbook workbook = new HSSFWorkbook();
 		HSSFSheet sheet = workbook.createSheet(getSheetName(sheetName));
-		fillExlSheet(sheet, datas, keys);
+		fillExlSheet(sheet, heads, datas, keys);
 		return workbook;
 	}
 
-	private static void fillExlSheet(HSSFSheet sheet, List<Map> datas, List<String> keys) {
+	private static void fillExlSheet(HSSFSheet sheet, List<String> heads, List<Map> datas, List<String> keys) {
+		int row = 0;
+		if (!FrameTool.isEmpty(heads)) {
+			fillExcelOneRow(sheet.createRow(row++), heads);
+		}
 		for (int i = 0, len = datas.size(); i < len; i++) {
-			fillExcelOneRow(sheet.createRow(i), datas.get(i), keys);
+			fillExcelOneRow(sheet.createRow(row++), datas.get(i), keys);
 		}
 
 	}
@@ -306,6 +312,14 @@ public class ToolForExcel {
 			Cell cell = row.createCell(i);
 			cell.setCellType(CellType.STRING);
 			cell.setCellValue(data.get(keys.get(i)).toString());
+		}
+	}
+
+	private static void fillExcelOneRow(HSSFRow row, List<String> values) {
+		for (int i = 0, len = values.size(); i < len; i++) {
+			Cell cell = row.createCell(i);
+			cell.setCellType(CellType.STRING);
+			cell.setCellValue(values.get(i));
 		}
 	}
 
