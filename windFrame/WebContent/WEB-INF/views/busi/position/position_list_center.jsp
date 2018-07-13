@@ -27,9 +27,7 @@
 						class="easyui-textbox" name="pay_botton_bgn" style="width: 100%" /></td>
 					<td style="width: 33%; text-align: center"><a
 						href="javascript:void(0)" class="easyui-linkbutton"
-						onclick="loadDatagridData();" style="width: 80px">查询</a> <a
-						href="javascript:void(0)" class="easyui-linkbutton"
-						onclick="exportExl();" style="width: 80px">导出</a></td>
+						onclick="loadDatagridData();" style="width: 80px">查询</a>
 				</tr>
 			</table>
 		</form>
@@ -47,7 +45,7 @@
 			$('#datagrid').datagrid('load', $("#qryForm").serializeJson());
 		}
 		$(function() {
-			var toolbar = [{
+			var toolbar = [ {
 				text : '查看岗位详情',
 				iconCls : 'icon-cut',
 				handler : function() {
@@ -79,12 +77,13 @@
 						alert(e);
 					}
 				}
-			}];
+			} ];
 			try {
 				$('#datagrid').datagrid({
 					url : "busi/position/loadPositionValidList.do",
 					method : 'POST',
 					formId : 'qryForm',
+					excelName : '导出文件.xls',
 					rownumbers : true,
 					singleSelect : true,
 					toolbar : toolbar,
@@ -93,8 +92,8 @@
 					striped : true,
 					singleSelect : false,
 					pageSize : 20,
-					pageList : [20, 50, 100, 150, 200],
-					columns : [[{
+					pageList : [ 20, 50, 100, 150, 200 ],
+					columns : [ [ {
 						field : 'ck',
 						checkbox : true
 					}, {
@@ -142,146 +141,64 @@
 						title : '招聘电话',
 						width : '8%',
 						align : 'center'
-					}]],
+					} ] ],
 				});
+				var pager = $('#datagrid').datagrid('getPager');
+				pager
+						.pagination({
+							buttons : [ {
+								iconCls : 'icon-edit',
+								text : '导出',
+								datagridId : 'datagrid',
+								handler : function() {
+									console
+											.log($(this).linkbutton('options').datagridId);
+									var datagridId = $(this).linkbutton(
+											'options').datagridId;
+									exportExl(datagridId);
+								}
+							} ]
+						});
 				loadDatagridData();
 			} catch (e) {
 				alert(e);
 			}
 		});
 
-		function exportExl() {
-			var opts = $('#datagrid').datagrid('options').columns;
+		function exportExl(datagridId) {
+			var opts = $('#' + datagridId).datagrid('options').columns;
 			var head = JSON.stringify(opts);
 			console.log(head);
-			var formId = $('#datagrid').datagrid('options').formId;
+			var formId = $('#' + datagridId).datagrid('options').formId;
 			console.log(formId);
-			/*	console.log(opts);
-				for (var i = 0; i < opts[0].length; i++) {
-					console.log(opts[0][i].title);
-				}*/
-			//JSONToExcelConvertor(JSON_DATA.data, "export", opts);
+			var saveItemData = $("#" + formId).serializeJson();
+			saveItemData.frame_select_all_label = 'frame_select_all_label';
+			saveItemData.frame_export_xls = 'frame_export_xls';
+			saveItemData.datagrid_head = head;
+			console.log(saveItemData);
+			$
+					.ajax({
+						url : $('#' + datagridId).datagrid('options').url,
+						type : "POST",
+						data : saveItemData,
+						success : function(data) {
+							console.log(data);
+							var showName = $('#' + datagridId).datagrid(
+									'options').excelName;
+							if (showName == null || showName == '') {
+								showName = "export.xls";
+							}
+							var inputs = '<input type="hidden" name="shortName" value="'+ data +'" />';
+							inputs = inputs
+									+ '<input type="hidden" name="showName" value="'+ showName +'" />';
+							console.log(inputs);
+							jQuery(
+									'<form action="frame/dwnTempFile.do" method="post">'
+											+ inputs + '</form>').appendTo(
+									'body').submit().remove();
+						}
+					})
 		}
-
-		function JSONToExcelConvertor(JSONData, FileName, columns) {
-
-			var arrData = typeof JSONData != 'object' ? JSON.parse(JSONData) : JSONData;
-
-			var excel = '<table>';
-			for (var i = 0; i < columns.length; i++) {
-				//设置表头
-				var row = "<tr>";
-				for (var j = 0, l = columns[i].length; j < l; j++) {
-					if (columns[i][j].title != null) {
-						row += "<td style='font-weight:blod;'>" + columns[i][j].title + '</td>';
-					}
-				}
-				excel += row + "</tr>";
-			}
-
-			//设置数据
-			for (var i = 0; i < arrData.length; i++) {
-				var row = "<tr>";
-
-				for (var j = 0; j < arrData[i].length; j++) {
-					var value = arrData[i][j].value === "." ? "" : arrData[i][j].value;
-					row += '<td>' + value + '</td>';
-				}
-				excel += row + "</tr>";
-			}
-
-			excel += "</table>";
-			console.log(excel);
-
-			var excelFile = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:x='urn:schemas-microsoft-com:office:excel' xmlns='http://www.w3.org/TR/REC-html40'>";
-			excelFile += '<meta http-equiv="content-type" content="application/vnd.ms-excel; charset=UTF-8">';
-			excelFile += '<meta http-equiv="content-type" content="application/vnd.ms-excel';
-			excelFile += '; charset=UTF-8">';
-			excelFile += "<head>";
-			excelFile += "<!--[if gte mso 9]>";
-			excelFile += "<xml>";
-			excelFile += "<x:ExcelWorkbook>";
-			excelFile += "<x:ExcelWorksheets>";
-			excelFile += "<x:ExcelWorksheet>";
-			excelFile += "<x:Name>";
-			excelFile += "sheet1";
-			excelFile += "</x:Name>";
-			excelFile += "<x:WorksheetOptions>";
-			excelFile += "<x:DisplayGridlines/>";
-			excelFile += "</x:WorksheetOptions>";
-			excelFile += "</x:ExcelWorksheet>";
-			excelFile += "</x:ExcelWorksheets>";
-			excelFile += "</x:ExcelWorkbook>";
-			excelFile += "</xml>";
-			excelFile += "<![endif]-->";
-			excelFile += "</head>";
-			excelFile += "<body>";
-			excelFile += excel;
-			excelFile += "</body>";
-			excelFile += "</html>";
-
-			var uri = 'data:application/vnd.ms-excel;charset=utf-8,' + encodeURIComponent(excelFile);
-
-			var link = document.createElement("a");
-			link.href = uri;
-
-			link.style = "visibility:hidden";
-			link.download = FileName + ".xls";
-
-			document.body.appendChild(link);
-			link.click();
-			document.body.removeChild(link);
-		}
-		var JSON_DATA = {
-			"title" : [{
-				"value" : "司机",
-				"type" : "ROW_HEADER_HEADER",
-				"datatype" : "string"
-			}, {
-				"value" : "日期",
-				"type" : "ROW_HEADER_HEADER",
-				"datatype" : "string"
-			}, {
-				"value" : "物流单数量",
-				"type" : "ROW_HEADER_HEADER",
-				"datatype" : "string"
-			}, {
-				"value" : "退货单数量",
-				"type" : "ROW_HEADER_HEADER",
-				"datatype" : "string"
-			}, {
-				"value" : "发货总件数",
-				"type" : "ROW_HEADER_HEADER",
-				"datatype" : "string"
-			}, {
-				"value" : "退货总件数",
-				"type" : "ROW_HEADER_HEADER",
-				"datatype" : "string"
-			}, {
-				"value" : "拒收总件数",
-				"type" : "ROW_HEADER_HEADER",
-				"datatype" : "string"
-			}, {
-				"value" : "取消发货总件数",
-				"type" : "ROW_HEADER_HEADER",
-				"datatype" : "string"
-			}, {
-				"value" : "物流费总金额    ",
-				"type" : "ROW_HEADER_HEADER",
-				"datatype" : "string"
-			}, {
-				"value" : "代收手续费总金额",
-				"type" : "ROW_HEADER_HEADER",
-				"datatype" : "string"
-			}, {
-				"value" : "代收货款总金额",
-				"type" : "ROW_HEADER_HEADER",
-				"datatype" : "string"
-			}],
-			"data" : [
-
-			]
-		};
 	</script>
 
 
