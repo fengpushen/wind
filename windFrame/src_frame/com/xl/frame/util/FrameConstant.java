@@ -7,6 +7,8 @@ public final class FrameConstant {
 	public static final String frame_menu_base_tree = "frame_menu_base_tree";
 
 	public static final String frame_select_all_label = "frame_select_all_label";
+	
+	public static final String frame_export_xls = "frame_export_xls";
 
 	/**
 	 * 系统运行环境的字符集

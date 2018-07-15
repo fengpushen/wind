@@ -115,7 +115,7 @@
 				<tr>
 					<td colspan="6" style="text-align: center;"><a
 						href="javascript:void(0)" class="easyui-linkbutton"
-						onclick="loadDatagridData();" style="width: 80px">查询</a></td>
+						onclick="loadDatagridData('datagrid');" style="width: 80px">查询</a></td>
 				</tr>
 			</table>
 		</form>
@@ -147,10 +147,7 @@
 	</div>
 
 	<script type="text/javascript">
-		function loadDatagridData() {
-			$('#datagrid').datagrid('options').url = "busi/hr/loadHrList.do";
-			$('#datagrid').datagrid('load', $("#qryForm").serializeJson());
-		}
+
 		$(function() {
 			try {
 				var toolbar = [
@@ -167,7 +164,7 @@
 									href : 'busi/hr/showHrInfo.do',
 									modal : false,
 									onBeforeClose : function() {
-										loadDatagridData();
+										loadDatagridData('datagrid');
 									},
 									onLoad : function() {
 										hrInfoPageLoaded();
@@ -226,7 +223,7 @@
 																								"",
 																								msg);
 																			}
-																			loadDatagridData();
+																			loadDatagridData('datagrid');
 																		}
 																	});
 														}
@@ -258,7 +255,7 @@
 										},
 										modal : false,
 										onBeforeClose : function() {
-											loadDatagridData();
+											loadDatagridData('datagrid');
 										}
 									});
 								}
@@ -396,7 +393,9 @@
 					required : true
 				});
 				$('#datagrid').datagrid({
+					url : 'busi/hr/loadHrList.do',
 					method : 'POST',
+					formId : 'qryForm',
 					rownumbers : true,
 					pagination : true,
 					striped : true,
@@ -423,58 +422,40 @@
 						width : '4%',
 						align : 'center'
 					}, {
-						field : 'SEX',
+						field : 'SEX_NAME',
 						title : '性别',
 						width : '4%',
-						align : 'center',
-						formatter : function(val, row) {
-							return theFrameCode.getCodeValue('sex', val);
-						}
+						align : 'center'
 					}, {
 						field : 'HJ_AREA_NAME',
 						title : '户籍地',
 						width : '8%',
 						align : 'center'
 					}, {
-						field : 'NATION',
+						field : 'NATION_NAME',
 						title : '民族',
 						width : '6%',
-						align : 'center',
-						formatter : function(val, row) {
-							return theFrameCode.getCodeValue('nation', val);
-						}
+						align : 'center'
 					}, {
-						field : 'LD_TYPE',
+						field : 'LD_TYPE_NAME',
 						title : '是否劳动力',
 						width : '6%',
-						align : 'center',
-						formatter : function(val, row) {
-							return theFrameCode.getCodeValue('boolean', val);
-						}
+						align : 'center'
 					}, {
-						field : 'IS_JOB',
+						field : 'IS_JOB_NAME',
 						title : '是否就业',
 						width : '5%',
-						align : 'center',
-						formatter : function(val, row) {
-							return theFrameCode.getCodeValue('boolean', val);
-						}
+						align : 'center'
 					}, {
 						field : 'IS_WANT_JOB_NAME',
 						title : '有就业意愿',
 						width : '6%',
-						align : 'center',
-						formatter : function(val, row) {
-							return theFrameCode.getCodeValue('boolean', val);
-						}
+						align : 'center'
 					}, {
-						field : 'DEGREE',
+						field : 'DEGREE_NAME',
 						title : '文化程度',
 						width : '8%',
-						align : 'center',
-						formatter : function(val, row) {
-							return theFrameCode.getCodeValue('degree', val);
-						}
+						align : 'center'
 					}, {
 						field : 'JNTC',
 						title : '技能特长',
@@ -482,7 +463,8 @@
 						align : 'center'
 					} ] ]
 				});
-				loadDatagridData();
+				addExportExlBtn('datagrid');
+				loadDatagridData('datagrid');
 			} catch (e) {
 				alert(e);
 			}

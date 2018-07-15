@@ -6,21 +6,26 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
+import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
+import com.google.gson.reflect.TypeToken;
 import com.xl.busi.BusiCommon;
+import com.xl.frame.util.FrameConstant;
 import com.xl.frame.util.FrameTool;
 import com.xl.frame.util.ToolForExcel;
 import com.xl.frame.util.ToolForFile;
 
 @ControllerAdvice
-//@EnableWebMvc
+@EnableWebMvc
 // TODO:这个advice一直没有配置生效，直到加了一个@EnableWebMvc的注释才生效，不知道为什么
 public class ExportExcelAdvice implements ResponseBodyAdvice {
 
@@ -29,27 +34,42 @@ public class ExportExcelAdvice implements ResponseBodyAdvice {
 	public Object beforeBodyWrite(Object arg0, MethodParameter arg1, MediaType arg2, Class arg3, ServerHttpRequest arg4,
 			ServerHttpResponse arg5) {
 
-		String rst = arg0.toString();
-		if (arg0 instanceof Map) {
+		ServletServerHttpRequest sshr = (ServletServerHttpRequest) arg4;
+		HttpServletRequest request = sshr.getServletRequest();
+		Map<String, String[]> paramMap = request.getParameterMap();
+
+		if (paramMap.containsKey(FrameConstant.frame_export_xls) && arg0 instanceof Map) {
 			Map map = (Map) arg0;
 			if (!FrameTool.isEmpty(map) && map.containsKey("rows")) {
 				List<Map> rows = (List<Map>) map.get("rows");
 				if (!FrameTool.isEmpty(rows)) {
+
+					String datagrid_head = request.getParameter("datagrid_head");
+					List<List<Map>> datagrid_heads = FrameTool.getGson().fromJson(datagrid_head,
+							new TypeToken<List<List<Map>>>() {
+							}.getType());
+					List<Map> datagrid_head_01 = datagrid_heads.get(0);
 					List<String> keys = new ArrayList<String>();
-					keys.add("P_WORK_AREA_NAME");
-					keys.add("END_TIME");
+					List<String> heads = new ArrayList<String>();
+					for (Map headMap : datagrid_head_01) {
+						String value = (String) headMap.get("field");
+						if ("ck".equals(value)) {
+							continue;
+						} else {
+							keys.add(value);
+							heads.add((String) headMap.get("title"));
+						}
+					}
 					try {
-						ToolForExcel.makeExlFile(getExpFile(), rows, keys);
+						String shortName = FrameTool.getUUID() + ".xls";
+						ToolForExcel.makeExlFile(getExpFile(shortName), heads, rows, keys);
+						arg0 = shortName;
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
 				}
 			}
 		}
-		System.out.println("-----------------------");
-		System.out.println("arg0:" + arg0);
-		System.out.println("rst:" + rst);
-		System.out.println("-----------------------");
 		return arg0;
 	}
 

@@ -29,7 +29,8 @@ public class ToolForExcel {
 
 	public static final String excel_type_2003 = "2003";
 	public static final String excel_type_2007 = "2007";
-	private static final String sheet_name_default = "sheet1";
+	public static final int excel_one_sheet_max_row = 65536;
+	private static final String sheet_name_default = "sheet";
 
 	public static Workbook getWorkbookFromExcelFile(String filePath) {
 		File excelFile = new File(filePath);
@@ -272,7 +273,7 @@ public class ToolForExcel {
 
 	public static void makeExlFile(File exlFile, String sheetName, List<String> heads, List<Map> datas,
 			List<String> keys) throws IOException {
-		HSSFWorkbook workbook = fillExlWorkBook(getSheetName(sheetName), heads, datas, keys);
+		HSSFWorkbook workbook = fillExlWorkBook(sheetName, heads, datas, keys);
 		writeWorkbookToFile(exlFile, workbook);
 	}
 
@@ -291,8 +292,27 @@ public class ToolForExcel {
 	private static HSSFWorkbook fillExlWorkBook(String sheetName, List<String> heads, List<Map> datas,
 			List<String> keys) {
 		HSSFWorkbook workbook = new HSSFWorkbook();
-		HSSFSheet sheet = workbook.createSheet(getSheetName(sheetName));
-		fillExlSheet(sheet, heads, datas, keys);
+		int sheetIdx = 1, dataIdx = 0, dataSize = datas.size(), headSize = 0;
+		if (!FrameTool.isEmpty(heads)) {
+			headSize = 1;
+		}
+		// 一个sheet能够容纳的数据行，等于sheet的最大行数减去头部所占的行数，因为头部会在每个sheet中出现
+		int sheetSize = ToolForExcel.excel_one_sheet_max_row - headSize;
+		while (dataIdx < dataSize) {
+			// 未处理的数据的数量
+			int undealDataSize = dataSize - dataIdx;
+
+			// 得出本次应处理数量，默认为一个sheet能够容纳的行，如果未处理的数据数量小于一个sheet能够容纳的行，则就是所有未处理的数据的数量
+			int curDealDataSize = sheetSize;
+			if (sheetSize > undealDataSize) {
+				curDealDataSize = undealDataSize;
+			}
+			List<Map> subDatas = datas.subList(dataIdx, dataIdx + curDealDataSize);
+			dataIdx += curDealDataSize;
+			HSSFSheet sheet = workbook.createSheet(getSheetName(sheetName, sheetIdx++));
+			fillExlSheet(sheet, heads, subDatas, keys);
+		}
+
 		return workbook;
 	}
 
@@ -308,11 +328,8 @@ public class ToolForExcel {
 	}
 
 	private static void fillExcelOneRow(HSSFRow row, Map data, List<String> keys) {
-		for (int i = 0, len = keys.size(); i < len; i++) {
-			Cell cell = row.createCell(i);
-			cell.setCellType(CellType.STRING);
-			cell.setCellValue(data.get(keys.get(i)).toString());
-		}
+		List<String> values = ToolForMap.getMapValueListStr(data, keys);
+		fillExcelOneRow(row, values);
 	}
 
 	private static void fillExcelOneRow(HSSFRow row, List<String> values) {
@@ -323,11 +340,11 @@ public class ToolForExcel {
 		}
 	}
 
-	private static String getSheetName(String sheetName) {
+	private static String getSheetName(String sheetName, int sheetIdx) {
 		if (FrameTool.isEmpty(sheetName)) {
-			return ToolForExcel.sheet_name_default;
+			sheetName = ToolForExcel.sheet_name_default;
 		}
-		return sheetName;
+		return sheetName + sheetIdx;
 	}
 
 }

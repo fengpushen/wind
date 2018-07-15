@@ -65,6 +65,13 @@ public final class FrameTool {
 		return gson.toJson(o);
 	}
 
+	public static Gson getGson() {
+		if (gson == null) {
+			initGson();
+		}
+		return gson;
+	}
+
 	public static String getMd5(String s) {
 		if (messageDigest == null) {
 			initMessageDigest();
@@ -252,6 +259,7 @@ public final class FrameTool {
 
 	/**
 	 * 从逗号分隔的字符串中生成字符串的set
+	 * 
 	 * @param s
 	 * @return
 	 */

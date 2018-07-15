@@ -52,7 +52,7 @@
 				<tr>
 					<td colspan="6" style="text-align: center;"><a
 						href="javascript:void(0)" class="easyui-linkbutton"
-						onclick="loadDatagridData();" style="width: 80px">查询</a></td>
+						onclick="loadDatagridData('datagrid');" style="width: 80px">查询</a></td>
 				</tr>
 			</table>
 		</form>
@@ -84,10 +84,7 @@
 	</div>
 
 	<script type="text/javascript">
-		function loadDatagridData() {
-			$('#datagrid').datagrid('options').url = "busi/hr/loadHrList.do";
-			$('#datagrid').datagrid('load', $("#qryForm").serializeJson());
-		}
+
 		$(function() {
 			try {
 				var toolbar = [{
@@ -103,7 +100,7 @@
 							href : 'busi/hr/showHrInfo.do',
 							modal : false,
 							onBeforeClose : function() {
-								loadDatagridData();
+								loadDatagridData('datagrid');
 							},
 							onLoad : function() {
 								hrInfoPageLoaded();
@@ -143,7 +140,7 @@
 												}
 												$.messager.alert("", msg);
 											}
-											loadDatagridData();
+											loadDatagridData('datagrid');
 										}
 									});
 								}
@@ -173,7 +170,7 @@
 								},
 								modal : false,
 								onBeforeClose : function() {
-									loadDatagridData();
+									loadDatagridData('datagrid');
 								}
 							});
 						}
@@ -275,7 +272,9 @@
 					required : true
 				});
 				$('#datagrid').datagrid({
+					url : 'busi/hr/loadHrList.do',
 					method : 'POST',
+					formId : 'qryForm',
 					rownumbers : true,
 					toolbar : toolbar,
 					fitColumns : true,
@@ -345,7 +344,8 @@
 						align : 'center'
 					}]]
 				});
-				loadDatagridData();
+				addExportExlBtn('datagrid');
+				loadDatagridData('datagrid');
 			} catch (e) {
 				alert(e);
 			}

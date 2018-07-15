@@ -45,7 +45,7 @@ public class HumanResourceController {
 
 	@ResponseBody
 	@RequestMapping(value = "/loadHrList.do")
-	public String loadHrList(HttpSession session, HttpServletRequest request) {
+	public Object loadHrList(HttpSession session, HttpServletRequest request) {
 
 		Map<String, Object> info = FrameTool.getRequestParameterMap(request);
 		String hj_area = (String) info.get("HJ_AREA");
@@ -57,7 +57,7 @@ public class HumanResourceController {
 		ExecuteResult rst = humanResourceService.loadHrList(info);
 		if (rst.isSucc()) {
 			Map map = (Map) rst.getInfoOne("info");
-			return FrameTool.toJson(map);
+			return map;
 		}
 		return null;
 	}

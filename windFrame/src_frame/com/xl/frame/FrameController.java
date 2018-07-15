@@ -1,5 +1,6 @@
 package com.xl.frame;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +10,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -109,6 +111,17 @@ public class FrameController {
 		Map trans = new HashMap();
 		trans.put("pmenu", frameService.getMenu(menu_p_id));
 		return new ModelAndView("/frame/menu_add", trans);
+	}
+
+	@RequestMapping("/dwnTempFile.do")
+	public ResponseEntity<byte[]> dwnTempFile(@RequestParam(required = true) String shortName, String showName) {
+		ResponseEntity<byte[]> rst = null;
+		try {
+			rst = BusiCommon.getFileDwnResponseEntity(BusiCommon.getTempFileFullName(shortName), showName);
+		} catch (IOException e) {
+			log.error("download", e);
+		}
+		return rst;
 	}
 
 }

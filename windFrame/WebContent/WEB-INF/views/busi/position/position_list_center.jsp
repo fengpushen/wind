@@ -165,40 +165,7 @@
 			}
 		});
 
-		function exportExl(datagridId) {
-			var opts = $('#' + datagridId).datagrid('options').columns;
-			var head = JSON.stringify(opts);
-			console.log(head);
-			var formId = $('#' + datagridId).datagrid('options').formId;
-			console.log(formId);
-			var saveItemData = $("#" + formId).serializeJson();
-			saveItemData.frame_select_all_label = 'frame_select_all_label';
-			saveItemData.frame_export_xls = 'frame_export_xls';
-			saveItemData.datagrid_head = head;
-			console.log(saveItemData);
-			$
-					.ajax({
-						url : $('#' + datagridId).datagrid('options').url,
-						type : "POST",
-						data : saveItemData,
-						success : function(data) {
-							console.log(data);
-							var showName = $('#' + datagridId).datagrid(
-									'options').excelName;
-							if (showName == null || showName == '') {
-								showName = "export.xls";
-							}
-							var inputs = '<input type="hidden" name="shortName" value="'+ data +'" />';
-							inputs = inputs
-									+ '<input type="hidden" name="showName" value="'+ showName +'" />';
-							console.log(inputs);
-							jQuery(
-									'<form action="frame/dwnTempFile.do" method="post">'
-											+ inputs + '</form>').appendTo(
-									'body').submit().remove();
-						}
-					})
-		}
+		
 	</script>
 
 

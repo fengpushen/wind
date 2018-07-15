@@ -247,3 +247,52 @@ function enableEles(ids) {
 		$("#" + ids[i]).textbox("enable");
 	}
 }
+
+function loadDatagridData(datagridId) {
+	var formId = $('#' + datagridId).datagrid('options').formId;
+	$('#' + datagridId).datagrid('load', $("#" + formId).serializeJson());
+}
+
+function addExportExlBtn(datagridId){
+	var pager = $('#' + datagridId).datagrid('getPager');
+	pager
+			.pagination({
+				buttons : [ {
+					iconCls : 'icon-edit',
+					text : '导出',
+					handler : function() {
+						exportExl(datagridId);
+					}
+				} ]
+			});
+}
+
+function exportExl(datagridId) {
+	var opts = $('#' + datagridId).datagrid('options').columns;
+	var head = JSON.stringify(opts);
+	var formId = $('#' + datagridId).datagrid('options').formId;
+	var saveItemData = $("#" + formId).serializeJson();
+	saveItemData.frame_select_all_label = 'frame_select_all_label';
+	saveItemData.frame_export_xls = 'frame_export_xls';
+	saveItemData.datagrid_head = head;
+	$
+			.ajax({
+				url : $('#' + datagridId).datagrid('options').url,
+				type : "POST",
+				data : saveItemData,
+				success : function(data) {
+					var showName = $('#' + datagridId).datagrid(
+							'options').excelName;
+					if (showName == null || showName == '') {
+						showName = "export.xls";
+					}
+					var inputs = '<input type="hidden" name="shortName" value="'+ data +'" />';
+					inputs = inputs
+							+ '<input type="hidden" name="showName" value="'+ showName +'" />';
+					jQuery(
+							'<form action="frame/dwnTempFile.do" method="post">'
+									+ inputs + '</form>').appendTo(
+							'body').submit().remove();
+				}
+			})
+}
