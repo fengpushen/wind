@@ -10,7 +10,7 @@ import java.util.Map;
 public class ToolForIdcard {
 
 	/**
-	 * Éí·İÖ¤ºÅÂë´æ·Å³öÉúÈÕÆÚµÄ¸ñÊ½
+	 * èº«ä»½è¯å·ç å­˜æ”¾å‡ºç”Ÿæ—¥æœŸçš„æ ¼å¼
 	 */
 	public static final String idcard_birth_style = "yyyyMMdd";
 
@@ -19,52 +19,52 @@ public class ToolForIdcard {
 			"4", "2" };
 
 	/**
-	 * Éí·İÖ¤ºÅÂëÑéÖ¤ 1¡¢ºÅÂëµÄ½á¹¹ ¹«ÃñÉí·İºÅÂëÊÇÌØÕ÷×éºÏÂë£¬ÓÉÊ®ÆßÎ»Êı×Ö±¾ÌåÂëºÍÒ»Î»Ğ£ÑéÂë×é³É¡£ÅÅÁĞË³Ğò´Ó×óÖÁÓÒÒÀ´ÎÎª£ºÁùÎ»Êı×ÖµØÖ·Âë£¬
-	 * °ËÎ»Êı×Ö³öÉúÈÕÆÚÂë£¬ÈıÎ»Êı×ÖË³ĞòÂëºÍÒ»Î»Êı×ÖĞ£ÑéÂë¡£ 2¡¢µØÖ·Âë(Ç°ÁùÎ»Êı£©
-	 * ±íÊ¾±àÂë¶ÔÏó³£×¡»§¿ÚËùÔÚÏØ(ÊĞ¡¢Æì¡¢Çø)µÄĞĞÕşÇø»®´úÂë£¬°´GB/T2260µÄ¹æ¶¨Ö´ĞĞ¡£ 3¡¢³öÉúÈÕÆÚÂë£¨µÚÆßÎ»ÖÁÊ®ËÄÎ»£©
-	 * ±íÊ¾±àÂë¶ÔÏó³öÉúµÄÄê¡¢ÔÂ¡¢ÈÕ£¬°´GB/T7408µÄ¹æ¶¨Ö´ĞĞ£¬Äê¡¢ÔÂ¡¢ÈÕ´úÂëÖ®¼ä²»ÓÃ·Ö¸ô·û¡£ 4¡¢Ë³ĞòÂë£¨µÚÊ®ÎåÎ»ÖÁÊ®ÆßÎ»£©
-	 * ±íÊ¾ÔÚÍ¬Ò»µØÖ·ÂëËù±êÊ¶µÄÇøÓò·¶Î§ÄÚ£¬¶ÔÍ¬Äê¡¢Í¬ÔÂ¡¢Í¬ÈÕ³öÉúµÄÈË±à¶¨µÄË³ĞòºÅ£¬ Ë³ĞòÂëµÄÆæÊı·ÖÅä¸øÄĞĞÔ£¬Å¼Êı·ÖÅä¸øÅ®ĞÔ¡£ 5¡¢Ğ£ÑéÂë£¨µÚÊ®°ËÎ»Êı£©
-	 * £¨1£©Ê®ÆßÎ»Êı×Ö±¾ÌåÂë¼ÓÈ¨ÇóºÍ¹«Ê½ S = Sum(Ai * Wi), i = 0, ... , 16 £¬ÏÈ¶ÔÇ°17Î»Êı×ÖµÄÈ¨ÇóºÍ
-	 * Ai:±íÊ¾µÚiÎ»ÖÃÉÏµÄÉí·İÖ¤ºÅÂëÊı×ÖÖµ Wi:±íÊ¾µÚiÎ»ÖÃÉÏµÄ¼ÓÈ¨Òò×Ó Wi: 7 9 10 5 8 4 2 1 6 3 7 9 10 5 8 4
-	 * 2 £¨2£©¼ÆËãÄ£ Y = mod(S, 11) £¨3£©Í¨¹ıÄ£µÃµ½¶ÔÓ¦µÄĞ£ÑéÂë Y: 0 1 2 3 4 5 6 7 8 9 10 Ğ£ÑéÂë: 1 0
+	 * èº«ä»½è¯å·ç éªŒè¯ 1ã€å·ç çš„ç»“æ„ å…¬æ°‘èº«ä»½å·ç æ˜¯ç‰¹å¾ç»„åˆç ï¼Œç”±åä¸ƒä½æ•°å­—æœ¬ä½“ç å’Œä¸€ä½æ ¡éªŒç ç»„æˆã€‚æ’åˆ—é¡ºåºä»å·¦è‡³å³ä¾æ¬¡ä¸ºï¼šå…­ä½æ•°å­—åœ°å€ç ï¼Œ
+	 * å…«ä½æ•°å­—å‡ºç”Ÿæ—¥æœŸç ï¼Œä¸‰ä½æ•°å­—é¡ºåºç å’Œä¸€ä½æ•°å­—æ ¡éªŒç ã€‚ 2ã€åœ°å€ç (å‰å…­ä½æ•°ï¼‰
+	 * è¡¨ç¤ºç¼–ç å¯¹è±¡å¸¸ä½æˆ·å£æ‰€åœ¨å¿(å¸‚ã€æ——ã€åŒº)çš„è¡Œæ”¿åŒºåˆ’ä»£ç ï¼ŒæŒ‰GB/T2260çš„è§„å®šæ‰§è¡Œã€‚ 3ã€å‡ºç”Ÿæ—¥æœŸç ï¼ˆç¬¬ä¸ƒä½è‡³åå››ä½ï¼‰
+	 * è¡¨ç¤ºç¼–ç å¯¹è±¡å‡ºç”Ÿçš„å¹´ã€æœˆã€æ—¥ï¼ŒæŒ‰GB/T7408çš„è§„å®šæ‰§è¡Œï¼Œå¹´ã€æœˆã€æ—¥ä»£ç ä¹‹é—´ä¸ç”¨åˆ†éš”ç¬¦ã€‚ 4ã€é¡ºåºç ï¼ˆç¬¬åäº”ä½è‡³åä¸ƒä½ï¼‰
+	 * è¡¨ç¤ºåœ¨åŒä¸€åœ°å€ç æ‰€æ ‡è¯†çš„åŒºåŸŸèŒƒå›´å†…ï¼Œå¯¹åŒå¹´ã€åŒæœˆã€åŒæ—¥å‡ºç”Ÿçš„äººç¼–å®šçš„é¡ºåºå·ï¼Œ é¡ºåºç çš„å¥‡æ•°åˆ†é…ç»™ç”·æ€§ï¼Œå¶æ•°åˆ†é…ç»™å¥³æ€§ã€‚ 5ã€æ ¡éªŒç ï¼ˆç¬¬åå…«ä½æ•°ï¼‰
+	 * ï¼ˆ1ï¼‰åä¸ƒä½æ•°å­—æœ¬ä½“ç åŠ æƒæ±‚å’Œå…¬å¼ S = Sum(Ai * Wi), i = 0, ... , 16 ï¼Œå…ˆå¯¹å‰17ä½æ•°å­—çš„æƒæ±‚å’Œ
+	 * Ai:è¡¨ç¤ºç¬¬iä½ç½®ä¸Šçš„èº«ä»½è¯å·ç æ•°å­—å€¼ Wi:è¡¨ç¤ºç¬¬iä½ç½®ä¸Šçš„åŠ æƒå› å­ Wi: 7 9 10 5 8 4 2 1 6 3 7 9 10 5 8 4
+	 * 2 ï¼ˆ2ï¼‰è®¡ç®—æ¨¡ Y = mod(S, 11) ï¼ˆ3ï¼‰é€šè¿‡æ¨¡å¾—åˆ°å¯¹åº”çš„æ ¡éªŒç  Y: 0 1 2 3 4 5 6 7 8 9 10 æ ¡éªŒç : 1 0
 	 * X 9 8 7 6 5 4 3 2
 	 */
 
 	/**
-	 * ¹¦ÄÜ£ºÉí·İÖ¤µÄÓĞĞ§ÑéÖ¤
+	 * åŠŸèƒ½ï¼šèº«ä»½è¯çš„æœ‰æ•ˆéªŒè¯
 	 * 
 	 * @param idStr
-	 *            Éí·İÖ¤ºÅ
-	 * @return ÓĞĞ§£º·µ»Ø"" ÎŞĞ§£º·µ»ØStringĞÅÏ¢
+	 *            èº«ä»½è¯å·
+	 * @return æœ‰æ•ˆï¼šè¿”å›"" æ— æ•ˆï¼šè¿”å›Stringä¿¡æ¯
 	 */
 	public static ExecuteResult idcardValidate(String idStr) {
 		ExecuteResult rst = new ExecuteResult();
 
 		if (FrameTool.isEmpty(idStr) || idStr.length() != 18) {
-			rst.setDefaultValue("Éí·İÖ¤ºÅÂë³¤¶ÈÓ¦¸ÃÎª18Î»");
+			rst.setDefaultValue("èº«ä»½è¯å·ç é•¿åº¦åº”è¯¥ä¸º18ä½");
 			return rst;
 		}
 
 		String Ai = idStr.substring(0, 17);
 		if (FrameTool.isNumeric(Ai) == false) {
-			rst.setDefaultValue("Éí·İÖ¤ºÅÂë³ı×îºóÒ»Î»Íâ£¬¶¼Ó¦ÎªÊı×Ö");
+			rst.setDefaultValue("èº«ä»½è¯å·ç é™¤æœ€åä¸€ä½å¤–ï¼Œéƒ½åº”ä¸ºæ•°å­—");
 			return rst;
 		}
 
-		// ================ ³öÉúÄêÔÂÊÇ·ñÓĞĞ§ ================
-		String strYear = Ai.substring(6, 10);// Äê·İ
-		String strMonth = Ai.substring(10, 12);// ÔÂ·İ
-		String strDay = Ai.substring(12, 14);// ÔÂ·İ
+		// ================ å‡ºç”Ÿå¹´æœˆæ˜¯å¦æœ‰æ•ˆ ================
+		String strYear = Ai.substring(6, 10);// å¹´ä»½
+		String strMonth = Ai.substring(10, 12);// æœˆä»½
+		String strDay = Ai.substring(12, 14);// æœˆä»½
 		if (FrameTool.isDate(strYear + "-" + strMonth + "-" + strDay) == false) {
-			rst.setDefaultValue("Éí·İÖ¤ÉúÈÕÎŞĞ§");
+			rst.setDefaultValue("èº«ä»½è¯ç”Ÿæ—¥æ— æ•ˆ");
 			return rst;
 		}
 		if (Integer.parseInt(strMonth) > 12 || Integer.parseInt(strMonth) == 0) {
-			rst.setDefaultValue("Éí·İÖ¤ÔÂ·İÎŞĞ§");
+			rst.setDefaultValue("èº«ä»½è¯æœˆä»½æ— æ•ˆ");
 			return rst;
 		}
 		if (Integer.parseInt(strDay) > 31 || Integer.parseInt(strDay) == 0) {
-			rst.setDefaultValue("Éí·İÖ¤ÈÕÆÚÎŞĞ§");
+			rst.setDefaultValue("èº«ä»½è¯æ—¥æœŸæ— æ•ˆ");
 			return rst;
 		}
 		GregorianCalendar gc = new GregorianCalendar();
@@ -72,30 +72,30 @@ public class ToolForIdcard {
 		try {
 			if ((gc.get(Calendar.YEAR) - Integer.parseInt(strYear)) > 150
 					|| (gc.getTime().getTime() - s.parse(strYear + "-" + strMonth + "-" + strDay).getTime()) < 0) {
-				rst.setDefaultValue("Éí·İÖ¤ÉúÈÕ²»ÔÚÓĞĞ§·¶Î§");
+				rst.setDefaultValue("èº«ä»½è¯ç”Ÿæ—¥ä¸åœ¨æœ‰æ•ˆèŒƒå›´");
 				return rst;
 			}
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
-			rst.setDefaultValue("Éí·İÖ¤ÉúÈÕÎŞĞ§");
+			rst.setDefaultValue("èº«ä»½è¯ç”Ÿæ—¥æ— æ•ˆ");
 			return rst;
 		} catch (java.text.ParseException e) {
 			e.printStackTrace();
-			rst.setDefaultValue("Éí·İÖ¤ÉúÈÕÎŞĞ§");
+			rst.setDefaultValue("èº«ä»½è¯ç”Ÿæ—¥æ— æ•ˆ");
 			return rst;
 		}
 
 		// =====================(end)=====================
 
-		// ================ µØÇøÂëÊ±ºòÓĞĞ§ ================
+		// ================ åœ°åŒºç æ—¶å€™æœ‰æ•ˆ ================
 		Map<String, String> h = getIdcardAreaCodeMap();
 		if (h.get(Ai.substring(0, 2)) == null) {
-			rst.setDefaultValue("Éí·İÖ¤µØÇø±àÂë´íÎó");
+			rst.setDefaultValue("èº«ä»½è¯åœ°åŒºç¼–ç é”™è¯¯");
 			return rst;
 		}
 		// ==============================================
 
-		// ================ ÅĞ¶Ï×îºóÒ»Î»µÄÖµ ================
+		// ================ åˆ¤æ–­æœ€åä¸€ä½çš„å€¼ ================
 		int TotalmulAiWi = 0;
 		for (int i = 0; i < 17; i++) {
 			TotalmulAiWi = TotalmulAiWi + Integer.parseInt(String.valueOf(Ai.charAt(i))) * Integer.parseInt(Wi[i]);
@@ -105,7 +105,7 @@ public class ToolForIdcard {
 		Ai = Ai + strVerifyCode;
 
 		if (Ai.equals(idStr) == false) {
-			rst.setDefaultValue("Éí·İÖ¤ÎŞĞ§£¬²»ÊÇºÏ·¨µÄÉí·İÖ¤ºÅÂë");
+			rst.setDefaultValue("èº«ä»½è¯æ— æ•ˆï¼Œä¸æ˜¯åˆæ³•çš„èº«ä»½è¯å·ç ");
 			return rst;
 		}
 		rst.setSucc(true);
@@ -124,46 +124,46 @@ public class ToolForIdcard {
 	private static synchronized void initIdcardAreaCodeMap() {
 		if (idcardAreaCodeMap == null) {
 			idcardAreaCodeMap = new HashMap<String, String>();
-			idcardAreaCodeMap.put("11", "±±¾©");
-			idcardAreaCodeMap.put("12", "Ìì½ò");
-			idcardAreaCodeMap.put("13", "ºÓ±±");
-			idcardAreaCodeMap.put("14", "É½Î÷");
-			idcardAreaCodeMap.put("15", "ÄÚÃÉ¹Å");
-			idcardAreaCodeMap.put("21", "ÁÉÄş");
-			idcardAreaCodeMap.put("22", "¼ªÁÖ");
-			idcardAreaCodeMap.put("23", "ºÚÁú½­");
-			idcardAreaCodeMap.put("31", "ÉÏº£");
-			idcardAreaCodeMap.put("32", "½­ËÕ");
-			idcardAreaCodeMap.put("33", "Õã½­");
-			idcardAreaCodeMap.put("34", "°²»Õ");
-			idcardAreaCodeMap.put("35", "¸£½¨");
-			idcardAreaCodeMap.put("36", "½­Î÷");
-			idcardAreaCodeMap.put("37", "É½¶«");
-			idcardAreaCodeMap.put("41", "ºÓÄÏ");
-			idcardAreaCodeMap.put("42", "ºş±±");
-			idcardAreaCodeMap.put("43", "ºşÄÏ");
-			idcardAreaCodeMap.put("44", "¹ã¶«");
-			idcardAreaCodeMap.put("45", "¹ãÎ÷");
-			idcardAreaCodeMap.put("46", "º£ÄÏ");
-			idcardAreaCodeMap.put("50", "ÖØÇì");
-			idcardAreaCodeMap.put("51", "ËÄ´¨");
-			idcardAreaCodeMap.put("52", "¹óÖİ");
-			idcardAreaCodeMap.put("53", "ÔÆÄÏ");
-			idcardAreaCodeMap.put("54", "Î÷²Ø");
-			idcardAreaCodeMap.put("61", "ÉÂÎ÷");
-			idcardAreaCodeMap.put("62", "¸ÊËà");
-			idcardAreaCodeMap.put("63", "Çàº£");
-			idcardAreaCodeMap.put("64", "ÄşÏÄ");
-			idcardAreaCodeMap.put("65", "ĞÂ½®");
-			idcardAreaCodeMap.put("71", "Ì¨Íå");
-			idcardAreaCodeMap.put("81", "Ïã¸Û");
-			idcardAreaCodeMap.put("82", "°ÄÃÅ");
-			idcardAreaCodeMap.put("91", "¹úÍâ");
+			idcardAreaCodeMap.put("11", "åŒ—äº¬");
+			idcardAreaCodeMap.put("12", "å¤©æ´¥");
+			idcardAreaCodeMap.put("13", "æ²³åŒ—");
+			idcardAreaCodeMap.put("14", "å±±è¥¿");
+			idcardAreaCodeMap.put("15", "å†…è’™å¤");
+			idcardAreaCodeMap.put("21", "è¾½å®");
+			idcardAreaCodeMap.put("22", "å‰æ—");
+			idcardAreaCodeMap.put("23", "é»‘é¾™æ±Ÿ");
+			idcardAreaCodeMap.put("31", "ä¸Šæµ·");
+			idcardAreaCodeMap.put("32", "æ±Ÿè‹");
+			idcardAreaCodeMap.put("33", "æµ™æ±Ÿ");
+			idcardAreaCodeMap.put("34", "å®‰å¾½");
+			idcardAreaCodeMap.put("35", "ç¦å»º");
+			idcardAreaCodeMap.put("36", "æ±Ÿè¥¿");
+			idcardAreaCodeMap.put("37", "å±±ä¸œ");
+			idcardAreaCodeMap.put("41", "æ²³å—");
+			idcardAreaCodeMap.put("42", "æ¹–åŒ—");
+			idcardAreaCodeMap.put("43", "æ¹–å—");
+			idcardAreaCodeMap.put("44", "å¹¿ä¸œ");
+			idcardAreaCodeMap.put("45", "å¹¿è¥¿");
+			idcardAreaCodeMap.put("46", "æµ·å—");
+			idcardAreaCodeMap.put("50", "é‡åº†");
+			idcardAreaCodeMap.put("51", "å››å·");
+			idcardAreaCodeMap.put("52", "è´µå·");
+			idcardAreaCodeMap.put("53", "äº‘å—");
+			idcardAreaCodeMap.put("54", "è¥¿è—");
+			idcardAreaCodeMap.put("61", "é™•è¥¿");
+			idcardAreaCodeMap.put("62", "ç”˜è‚ƒ");
+			idcardAreaCodeMap.put("63", "é’æµ·");
+			idcardAreaCodeMap.put("64", "å®å¤");
+			idcardAreaCodeMap.put("65", "æ–°ç–†");
+			idcardAreaCodeMap.put("71", "å°æ¹¾");
+			idcardAreaCodeMap.put("81", "é¦™æ¸¯");
+			idcardAreaCodeMap.put("82", "æ¾³é—¨");
+			idcardAreaCodeMap.put("91", "å›½å¤–");
 		}
 	}
 
 	/**
-	 * ÅĞ¶Ï´ËÉí·İÖ¤ºÅÂëÊÇ·ñÎªÄĞĞÔµÄ
+	 * åˆ¤æ–­æ­¤èº«ä»½è¯å·ç æ˜¯å¦ä¸ºç”·æ€§çš„
 	 * 
 	 * @param idcard
 	 * @return
@@ -171,7 +171,7 @@ public class ToolForIdcard {
 	public static boolean isMale(String idcard) {
 		ExecuteResult rst = ToolForIdcard.idcardValidate(idcard);
 		if (!rst.isSucc()) {
-			throw new RuntimeException("´íÎóµÄÉí·İÖ¤ºÅÂë");
+			throw new RuntimeException("é”™è¯¯çš„èº«ä»½è¯å·ç ");
 		} else {
 			int sexCodeIdcard = Integer.parseInt(idcard.substring(16, 17));
 			if (sexCodeIdcard % 2 == 1) {
@@ -183,7 +183,7 @@ public class ToolForIdcard {
 	}
 
 	/**
-	 * »ñÈ¡´ËÉí·İÖ¤µÄ³öÉúÈÕÆÚµÄdate¸ñÊ½
+	 * è·å–æ­¤èº«ä»½è¯çš„å‡ºç”Ÿæ—¥æœŸçš„dateæ ¼å¼
 	 * 
 	 * @param idcard
 	 * @return
@@ -199,7 +199,7 @@ public class ToolForIdcard {
 	}
 
 	/**
-	 * »ñÈ¡´ËÉí·İÖ¤µÄ³öÉúÈÕÆÚµÄString¸ñÊ½
+	 * è·å–æ­¤èº«ä»½è¯çš„å‡ºç”Ÿæ—¥æœŸçš„Stringæ ¼å¼
 	 * 
 	 * @param idcard
 	 * @param style
@@ -212,7 +212,7 @@ public class ToolForIdcard {
 	}
 
 	/**
-	 * ¸ù¾İÉí·İÖ¤ÉÏµÄ³öÉúÄê·İÀ´»ñÈ¡µ±Ç°µÄÄêÁä
+	 * æ ¹æ®èº«ä»½è¯ä¸Šçš„å‡ºç”Ÿå¹´ä»½æ¥è·å–å½“å‰çš„å¹´é¾„
 	 * 
 	 * @param idcard
 	 * @return
@@ -222,7 +222,7 @@ public class ToolForIdcard {
 	}
 
 	/**
-	 * ¸ù¾İÉí·İÖ¤ÉÏµÄ³öÉúÄê·İÀ´»ñÈ¡ÔÚreferYearÕâÒ»ÄêÊ±´ËÈËÄêÁäÊÇ¶àÉÙ
+	 * æ ¹æ®èº«ä»½è¯ä¸Šçš„å‡ºç”Ÿå¹´ä»½æ¥è·å–åœ¨referYearè¿™ä¸€å¹´æ—¶æ­¤äººå¹´é¾„æ˜¯å¤šå°‘
 	 * 
 	 * @param idcard
 	 * @param referYear
@@ -231,7 +231,7 @@ public class ToolForIdcard {
 	public static int getAgeFromIdcardYear(String idcard, int referYear) {
 		ExecuteResult rst = ToolForIdcard.idcardValidate(idcard);
 		if (!rst.isSucc()) {
-			throw new RuntimeException("´íÎóµÄÉí·İÖ¤ºÅÂë");
+			throw new RuntimeException("é”™è¯¯çš„èº«ä»½è¯å·ç ");
 		} else {
 			int year = Integer.parseInt(idcard.substring(6, 10));
 			return referYear - year;

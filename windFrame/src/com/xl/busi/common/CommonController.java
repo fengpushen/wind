@@ -24,16 +24,16 @@ public class CommonController {
 	private static Log log = LogFactory.getLog(CommonController.class);
 
 	/**
-	 * Òì²½Éú³ÉÊ÷µÄjson
+	 * å¼‚æ­¥ç”Ÿæˆæ ‘çš„json
 	 * 
 	 * @param treeName
-	 *            Ê÷Ãû
+	 *            æ ‘å
 	 * @param rootId
-	 *            ´ÓÊ÷µÄÄÄÒ»¸ö½Úµã¿ªÊ¼ÏÔÊ¾
+	 *            ä»æ ‘çš„å“ªä¸€ä¸ªèŠ‚ç‚¹å¼€å§‹æ˜¾ç¤º
 	 * @param limitLevel
-	 *            ÏÔÊ¾µ½Ê÷µÄÄÄÒ»¼¶
+	 *            æ˜¾ç¤ºåˆ°æ ‘çš„å“ªä¸€çº§
 	 * @param id
-	 *            ÒªÏÔÊ¾µÄ×Ó½ÚµãµÄ¸¸id
+	 *            è¦æ˜¾ç¤ºçš„å­èŠ‚ç‚¹çš„çˆ¶id
 	 * @return
 	 */
 	@ResponseBody
@@ -47,7 +47,7 @@ public class CommonController {
 		String treeJson = "";
 		if (tree != null) {
 			List<TreeNode> nodes = null;
-			// ´«ÈëÁËrootId, Î´´«Èëid£¬ËµÃ÷ÊÇµÚÒ»´Î¼ÓÔØÊ÷£¬²¢Ö¸¶¨ÁËÒª¼ÓÔØµÄ¸ù½Úµã£¬Ôò½«´Ë¸ù½Úµã¼°Æä×Ó½Úµã·µ»Ø
+			// ä¼ å…¥äº†rootId, æœªä¼ å…¥idï¼Œè¯´æ˜æ˜¯ç¬¬ä¸€æ¬¡åŠ è½½æ ‘ï¼Œå¹¶æŒ‡å®šäº†è¦åŠ è½½çš„æ ¹èŠ‚ç‚¹ï¼Œåˆ™å°†æ­¤æ ¹èŠ‚ç‚¹åŠå…¶å­èŠ‚ç‚¹è¿”å›
 			if (!FrameTool.isEmpty(rootId) && FrameTool.isEmpty(id)) {
 				TreeNode node = tree.getNode(rootId);
 				if (!FrameTool.isEmpty(node)) {

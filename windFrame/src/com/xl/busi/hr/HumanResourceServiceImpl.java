@@ -44,11 +44,11 @@ public class HumanResourceServiceImpl implements HumanResourceService {
 		String HJ_AREA = (String) info.get("hj_area");
 
 		if (FrameTool.isEmpty(HJ_AREA)) {
-			rtn.setDefaultValue("»§¼®µØ²»ÄÜÎª¿Õ");
+			rtn.setDefaultValue("æˆ·ç±åœ°ä¸èƒ½ä¸ºç©º");
 			return rtn;
 		}
 		if (FrameTool.isEmpty(idcard)) {
-			rtn.setDefaultValue("Éí·İÖ¤²»ÄÜÎª¿Õ");
+			rtn.setDefaultValue("èº«ä»½è¯ä¸èƒ½ä¸ºç©º");
 			return rtn;
 		}
 		idcard = idcard.toUpperCase();
@@ -57,20 +57,20 @@ public class HumanResourceServiceImpl implements HumanResourceService {
 			return rst;
 		}
 		if (!BusiCommon.isInScope(opr_area, HJ_AREA)) {
-			rtn.setDefaultValue("²»ÄÜ¹ÜÀí·Ç±¾µØÇøÈËÔ±");
+			rtn.setDefaultValue("ä¸èƒ½ç®¡ç†éæœ¬åœ°åŒºäººå‘˜");
 			return rtn;
 		}
 		if (BusiCommon.isOverRetirementAgeByIdcardYear(idcard)) {
-			rtn.setDefaultValue("²»ÄÜÂ¼Èë³¬¹ıÍËĞİÄêÁäµÄÈËÔ±");
+			rtn.setDefaultValue("ä¸èƒ½å½•å…¥è¶…è¿‡é€€ä¼‘å¹´é¾„çš„äººå‘˜");
 			return rtn;
 		}
 		if (BusiCommon.isTooYoungFoInputByIdcardYear(idcard)) {
-			rtn.setDefaultValue("²»ÄÜÂ¼ÈëÌ«Ğ¡ÄêÁäµÄÈËÔ±");
+			rtn.setDefaultValue("ä¸èƒ½å½•å…¥å¤ªå°å¹´é¾„çš„äººå‘˜");
 			return rtn;
 		}
 		Map idcardInfo = humanResourceDAO.selectBusi_hrByIdcard(idcard);
 		if (!FrameTool.isEmpty(idcardInfo)) {
-			rtn.setDefaultValue("ÏàÍ¬µÄÉí·İÖ¤ºÅÂëÒÑ¾­´æÔÚ");
+			rtn.setDefaultValue("ç›¸åŒçš„èº«ä»½è¯å·ç å·²ç»å­˜åœ¨");
 			return rtn;
 		}
 
@@ -80,7 +80,7 @@ public class HumanResourceServiceImpl implements HumanResourceService {
 		info.put("hr_id", hr_id);
 		info.put("opr_id", orp_id);
 		info.put("opr_type", opr_type);
-		FrameTool.replaceMapValue(info, new String[] { "jntc" }, "£¬", ",");
+		FrameTool.replaceMapValue(info, new String[] { "jntc" }, "ï¼Œ", ",");
 		if (BusiCommon.isTooYoungForWorkByIdcardYear(idcard)) {
 			info.put("ld_type", "0");
 		}
@@ -127,12 +127,12 @@ public class HumanResourceServiceImpl implements HumanResourceService {
 		String hj_area = (String) info.get("hj_area");
 
 		if (FrameTool.isEmpty(hj_area)) {
-			rtn.setDefaultValue("»§¼®µØ²»ÄÜÎª¿Õ");
+			rtn.setDefaultValue("æˆ·ç±åœ°ä¸èƒ½ä¸ºç©º");
 			return rtn;
 		}
 		Map infoOrg = humanResourceDAO.selectBusi_hr(hr_id);
 		if (FrameTool.isEmpty(infoOrg)) {
-			rtn.setDefaultValue("ĞŞ¸ÄµÄÊı¾İ²»´æÔÚ");
+			rtn.setDefaultValue("ä¿®æ”¹çš„æ•°æ®ä¸å­˜åœ¨");
 			return rtn;
 		}
 		ExecuteResult rst = ToolForIdcard.idcardValidate(idcard);
@@ -147,24 +147,24 @@ public class HumanResourceServiceImpl implements HumanResourceService {
 		}
 		String hj_area_org = (String) infoOrg.get("HJ_AREA");
 		if (!BusiCommon.isInScope(opr_area, hj_area) || !BusiCommon.isInScope(opr_area, hj_area_org)) {
-			rtn.setDefaultValue("²»ÄÜ¹ÜÀí·Ç±¾µØÇøÈËÔ±");
+			rtn.setDefaultValue("ä¸èƒ½ç®¡ç†éæœ¬åœ°åŒºäººå‘˜");
 			return rtn;
 		}
 		if (idcardChanged && BusiCommon.isOverRetirementAgeByIdcardYear(idcard)) {
-			rtn.setDefaultValue("²»ÄÜÂ¼Èë³¬¹ıÍËĞİÄêÁäµÄÈËÔ±");
+			rtn.setDefaultValue("ä¸èƒ½å½•å…¥è¶…è¿‡é€€ä¼‘å¹´é¾„çš„äººå‘˜");
 			return rtn;
 		}
 		if (idcardChanged) {
 			Map idcardInfo = humanResourceDAO.selectBusi_hrByIdcard(idcard);
 			if (!FrameTool.isEmpty(idcardInfo) && !hr_id.equals(idcardInfo.get("HR_ID"))
 					&& idcard.equals(idcardInfo.get("idcard"))) {
-				rtn.setDefaultValue("ÏàÍ¬µÄÉí·İÖ¤ºÅÂëÒÑ¾­´æÔÚ");
+				rtn.setDefaultValue("ç›¸åŒçš„èº«ä»½è¯å·ç å·²ç»å­˜åœ¨");
 				return rtn;
 			}
 			info.put("birth", ToolForIdcard.getBirthFromIdcard(idcard, FrameConstant.busi_default_date_style));
 			info.put("sex", BusiCommon.getSexCodeFromIdcard(idcard));
 		}
-		FrameTool.replaceMapValue(info, new String[] { "jntc", "want_job_name" }, "£¬", ",");
+		FrameTool.replaceMapValue(info, new String[] { "jntc", "want_job_name" }, "ï¼Œ", ",");
 		frameDAO.anyUpdateByPk("busi_hr", info, hr_id);
 
 		String isJob = (String) info.get("is_job");
@@ -349,7 +349,7 @@ public class HumanResourceServiceImpl implements HumanResourceService {
 			Map infoOrg = humanResourceDAO.selectBusi_hr(hid);
 			String hj_area_org = (String) infoOrg.get("HJ_AREA");
 			if (!BusiCommon.isInScope(oprArea, hj_area_org)) {
-				rtn.setDefaultValue("²»ÄÜ¹ÜÀí·Ç±¾µØÇøÈËÔ±");
+				rtn.setDefaultValue("ä¸èƒ½ç®¡ç†éæœ¬åœ°åŒºäººå‘˜");
 				return rtn;
 			}
 			Map params = new HashMap();
@@ -385,7 +385,7 @@ public class HumanResourceServiceImpl implements HumanResourceService {
 	}
 
 	public ExecuteResult searchHrListCom(Map<String, Object> params, String c_id) {
-		// ÆóÒµ²éÑ¯ÈËÔ±ĞÅÏ¢Ö»ÄÜ²éÑ¯ÓĞ¾ÍÒµÒâÔ¸µÄÀÍ¶¯Á¦
+		// ä¼ä¸šæŸ¥è¯¢äººå‘˜ä¿¡æ¯åªèƒ½æŸ¥è¯¢æœ‰å°±ä¸šæ„æ„¿çš„åŠ³åŠ¨åŠ›
 		params.put("LD_TYPE", FrameConstant.busi_com_boolean_true);
 		params.put("IS_WANT_JOB", FrameConstant.busi_com_boolean_true);
 		params.put("lable_cid", c_id);
@@ -465,7 +465,7 @@ public class HumanResourceServiceImpl implements HumanResourceService {
 	}
 
 	/*
-	 * ÆóÒµ²é¿´ÈËÔ±ĞÅÏ¢ÏêÇé£¬ĞèÒª¼ÇÂ¼²é¿´Çé¿ö
+	 * ä¼ä¸šæŸ¥çœ‹äººå‘˜ä¿¡æ¯è¯¦æƒ…ï¼Œéœ€è¦è®°å½•æŸ¥çœ‹æƒ…å†µ
 	 */
 	public Map getHrInfoCom(String c_id, String hr_id) throws SQLException {
 		Map params = new HashMap();
@@ -502,12 +502,12 @@ public class HumanResourceServiceImpl implements HumanResourceService {
 				// params.put("OPR_TYPE", FrameConstant.busi_user_kind_hr);
 				// frameDAO.anyInsert("busi_hr", params);
 				// rtn.addInfo("hr_id", hr_id);
-				rtn.setDefaultValue("Ã»ÓĞ´ËÉí·İÖ¤ºÅÂëµÄĞÅÏ¢");
+				rtn.setDefaultValue("æ²¡æœ‰æ­¤èº«ä»½è¯å·ç çš„ä¿¡æ¯");
 				return rtn;
 			} else {
 				String hr_name_cur = (String) info.get("HR_NAME");
 				if (!hr_name_cur.equals(hr_name)) {
-					rtn.setDefaultValue("ĞÕÃûÓëÉí·İÖ¤²»·û£¬ÇëÈ·¶¨ºóÔÙ²Ù×÷");
+					rtn.setDefaultValue("å§“åä¸èº«ä»½è¯ä¸ç¬¦ï¼Œè¯·ç¡®å®šåå†æ“ä½œ");
 					return rtn;
 				}
 				rtn.addInfo("hr_id", info.get("HR_ID"));
@@ -525,17 +525,17 @@ public class HumanResourceServiceImpl implements HumanResourceService {
 		try {
 			if (FrameTool.isEmpty(batchId) || FrameTool.isEmpty(impFile) || FrameTool.isEmpty(oprId)
 					|| FrameTool.isEmpty(oprArea)) {
-				rtn.setDefaultValue("´íÎóµÄ²ÎÊı");
+				rtn.setDefaultValue("é”™è¯¯çš„å‚æ•°");
 				return rtn;
 			}
 			if (!ToolForFile.isExcelFile(impFile)) {
-				rtn.setDefaultValue("ÇëÓÃ¹æ¶¨µÄÄ£°åµ¼Èë");
+				rtn.setDefaultValue("è¯·ç”¨è§„å®šçš„æ¨¡æ¿å¯¼å…¥");
 				return rtn;
 			}
 
 			List<String[]> rows = ToolForExcel.buildListFromExcel(impFile, 4, 1, 24);
 			if (FrameTool.isEmpty(rows)) {
-				rtn.setDefaultValue("µ¼ÈëÎÄ¼şÖĞÃ»ÓĞÊı¾İ");
+				rtn.setDefaultValue("å¯¼å…¥æ–‡ä»¶ä¸­æ²¡æœ‰æ•°æ®");
 				return rtn;
 			}
 			rtn.addInfo("allNum", rows.size());
@@ -549,11 +549,11 @@ public class HumanResourceServiceImpl implements HumanResourceService {
 								(String) error.get("ERROR_INFO")));
 					}
 					if (!FrameTool.isEmpty(cellInfos)) {
-						// ÏÈÇå³ı´íÎóÌáÊ¾ÁĞµÄÄÚÈİ£¬ÒÔ·ÀÓĞĞ©ÓÃ»§Ö±½ÓÓÃÉÏ´ÎµÄ´íÎóÎÄ¼şÖ±½Ó¸Äºóµ¼Èë
+						// å…ˆæ¸…é™¤é”™è¯¯æç¤ºåˆ—çš„å†…å®¹ï¼Œä»¥é˜²æœ‰äº›ç”¨æˆ·ç›´æ¥ç”¨ä¸Šæ¬¡çš„é”™è¯¯æ–‡ä»¶ç›´æ¥æ”¹åå¯¼å…¥
 						ToolForExcel.cleanColumn(impFile, 4, 25);
 						ToolForExcel.randomWriteExcelFile(impFile, cellInfos);
 						rtn.addInfo("batchId", batchId);
-						rtn.setDefaultValue(cellInfos.size() + "ĞĞÊı¾İ´íÎó");
+						rtn.setDefaultValue(cellInfos.size() + "è¡Œæ•°æ®é”™è¯¯");
 					}
 				}
 			} else {
@@ -562,7 +562,7 @@ public class HumanResourceServiceImpl implements HumanResourceService {
 
 		} catch (Exception e) {
 			log.error("batchImpHrInfo", e);
-			rtn.setDefaultValue("ÏµÍ³ÄÚ²¿´íÎó");
+			rtn.setDefaultValue("ç³»ç»Ÿå†…éƒ¨é”™è¯¯");
 		}
 		return rtn;
 	}
@@ -678,11 +678,11 @@ public class HumanResourceServiceImpl implements HumanResourceService {
 		try {
 			Map info = frameDAO.anySelectOneTableByPk("bs_c_hire", hire_id);
 			if (FrameTool.isEmpty(info)) {
-				rtn.setDefaultValue("Ã»ÓĞÏàÓ¦µÄ¼ÇÂ¼");
+				rtn.setDefaultValue("æ²¡æœ‰ç›¸åº”çš„è®°å½•");
 				return rtn;
 			}
 			if (!FrameTool.isEmpty(info.get("QUIT_TIME"))) {
-				rtn.setDefaultValue("ÒÑ¾­ÀëÖ°ÈËÔ±²»ÄÜ×ö×ªÕı²Ù×÷");
+				rtn.setDefaultValue("å·²ç»ç¦»èŒäººå‘˜ä¸èƒ½åšè½¬æ­£æ“ä½œ");
 				return rtn;
 			}
 			Map params = new HashMap();
@@ -723,11 +723,11 @@ public class HumanResourceServiceImpl implements HumanResourceService {
 		try {
 			Map info = frameDAO.anySelectOneTableByPk("bs_c_hire", hire_id);
 			if (FrameTool.isEmpty(info)) {
-				rtn.setDefaultValue("Ã»ÓĞÏàÓ¦µÄ¼ÇÂ¼");
+				rtn.setDefaultValue("æ²¡æœ‰ç›¸åº”çš„è®°å½•");
 				return rtn;
 			}
 			if (!FrameTool.isEmpty(info.get("QUIT_TIME"))) {
-				rtn.setDefaultValue("²»ÄÜÖØ¸´×öÀëÖ°²Ù×÷");
+				rtn.setDefaultValue("ä¸èƒ½é‡å¤åšç¦»èŒæ“ä½œ");
 				return rtn;
 			}
 			Map params = new HashMap();

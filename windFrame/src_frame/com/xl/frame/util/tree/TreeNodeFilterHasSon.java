@@ -1,7 +1,7 @@
 package com.xl.frame.util.tree;
 
 /**
- * ¸¸½Úµã¹ıÂËÆ÷£¬ËùÓĞÓĞ×ÓËï½ÚµãµÄ½Úµã²ÅÄÜÍ¨¹ı´ËÑéÖ¤
+ * çˆ¶èŠ‚ç‚¹è¿‡æ»¤å™¨ï¼Œæ‰€æœ‰æœ‰å­å­™èŠ‚ç‚¹çš„èŠ‚ç‚¹æ‰èƒ½é€šè¿‡æ­¤éªŒè¯
  *
  */
 public class TreeNodeFilterHasSon implements TreeNodeFilter {

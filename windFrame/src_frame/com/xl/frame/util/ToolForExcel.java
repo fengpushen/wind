@@ -66,7 +66,7 @@ public class ToolForExcel {
 	}
 
 	/**
-	 * ´ÓexcelÎÄ¼şÖĞ¶ÁÈ¡ÄÚÈİ£¬×é³ÉList·µ»Ø£¬ListÖĞÃ¿¸öÔªËØÎªStringÊı×é£¬Êı×éµÄµÚÒ»¸öÔªËØÎªĞĞºÅ£¬Êµ¼ÊÄÚÈİ´ÓµÚ¶ş¸öÔªËØ¿ªÊ¼
+	 * ä»excelæ–‡ä»¶ä¸­è¯»å–å†…å®¹ï¼Œç»„æˆListè¿”å›ï¼ŒListä¸­æ¯ä¸ªå…ƒç´ ä¸ºStringæ•°ç»„ï¼Œæ•°ç»„çš„ç¬¬ä¸€ä¸ªå…ƒç´ ä¸ºè¡Œå·ï¼Œå®é™…å†…å®¹ä»ç¬¬äºŒä¸ªå…ƒç´ å¼€å§‹
 	 * 
 	 * @param file
 	 * @return
@@ -79,9 +79,9 @@ public class ToolForExcel {
 	/**
 	 * @param file
 	 * @param startRow
-	 *            ¿ªÊ¼ĞĞ
+	 *            å¼€å§‹è¡Œ
 	 * @param startCol
-	 *            ¿ªÊ¼ÁĞ
+	 *            å¼€å§‹åˆ—
 	 * @return
 	 * @throws IOException
 	 */
@@ -93,11 +93,11 @@ public class ToolForExcel {
 	/**
 	 * @param file
 	 * @param startRow
-	 *            ¿ªÊ¼ĞĞ
+	 *            å¼€å§‹è¡Œ
 	 * @param startCol
-	 *            ¿ªÊ¼ÁĞ
+	 *            å¼€å§‹åˆ—
 	 * @param endCol
-	 *            ½áÊøÁĞ
+	 *            ç»“æŸåˆ—
 	 * @return
 	 * @throws IOException
 	 */
@@ -296,13 +296,13 @@ public class ToolForExcel {
 		if (!FrameTool.isEmpty(heads)) {
 			headSize = 1;
 		}
-		// Ò»¸ösheetÄÜ¹»ÈİÄÉµÄÊı¾İĞĞ£¬µÈÓÚsheetµÄ×î´óĞĞÊı¼õÈ¥Í·²¿ËùÕ¼µÄĞĞÊı£¬ÒòÎªÍ·²¿»áÔÚÃ¿¸ösheetÖĞ³öÏÖ
+		// ä¸€ä¸ªsheetèƒ½å¤Ÿå®¹çº³çš„æ•°æ®è¡Œï¼Œç­‰äºsheetçš„æœ€å¤§è¡Œæ•°å‡å»å¤´éƒ¨æ‰€å çš„è¡Œæ•°ï¼Œå› ä¸ºå¤´éƒ¨ä¼šåœ¨æ¯ä¸ªsheetä¸­å‡ºç°
 		int sheetSize = ToolForExcel.excel_one_sheet_max_row - headSize;
 		while (dataIdx < dataSize) {
-			// Î´´¦ÀíµÄÊı¾İµÄÊıÁ¿
+			// æœªå¤„ç†çš„æ•°æ®çš„æ•°é‡
 			int undealDataSize = dataSize - dataIdx;
 
-			// µÃ³ö±¾´ÎÓ¦´¦ÀíÊıÁ¿£¬Ä¬ÈÏÎªÒ»¸ösheetÄÜ¹»ÈİÄÉµÄĞĞ£¬Èç¹ûÎ´´¦ÀíµÄÊı¾İÊıÁ¿Ğ¡ÓÚÒ»¸ösheetÄÜ¹»ÈİÄÉµÄĞĞ£¬Ôò¾ÍÊÇËùÓĞÎ´´¦ÀíµÄÊı¾İµÄÊıÁ¿
+			// å¾—å‡ºæœ¬æ¬¡åº”å¤„ç†æ•°é‡ï¼Œé»˜è®¤ä¸ºä¸€ä¸ªsheetèƒ½å¤Ÿå®¹çº³çš„è¡Œï¼Œå¦‚æœæœªå¤„ç†çš„æ•°æ®æ•°é‡å°äºä¸€ä¸ªsheetèƒ½å¤Ÿå®¹çº³çš„è¡Œï¼Œåˆ™å°±æ˜¯æ‰€æœ‰æœªå¤„ç†çš„æ•°æ®çš„æ•°é‡
 			int curDealDataSize = sheetSize;
 			if (sheetSize > undealDataSize) {
 				curDealDataSize = undealDataSize;

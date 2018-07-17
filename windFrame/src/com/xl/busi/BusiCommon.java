@@ -22,17 +22,17 @@ import com.xl.frame.util.tree.TreeView;
 public class BusiCommon {
 
 	/**
-	 * ÏµÍ³Ô¤¶¨Òå¹©ÏÂÔØÎÄ¼şµÄ´æ·ÅÄ¿Â¼
+	 * ç³»ç»Ÿé¢„å®šä¹‰ä¾›ä¸‹è½½æ–‡ä»¶çš„å­˜æ”¾ç›®å½•
 	 */
 	public static final String download_file_dir = "WEB-INF/views/busi/forDwn/";
 
 	/**
-	 * ÏµÍ³ÔËĞĞÁÙÊ±ÎÄ¼şµÄ´æ·ÅÄ¿Â¼
+	 * ç³»ç»Ÿè¿è¡Œä¸´æ—¶æ–‡ä»¶çš„å­˜æ”¾ç›®å½•
 	 */
 	public static final String temp_file_dir = "temp/";
 
 	/**
-	 * »ñÈ¡ÈËÔ±ÅúÁ¿µ¼ÈëÄ£°åµÄÈ«Â·¾¶
+	 * è·å–äººå‘˜æ‰¹é‡å¯¼å…¥æ¨¡æ¿çš„å…¨è·¯å¾„
 	 * 
 	 * @return
 	 */
@@ -41,11 +41,11 @@ public class BusiCommon {
 	}
 
 	/**
-	 * »ñÈ¡ÏµÍ³ÔËĞĞÊ±ÁÙÊ±ÎÄ¼ş´æ·ÅµØµÄÈ«Â·¾¶
+	 * è·å–ç³»ç»Ÿè¿è¡Œæ—¶ä¸´æ—¶æ–‡ä»¶å­˜æ”¾åœ°çš„å…¨è·¯å¾„
 	 * 
 	 * @return
 	 */
-	// TODO:ÕâÀïÓ¦¸Ã½øÒ»²½ÓÅ»¯£¬Õâ¸öÊÇ¸úÒµÎñÓĞ¹ØµÄ£¬µ«ÊÇ¿ò¼ÜÀïÃæĞèÒªÓÃµ½£¬Ó¦¸ÃÓĞÄ³ÖÖ·½·¨ÈÃ¿ò¼Ü²»Ö±½Óµ÷ÓÃ´ËÀà
+	// TODO:è¿™é‡Œåº”è¯¥è¿›ä¸€æ­¥ä¼˜åŒ–ï¼Œè¿™ä¸ªæ˜¯è·Ÿä¸šåŠ¡æœ‰å…³çš„ï¼Œä½†æ˜¯æ¡†æ¶é‡Œé¢éœ€è¦ç”¨åˆ°ï¼Œåº”è¯¥æœ‰æŸç§æ–¹æ³•è®©æ¡†æ¶ä¸ç›´æ¥è°ƒç”¨æ­¤ç±»
 	public static String getFullPathOfTempDir() {
 		return System.getProperty("realPath.webcontent") + temp_file_dir;
 	}
@@ -169,7 +169,7 @@ public class BusiCommon {
 	}
 
 	/**
-	 * ÅĞ¶ÏotherAreaCodeÊÇ·ñÎªareaCodeµÄ·¶Î§Ö®ÄÚ
+	 * åˆ¤æ–­otherAreaCodeæ˜¯å¦ä¸ºareaCodeçš„èŒƒå›´ä¹‹å†…
 	 * 
 	 * @param areaCode
 	 * @param otherAreaCode
@@ -193,7 +193,7 @@ public class BusiCommon {
 	}
 
 	/**
-	 * ¸ù¾İÉí·İÖ¤ºÅÂë»ñÈ¡ÏµÍ³ÖĞµÄĞÔ±ğ´úÂë
+	 * æ ¹æ®èº«ä»½è¯å·ç è·å–ç³»ç»Ÿä¸­çš„æ€§åˆ«ä»£ç 
 	 * 
 	 * @param idcard
 	 * @return
@@ -207,12 +207,12 @@ public class BusiCommon {
 	}
 
 	/**
-	 * ´¦Àí²éÑ¯²ÎÊıÖĞµÄ±¾¼¶µØÇøµÄÎÊÌâ
+	 * å¤„ç†æŸ¥è¯¢å‚æ•°ä¸­çš„æœ¬çº§åœ°åŒºçš„é—®é¢˜
 	 * 
 	 * @param map
-	 *            ²éÑ¯²ÎÊımap
+	 *            æŸ¥è¯¢å‚æ•°map
 	 * @param key
-	 *            Ö¸ÏòµØÇø±àÂëµÄkey
+	 *            æŒ‡å‘åœ°åŒºç¼–ç çš„key
 	 */
 	public static void dealAreaBj(Map map, String key) {
 		if (FrameTool.isEmpty(map) || FrameTool.isEmpty(key)) {
@@ -222,19 +222,19 @@ public class BusiCommon {
 		if (FrameTool.isEmpty(areaCode)) {
 			return;
 		}
-		// Èç¹û²ÎÊıÖĞµÄµØÇø±àÂëÊÇ±¾¼¶µØÇøµÄ±àÂëÔòÔÚ²éÑ¯²ÎÊıÖĞ¼ÓÒ»¸ö±íÊ¾±¾¼¶µÄ²ÎÊı£¬²¢°ÑµØÇø±àÂë»Ö¸´³ÉÕı³£µÄÑù×Ó
+		// å¦‚æœå‚æ•°ä¸­çš„åœ°åŒºç¼–ç æ˜¯æœ¬çº§åœ°åŒºçš„ç¼–ç åˆ™åœ¨æŸ¥è¯¢å‚æ•°ä¸­åŠ ä¸€ä¸ªè¡¨ç¤ºæœ¬çº§çš„å‚æ•°ï¼Œå¹¶æŠŠåœ°åŒºç¼–ç æ¢å¤æˆæ­£å¸¸çš„æ ·å­
 		if (areaCode.endsWith(FrameConstant.busi_com_area_bj_add)) {
 			map.put(key + "_" + FrameConstant.busi_com_area_bj_add, FrameConstant.busi_com_area_bj_add);
 			areaCode = areaCode.replaceAll(FrameConstant.busi_com_area_bj_add, "");
 			map.put(key, areaCode);
 		} else {
-			// µØÇø±àÂë²»ÊÇ±¾¼¶µÄ£¬ÔòĞèÒªÔÚ²éÑ¯²ÎÊıÀïÃæÔö¼ÓÒ»¸ö±íÊ¾µØÇøµÈ¼¶µÄ²ÎÊı
+			// åœ°åŒºç¼–ç ä¸æ˜¯æœ¬çº§çš„ï¼Œåˆ™éœ€è¦åœ¨æŸ¥è¯¢å‚æ•°é‡Œé¢å¢åŠ ä¸€ä¸ªè¡¨ç¤ºåœ°åŒºç­‰çº§çš„å‚æ•°
 			map.put(key + "_" + FrameConstant.busi_com_area_level_add, BusiCommon.getAreaLevel(areaCode));
 		}
 	}
 
 	/**
-	 * ¸ù¾İÄêÁäºÍĞÔ±ğÅĞ¶Ïµ±Ç°ÊÇ·ñ³¬¹ıÁËÍËĞİÄêÁä
+	 * æ ¹æ®å¹´é¾„å’Œæ€§åˆ«åˆ¤æ–­å½“å‰æ˜¯å¦è¶…è¿‡äº†é€€ä¼‘å¹´é¾„
 	 * 
 	 * @param age
 	 * @param sexCode
@@ -247,11 +247,11 @@ public class BusiCommon {
 		if (FrameConstant.busi_sex_code_male.equals(sexCode)) {
 			return age >= 60;
 		}
-		throw new RuntimeException("´íÎóµÄĞÔ±ğ´úÂë");
+		throw new RuntimeException("é”™è¯¯çš„æ€§åˆ«ä»£ç ");
 	}
 
 	/**
-	 * ÅĞ¶ÏÊÇ·ñÎ´µ½·¨¶¨¹¤×÷ÄêÁä
+	 * åˆ¤æ–­æ˜¯å¦æœªåˆ°æ³•å®šå·¥ä½œå¹´é¾„
 	 * 
 	 * @param age
 	 * @return
@@ -261,7 +261,7 @@ public class BusiCommon {
 	}
 
 	/**
-	 * ÅĞ¶ÏÊÇ·ñÄêÁäÌ«Ğ¡²»ÊÊºÏÂ¼ÈëÏµÍ³
+	 * åˆ¤æ–­æ˜¯å¦å¹´é¾„å¤ªå°ä¸é€‚åˆå½•å…¥ç³»ç»Ÿ
 	 * 
 	 * @param age
 	 * @return
@@ -271,7 +271,7 @@ public class BusiCommon {
 	}
 
 	/**
-	 * ¸ù¾İÉí·İÖ¤ÉÏµÄ³öÉúÄê·İºÍĞÔ±ğÅĞ¶Ïµ±Ç°ÊÇ·ñ³¬¹ıÁËÍËĞİÄêÁä
+	 * æ ¹æ®èº«ä»½è¯ä¸Šçš„å‡ºç”Ÿå¹´ä»½å’Œæ€§åˆ«åˆ¤æ–­å½“å‰æ˜¯å¦è¶…è¿‡äº†é€€ä¼‘å¹´é¾„
 	 * 
 	 * @param idcard
 	 * @return
@@ -281,7 +281,7 @@ public class BusiCommon {
 	}
 
 	/**
-	 * ¸ù¾İÉí·İÖ¤ÉÏµÄ³öÉúÄê·İÅĞ¶ÏÊÇ·ñÎ´µ½·¨¶¨¹¤×÷ÄêÁä
+	 * æ ¹æ®èº«ä»½è¯ä¸Šçš„å‡ºç”Ÿå¹´ä»½åˆ¤æ–­æ˜¯å¦æœªåˆ°æ³•å®šå·¥ä½œå¹´é¾„
 	 * 
 	 * @param idcard
 	 * @return
@@ -291,7 +291,7 @@ public class BusiCommon {
 	}
 
 	/**
-	 * ¸ù¾İÉí·İÖ¤ÉÏµÄ³öÉúÄê·İÅĞ¶ÏÊÇ·ñÎ´µ½Êı¾İÂ¼ÈëÏŞÖÆ
+	 * æ ¹æ®èº«ä»½è¯ä¸Šçš„å‡ºç”Ÿå¹´ä»½åˆ¤æ–­æ˜¯å¦æœªåˆ°æ•°æ®å½•å…¥é™åˆ¶
 	 * 
 	 * @param idcard
 	 * @return

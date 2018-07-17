@@ -73,7 +73,7 @@ public class CompanyServiceImpl implements CompanyService {
 			c_id = FrameTool.getUUID();
 		}
 		if ((isAdd || (!isAdd && !FrameTool.isEmpty(c_name))) && comNameExits(c_id, c_name, c_type)) {
-			rtn.setDefaultValue("ÏàÍ¬µÄµ¥Î»Ãû³ÆÒÑ¾­´æÔÚ");
+			rtn.setDefaultValue("ç›¸åŒçš„å•ä½åç§°å·²ç»å­˜åœ¨");
 		} else {
 			if (isAdd) {
 				info.put("C_ID", c_id);
@@ -142,7 +142,7 @@ public class CompanyServiceImpl implements CompanyService {
 		try {
 			Map info = companyDAO.selectBs_companyById(cid);
 			if (FrameTool.isEmpty(info)) {
-				rtn.setDefaultValue("´Ëµ¥Î»²»´æÔÚ");
+				rtn.setDefaultValue("æ­¤å•ä½ä¸å­˜åœ¨");
 				return rtn;
 			}
 			String ctype = (String) info.get("C_TYPE");
@@ -155,7 +155,7 @@ public class CompanyServiceImpl implements CompanyService {
 			rtn.setSucc(true);
 		} catch (Exception e) {
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-			rtn.setDefaultValue("³ÌĞòÄÚ²¿´íÎó");
+			rtn.setDefaultValue("ç¨‹åºå†…éƒ¨é”™è¯¯");
 			log.error("addComAccount", e);
 		}
 		return rtn;
@@ -285,9 +285,7 @@ public class CompanyServiceImpl implements CompanyService {
 		Map params = new HashMap();
 		String area_code = (String)trans.get("area_code");
 		
-		params.put("area_scope", area_scope);
-		params.put("area_scope_level", BusiCommon.getAreaLevel(area_scope));
-		params.put("area_level", area_level);
+
 		return frameDAO.qryPaginationInfo("selectBusi_hr_job_tj", params);
 	}
 

@@ -88,7 +88,7 @@ public class HumanResourceController {
 
 	@ResponseBody
 	@RequestMapping(value = "/saveHrInfo.do")
-	public String saveHrInfo(HttpSession session, HttpServletRequest request) {
+	public Object saveHrInfo(HttpSession session, HttpServletRequest request) {
 
 		ExecuteResult rst = new ExecuteResult();
 		try {
@@ -99,7 +99,7 @@ public class HumanResourceController {
 			rst.setDefaultValue("程序内部错误");
 			log.error("error", e);
 		}
-		return FrameTool.toJson(rst);
+		return rst;
 	}
 
 	@ResponseBody

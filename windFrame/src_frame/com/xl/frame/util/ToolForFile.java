@@ -8,7 +8,7 @@ import org.apache.commons.io.FilenameUtils;
 public class ToolForFile {
 
 	/**
-	 * 判断文件是否为excel文件
+	 * 鍒ゆ柇鏂囦欢鏄惁涓篹xcel鏂囦欢
 	 * 
 	 * @param file
 	 * @return
@@ -19,7 +19,7 @@ public class ToolForFile {
 	}
 
 	/**
-	 * 当file不存在时则在文件系统中建立此file
+	 * 褰揻ile涓嶅瓨鍦ㄦ椂鍒欏湪鏂囦欢绯荤粺涓缓绔嬫file
 	 * 
 	 * @param file
 	 * @throws IOException

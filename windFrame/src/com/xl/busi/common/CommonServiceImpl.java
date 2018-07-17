@@ -27,7 +27,7 @@ public class CommonServiceImpl implements CommonService {
 
 	@PostConstruct
 	public void initBusi() {
-		// 初始化地区树
+		// 鍒濆鍖栧湴鍖烘爲
 		initAreaTree();
 	}
 
@@ -56,7 +56,7 @@ public class CommonServiceImpl implements CommonService {
 			nodes.add(node);
 			bjnodes.add(nodeBj);
 			if (!"4".equals(areaLevel)) {
-				nodeBj = new TreeNode(areaCode + FrameConstant.busi_com_area_bj_add, areaName + "本级", areaCode);
+				nodeBj = new TreeNode(areaCode + FrameConstant.busi_com_area_bj_add, areaName + "鏈骇", areaCode);
 				nodeBj.setOrderNo("0");
 				bjnodes.add(nodeBj);
 			}

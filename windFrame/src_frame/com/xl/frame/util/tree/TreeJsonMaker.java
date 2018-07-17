@@ -3,13 +3,13 @@ package com.xl.frame.util.tree;
 import java.util.List;
 
 /**
- * Ê÷µÄjsonÉú³ÉÆ÷
+ * æ ‘çš„jsonç”Ÿæˆå™¨
  *
  */
 public interface TreeJsonMaker {
 
 	/**
-	 * Éú³ÉÕâ¸öÊ÷ÒÔnodeÎª¸ù½Úµã£¬µ½µÚlimitLevel²ã½Úµã£¨°üº¬£©ÎªÖ¹µÄ×ÓÊ÷µÄjson
+	 * ç”Ÿæˆè¿™ä¸ªæ ‘ä»¥nodeä¸ºæ ¹èŠ‚ç‚¹ï¼Œåˆ°ç¬¬limitLevelå±‚èŠ‚ç‚¹ï¼ˆåŒ…å«ï¼‰ä¸ºæ­¢çš„å­æ ‘çš„json
 	 * 
 	 * @param id
 	 * @return
@@ -17,7 +17,7 @@ public interface TreeJsonMaker {
 	String getJson(TreeView tree, TreeNode node, int limitLevel);
 
 	/**
-	 * Éú³ÉÕâ¸öÊ÷µ½µÚlimitLevel²ã½Úµã£¨°üº¬£©ÎªÖ¹µÄjson
+	 * ç”Ÿæˆè¿™ä¸ªæ ‘åˆ°ç¬¬limitLevelå±‚èŠ‚ç‚¹ï¼ˆåŒ…å«ï¼‰ä¸ºæ­¢çš„json
 	 * 
 	 * @param tree
 	 * @param limitLevel
@@ -26,7 +26,7 @@ public interface TreeJsonMaker {
 	String getJson(TreeView tree, int limitLevel);
 
 	/**
-	 * Éú³ÉÕâ¸öÊ÷Ö»°üº¬idsÖĞ½Úµã¼°ÆäÉÏ¼¶½ÚµãµÄjson
+	 * ç”Ÿæˆè¿™ä¸ªæ ‘åªåŒ…å«idsä¸­èŠ‚ç‚¹åŠå…¶ä¸Šçº§èŠ‚ç‚¹çš„json
 	 * 
 	 * @param tree
 	 * @param ids
@@ -35,7 +35,7 @@ public interface TreeJsonMaker {
 	String getJson(TreeView tree, List<String> ids);
 
 	/**
-	 * Éú³ÉÕâ¸öÊ÷ÒÔnodeÎª¸ù½Úµã£¬ËùÓĞ½Úµã¶¼·ûºÏ¹ıÂËÆ÷ÏŞÖÆµÄ×ÓÊ÷µÄjson
+	 * ç”Ÿæˆè¿™ä¸ªæ ‘ä»¥nodeä¸ºæ ¹èŠ‚ç‚¹ï¼Œæ‰€æœ‰èŠ‚ç‚¹éƒ½ç¬¦åˆè¿‡æ»¤å™¨é™åˆ¶çš„å­æ ‘çš„json
 	 * 
 	 * @param id
 	 * @return

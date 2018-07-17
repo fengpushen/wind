@@ -83,7 +83,7 @@ public class PositionServiceImpl implements PositionService {
 			p_id = FrameTool.getUUID();
 		}
 		if (positionNameExits(p_id, c_id, p_name)) {
-			rtn.setDefaultValue("ÏàÍ¬µÄÖ°Î»Ãû³ÆÒÑ¾­´æÔÚ");
+			rtn.setDefaultValue("ç›¸åŒçš„èŒä½åç§°å·²ç»å­˜åœ¨");
 		} else {
 			String P_DW_ZPR = (String) info.get("P_DW_ZPR");
 			if (FrameConstant.busi_com_boolean_true.equals(P_DW_ZPR)) {
@@ -156,7 +156,7 @@ public class PositionServiceImpl implements PositionService {
 	public ExecuteResult sendPositionReq(String pid, String hr_id) throws SQLException {
 		ExecuteResult rtn = new ExecuteResult();
 		if (positionReqExists(pid, hr_id)) {
-			rtn.setDefaultValue("ÄúÒÑ¾­ÉêÇë¹ı´Ë¸ÚÎ»£¬ÇëÎğÖØ¸´ÉêÇë");
+			rtn.setDefaultValue("æ‚¨å·²ç»ç”³è¯·è¿‡æ­¤å²—ä½ï¼Œè¯·å‹¿é‡å¤ç”³è¯·");
 		} else {
 			Map params = new HashMap();
 			params.put("REQ_ID", FrameTool.getUUID());
@@ -172,7 +172,7 @@ public class PositionServiceImpl implements PositionService {
 	public ExecuteResult sendPositionReqCenter(String opr_id, String pid, String hr_id) throws SQLException {
 		ExecuteResult rtn = new ExecuteResult();
 		if (positionReqExists(pid, hr_id)) {
-			rtn.setDefaultValue("ÒÑ¾­ÉêÇë¹ı´Ë¸ÚÎ»£¬ÇëÎğÖØ¸´ÉêÇë");
+			rtn.setDefaultValue("å·²ç»ç”³è¯·è¿‡æ­¤å²—ä½ï¼Œè¯·å‹¿é‡å¤ç”³è¯·");
 		} else {
 			Map params = new HashMap();
 			params.put("REQ_ID", FrameTool.getUUID());
@@ -190,7 +190,7 @@ public class PositionServiceImpl implements PositionService {
 		ExecuteResult rtn = new ExecuteResult();
 		if (FrameTool.isEmpty(opr_id) || FrameTool.isEmpty(pids) || FrameTool.isEmpty(hr_ids)
 				|| pids.length != hr_ids.length) {
-			rtn.setDefaultValue("´íÎóµÄ²ÎÊı");
+			rtn.setDefaultValue("é”™è¯¯çš„å‚æ•°");
 		} else {
 			for (int i = 0, len = pids.length; i < len; i++) {
 				rtn = sendPositionReqCenter(opr_id, pids[i], hr_ids[i]);

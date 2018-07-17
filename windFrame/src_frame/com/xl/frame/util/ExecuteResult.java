@@ -3,7 +3,7 @@ package com.xl.frame.util;
 import java.util.HashMap;
 
 /**
- * 操作结果
+ * 鎿嶄綔缁撴灉
  * 
  * @author wind
  * 
@@ -11,17 +11,17 @@ import java.util.HashMap;
 public class ExecuteResult implements java.io.Serializable {
 
 	/**
-	 * 默认返回值的key
+	 * 榛樿杩斿洖鍊肩殑key
 	 */
 	public static final String INFO_KEY_DEFAULT = "INFO_KEY_DEFAULT";
 
 	/**
-	 * 操作是否成功
+	 * 鎿嶄綔鏄惁鎴愬姛
 	 */
 	private boolean isSucc = false;
 
 	/**
-	 * 操作附加信息
+	 * 鎿嶄綔闄勫姞淇℃伅
 	 */
 	private HashMap<String, Object> info;
 

@@ -40,11 +40,11 @@ public class FrameServiceImpl implements FrameService {
 
 	@PostConstruct
 	public void initFrame() {
-		// ³õÊ¼»¯ÏµÍ³ÅäÖÃ
+		// åˆå§‹åŒ–ç³»ç»Ÿé…ç½®
 		refreshConfig();
-		// ³õÊ¼»¯²Ëµ¥Ê÷
+		// åˆå§‹åŒ–èœå•æ ‘
 		initMenuBaseTree();
-		// ³õÊ¼»¯ÏµÍ³Âë±í
+		// åˆå§‹åŒ–ç³»ç»Ÿç è¡¨
 		initFrameCode();
 	}
 
@@ -85,15 +85,15 @@ public class FrameServiceImpl implements FrameService {
 		try {
 			Map accountInfo = frameDAO.selectFrame_accountByAccount(account_kind, account);
 			if (accountInfo == null || accountInfo.size() == 0) {
-				rst.setDefaultValue("ÕË»§»òÃÜÂë´íÎó");
+				rst.setDefaultValue("è´¦æˆ·æˆ–å¯†ç é”™è¯¯");
 			} else if (!accountInfo.get("PASSWORD").equals(FrameTool.getMd5(password))) {
-				rst.setDefaultValue("ÕË»§»òÃÜÂë´íÎó");
+				rst.setDefaultValue("è´¦æˆ·æˆ–å¯†ç é”™è¯¯");
 			} else {
 				rst.addInfo("accountInfo", accountInfo);
 				rst.setSucc(true);
 			}
 		} catch (Exception e) {
-			rst.setDefaultValue("Î´Öª´íÎó");
+			rst.setDefaultValue("æœªçŸ¥é”™è¯¯");
 			log.error("", e);
 		}
 		return rst;
@@ -134,7 +134,7 @@ public class FrameServiceImpl implements FrameService {
 		ExecuteResult rst = new ExecuteResult();
 		try {
 			TreeView menuTree = FrameCache.getTree(FrameConstant.frame_menu_base_tree);
-			// TODO:Ö±½ÓnewÁËÒ»¸ö¶ÔÏó£¬¿´ÊÇ·ñ¿ÉÒÔ¸ÄÔìÎªÄ³ÖÖ»ñÈ¡·½Ê½
+			// TODO:ç›´æ¥newäº†ä¸€ä¸ªå¯¹è±¡ï¼Œçœ‹æ˜¯å¦å¯ä»¥æ”¹é€ ä¸ºæŸç§è·å–æ–¹å¼
 			rst.setDefaultValue(menuTree.getJson(new TreeNodeFilterHasSon()));
 			rst.setSucc(true);
 		} catch (Exception e) {
@@ -254,7 +254,7 @@ public class FrameServiceImpl implements FrameService {
 		params.put("account", account);
 		Map accountInfo = frameDAO.selectFrame_accountByAccount(account_kind, account);
 		if (!FrameTool.isEmpty(accountInfo)) {
-			rtn.setDefaultValue("ÏàÍ¬µÄÕËºÅÃû³ÆÒÑ¾­´æÔÚ");
+			rtn.setDefaultValue("ç›¸åŒçš„è´¦å·åç§°å·²ç»å­˜åœ¨");
 		} else {
 
 			params.put("busi_id", busi_id);
@@ -279,22 +279,22 @@ public class FrameServiceImpl implements FrameService {
 		ExecuteResult rtn = new ExecuteResult();
 		Map accountInfo = frameDAO.selectFrame_accountByAccountId(account_id);
 		if (FrameTool.isEmpty(accountInfo)) {
-			rtn.setDefaultValue("ÒªĞŞ¸ÄµÄÕËºÅ²»´æÔÚ");
+			rtn.setDefaultValue("è¦ä¿®æ”¹çš„è´¦å·ä¸å­˜åœ¨");
 		} else {
 			Map account2 = frameDAO.selectFrame_accountByAccount((String) accountInfo.get("ACCOUNT_KIND"), account);
 			if (!FrameTool.isEmpty(account2) && !account_id.equals(account2.get("ACCOUNT_ID"))) {
-				rtn.setDefaultValue("ÏàÍ¬µÄÕËºÅÃû³ÆÒÑ¾­´æÔÚ");
+				rtn.setDefaultValue("ç›¸åŒçš„è´¦å·åç§°å·²ç»å­˜åœ¨");
 			} else {
 
 				Map params = new HashMap();
 				String oldAccount = (String) accountInfo.get("ACCOUNT");
-				// ĞèÒªĞŞ¸ÄÕËºÅ
+				// éœ€è¦ä¿®æ”¹è´¦å·
 				if (!oldAccount.equals(account)) {
 					params.put("account", account);
 					frameDAO.anyUpdateByPk("frame_account", params, account_id);
 				}
 
-				// ÖØÖÃÕËºÅ½ÇÉ«ĞÅÏ¢
+				// é‡ç½®è´¦å·è§’è‰²ä¿¡æ¯
 				params.clear();
 				params.put("account_id", account_id);
 				frameDAO.anyDelete("frame_account_role", params);
@@ -322,7 +322,7 @@ public class FrameServiceImpl implements FrameService {
 	public ExecuteResult setAccountPassword(String account_id, String password) throws SQLException {
 		ExecuteResult rtn = new ExecuteResult();
 		if (FrameTool.isEmpty(account_id) || FrameTool.isEmpty(password)) {
-			rtn.setDefaultValue("´íÎóµÄ²ÎÊı");
+			rtn.setDefaultValue("é”™è¯¯çš„å‚æ•°");
 		} else {
 			Map params = new HashMap();
 			params.put("password", FrameTool.getMd5(password));
@@ -356,7 +356,7 @@ public class FrameServiceImpl implements FrameService {
 			rtn.setSucc(true);
 		} catch (Exception e) {
 			log.error("error", e);
-			rtn.setDefaultValue("³ÌĞòÄÚ²¿´íÎó");
+			rtn.setDefaultValue("ç¨‹åºå†…éƒ¨é”™è¯¯");
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 		}
 		return rtn;
@@ -364,7 +364,7 @@ public class FrameServiceImpl implements FrameService {
 
 	public List<Map> getAccountsRoleMgd(String account_id) {
 		Map params = new HashMap();
-		// ³¬¼¶¹ÜÀíÔ±¿ÉÒÔ¹ÜÀíËùÓĞ¿É·ÖÅäÈ¨ÏŞ£¬ÆÕÍ¨ÓÃ»§Ö»ÄÜ¹ÜÀí×Ô¼ºÓµÓĞµÄ¿É·ÖÅäÈ¨ÏŞ
+		// è¶…çº§ç®¡ç†å‘˜å¯ä»¥ç®¡ç†æ‰€æœ‰å¯åˆ†é…æƒé™ï¼Œæ™®é€šç”¨æˆ·åªèƒ½ç®¡ç†è‡ªå·±æ‹¥æœ‰çš„å¯åˆ†é…æƒé™
 		if (!FrameConstant.busi_com_super_admin_account_id.equals(account_id)) {
 			params.put("account_id", account_id);
 		}
@@ -396,7 +396,7 @@ public class FrameServiceImpl implements FrameService {
 	}
 
 	/**
-	 * ÅĞ¶ÏÒ»¸öÕËºÅÊÇ·ñÓĞÁíÒ»¸öÕËºÅµÄËùÓĞ½ÇÉ«
+	 * åˆ¤æ–­ä¸€ä¸ªè´¦å·æ˜¯å¦æœ‰å¦ä¸€ä¸ªè´¦å·çš„æ‰€æœ‰è§’è‰²
 	 * 
 	 * @param account_id
 	 * @param other_account_id
@@ -432,7 +432,7 @@ public class FrameServiceImpl implements FrameService {
 		try {
 			Map accountInfo = frameDAO.selectFrame_accountByAccountId(account_id);
 			if (FrameTool.isEmpty(accountInfo)) {
-				rst.setDefaultValue("´íÎóµÄÕËºÅ");
+				rst.setDefaultValue("é”™è¯¯çš„è´¦å·");
 				return rst;
 			}
 			rst = checkAccountLogin((String) accountInfo.get("ACCOUNT_KIND"), (String) accountInfo.get("ACCOUNT"),
@@ -444,7 +444,7 @@ public class FrameServiceImpl implements FrameService {
 
 			rst = setAccountPassword(account_id, password);
 		} catch (Exception e) {
-			rst.setDefaultValue("Î´Öª´íÎó");
+			rst.setDefaultValue("æœªçŸ¥é”™è¯¯");
 			log.error("", e);
 		}
 		return rst;

@@ -8,7 +8,7 @@ import java.util.Set;
 import com.xl.frame.util.FrameTool;
 
 /**
- * ·ûºÏeasyUIÖĞÊ÷Ä£ĞÍµÄjsonÉú³ÉÆ÷
+ * ç¬¦åˆeasyUIä¸­æ ‘æ¨¡å‹çš„jsonç”Ÿæˆå™¨
  *
  */
 public class TreeEasyUIJsonMaker implements TreeJsonMaker {

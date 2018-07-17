@@ -80,11 +80,11 @@ public class FrameDAOImpl implements FrameDAO {
 
 	public int anyDelete(String tableName, Map<String, Object> params) throws SQLException {
 		if (FrameTool.isEmpty(params)) {
-			throw new SQLException("Î´Ìá¹©²ÎÊı");
+			throw new SQLException("æœªæä¾›å‚æ•°");
 		}
 		Map<String, Object> paramsCopy = getFilteColumnsParams(tableName, params);
 		if (FrameTool.isEmpty(paramsCopy)) {
-			throw new SQLException("Î´Ìá¹©²ÎÊı");
+			throw new SQLException("æœªæä¾›å‚æ•°");
 		}
 		Map anyDelParams = new HashMap<String, Object>();
 		anyDelParams.put("tableName", tableName);
@@ -94,7 +94,7 @@ public class FrameDAOImpl implements FrameDAO {
 
 	public int anyDeleteByPk(String tableName, String pkValue) throws SQLException {
 		if (FrameTool.isEmpty(pkValue)) {
-			throw new SQLException("Î´Ìá¹©²ÎÊı");
+			throw new SQLException("æœªæä¾›å‚æ•°");
 		}
 		return anyDelete(tableName, getPkParams(tableName, pkValue));
 	}
@@ -102,13 +102,13 @@ public class FrameDAOImpl implements FrameDAO {
 	public int anyUpdate(String tableName, Map<String, Object> params, Map<String, Object> qryParams)
 			throws SQLException {
 		if (FrameTool.isEmpty(qryParams) || FrameTool.isEmpty(params)) {
-			throw new SQLException("Î´Ìá¹©²ÎÊı");
+			throw new SQLException("æœªæä¾›å‚æ•°");
 		}
 		Map<String, Object> paramsCopy = getFilteColumnsParams(tableName, params);
 		Map<String, Object> qryParamsCopy = getFilteColumnsParams(tableName, qryParams);
 
 		if (FrameTool.isEmpty(paramsCopy) || FrameTool.isEmpty(qryParamsCopy)) {
-			throw new SQLException("Î´Ìá¹©²ÎÊı");
+			throw new SQLException("æœªæä¾›å‚æ•°");
 		}
 		Map anyUpdateParams = new HashMap<String, Object>();
 		anyUpdateParams.put("tableName", tableName);
@@ -119,7 +119,7 @@ public class FrameDAOImpl implements FrameDAO {
 
 	public int anyUpdateByPk(String tableName, Map<String, Object> params, String pkValue) throws SQLException {
 		if (FrameTool.isEmpty(pkValue)) {
-			throw new SQLException("Î´Ìá¹©²ÎÊı");
+			throw new SQLException("æœªæä¾›å‚æ•°");
 		}
 		return anyUpdate(tableName, getColumnsParamsWithoutPk(tableName, params), getPkParams(tableName, pkValue));
 	}
@@ -150,7 +150,7 @@ public class FrameDAOImpl implements FrameDAO {
 	}
 
 	/**
-	 * ¸ù¾İ²ÎÊıÅĞ¶Ï´Ë²éÑ¯ÊÇ·ñĞèÒª²éÑ¯ËùÓĞµÄÊı¾İ
+	 * æ ¹æ®å‚æ•°åˆ¤æ–­æ­¤æŸ¥è¯¢æ˜¯å¦éœ€è¦æŸ¥è¯¢æ‰€æœ‰çš„æ•°æ®
 	 * 
 	 * @param params
 	 * @return
@@ -160,7 +160,7 @@ public class FrameDAOImpl implements FrameDAO {
 	}
 
 	/**
-	 * ÉèÖÃ²éÑ¯ËùÓĞÊı¾İµÄ²ÎÊı
+	 * è®¾ç½®æŸ¥è¯¢æ‰€æœ‰æ•°æ®çš„å‚æ•°
 	 * 
 	 * @param params
 	 * @param total
@@ -173,7 +173,7 @@ public class FrameDAOImpl implements FrameDAO {
 	}
 
 	private FrameDbTable getTableMetaData(String tableName) throws SQLException {
-		// TODO:sqlSession.getConfiguration().getDatabaseId()Õâ¸öÎª¿Õ£¬Ó¦¸ÃÓĞ±ğµÄ·½·¨Çø·Ö²»Í¬µÄÊı¾İÔ´
+		// TODO:sqlSession.getConfiguration().getDatabaseId()è¿™ä¸ªä¸ºç©ºï¼Œåº”è¯¥æœ‰åˆ«çš„æ–¹æ³•åŒºåˆ†ä¸åŒçš„æ•°æ®æº
 		FrameDbInfo dbInfo = FrameCache.getDbInfo(sqlSession.getConfiguration().getDatabaseId());
 		FrameDbTable table = dbInfo.getTable(tableName);
 		if (table == null) {

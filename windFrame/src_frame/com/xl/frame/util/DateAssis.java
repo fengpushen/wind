@@ -11,10 +11,10 @@ import java.util.Map;
 
 /**
  * <p>
- * Title: java.util.DateÀàĞÍµÄ°ïÖúÀà
+ * Title: java.util.Dateç±»å‹çš„å¸®åŠ©ç±»
  * </p>
  * <p>
- * Description:´ËÀàÖĞÌá¹©Ò»Ğ©¿ì½İµÄ·½·¨¹©Ê¹ÓÃDateÀàĞÍÊ±ËùĞèµÄÒ»Ğ©³£ÓÃµÄ²Ù×÷¡£
+ * Description:æ­¤ç±»ä¸­æä¾›ä¸€äº›å¿«æ·çš„æ–¹æ³•ä¾›ä½¿ç”¨Dateç±»å‹æ—¶æ‰€éœ€çš„ä¸€äº›å¸¸ç”¨çš„æ“ä½œã€‚
  * </p>
  * 
  * @version 1.0
@@ -24,12 +24,12 @@ public class DateAssis {
 	private static Map<String, DateFormat> formaterMap = new HashMap<String, DateFormat>();
 
 	/**
-	 * °´ÕÕstyleµÄÑùÊ½¸ñÊ½»¯date£¬ÑùÊ½µÄÊéĞ´·½Ê½²Î¿´java.text.SimpleDateFormat
+	 * æŒ‰ç…§styleçš„æ ·å¼æ ¼å¼åŒ–dateï¼Œæ ·å¼çš„ä¹¦å†™æ–¹å¼å‚çœ‹java.text.SimpleDateFormat
 	 * 
 	 * @param date
-	 *            ĞèÒª¸ñÊ½»¯µÄÈÕÆÚÀàĞÍ
+	 *            éœ€è¦æ ¼å¼åŒ–çš„æ—¥æœŸç±»å‹
 	 * @param style
-	 *            ¸ñÊ½»¯µÄÑùÊ½
+	 *            æ ¼å¼åŒ–çš„æ ·å¼
 	 * @return
 	 */
 	public static String formatDate(Date date, String style) {
@@ -40,12 +40,12 @@ public class DateAssis {
 	}
 
 	/**
-	 * ½«¸ñÊ½»¯µÄ×Ö·û´®×ª»»Îª¶ÔÓ¦µÄDate
+	 * å°†æ ¼å¼åŒ–çš„å­—ç¬¦ä¸²è½¬æ¢ä¸ºå¯¹åº”çš„Date
 	 * 
 	 * @param dateString
-	 *            ¸ñÊ½»¯µÄ×Ö·û´®
+	 *            æ ¼å¼åŒ–çš„å­—ç¬¦ä¸²
 	 * @param style
-	 *            ¸ñÊ½»¯µÄÑùÊ½
+	 *            æ ¼å¼åŒ–çš„æ ·å¼
 	 * @return
 	 */
 	public static Date parseStringToDate(String dateString, String style) {
@@ -60,12 +60,12 @@ public class DateAssis {
 	}
 
 	/**
-	 * ÅĞ¶ÏÊäÈëµÄÈÕÆÚÊÇ·ñÎªÒ»¸öÔÂµÄ×îºó¼¸Ìì
+	 * åˆ¤æ–­è¾“å…¥çš„æ—¥æœŸæ˜¯å¦ä¸ºä¸€ä¸ªæœˆçš„æœ€åå‡ å¤©
 	 * 
 	 * @param date
-	 *            ÒªÅĞ¶ÏµÄÈÕÆÚ
+	 *            è¦åˆ¤æ–­çš„æ—¥æœŸ
 	 * @param count
-	 *            1£¬±íÊ¾ÒªÅĞ¶ÏÈÕÆÚÊÇ·ñÎªµ¹Êı1ÌìÄÚ£¬2±íÊ¾ÊÇ·ñÎªµ¹Êı2ÌìÄÚ£¬ÒÀ´ÎÀàÍÆ
+	 *            1ï¼Œè¡¨ç¤ºè¦åˆ¤æ–­æ—¥æœŸæ˜¯å¦ä¸ºå€’æ•°1å¤©å†…ï¼Œ2è¡¨ç¤ºæ˜¯å¦ä¸ºå€’æ•°2å¤©å†…ï¼Œä¾æ¬¡ç±»æ¨
 	 * @return
 	 */
 	public static boolean isMonthEnd(Date date, int count) {
@@ -78,7 +78,7 @@ public class DateAssis {
 	}
 
 	/**
-	 * »ñµÃÊäÈëÊ±¼äÖĞµÄÄê·İ
+	 * è·å¾—è¾“å…¥æ—¶é—´ä¸­çš„å¹´ä»½
 	 * 
 	 * @param date
 	 * @return
@@ -90,7 +90,7 @@ public class DateAssis {
 	}
 
 	/**
-	 * »ñµÃµ±Ç°Ê±¼äµÄÄê·İ
+	 * è·å¾—å½“å‰æ—¶é—´çš„å¹´ä»½
 	 * 
 	 * @return
 	 */
@@ -99,10 +99,10 @@ public class DateAssis {
 	}
 
 	/**
-	 * ¸ù¾İstyle»ñµÃÈÕÆÚ¸ñÊ½»¯Àà
+	 * æ ¹æ®styleè·å¾—æ—¥æœŸæ ¼å¼åŒ–ç±»
 	 * 
 	 * @param style
-	 *            ¸ñÊ½»¯µÄÑùÊ½
+	 *            æ ¼å¼åŒ–çš„æ ·å¼
 	 * @return
 	 */
 	private static DateFormat getDateFormat(String style) {

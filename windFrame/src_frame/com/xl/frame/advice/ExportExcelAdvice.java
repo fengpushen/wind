@@ -26,11 +26,11 @@ import com.xl.frame.util.ToolForFile;
 
 @ControllerAdvice
 @EnableWebMvc
-// TODO:Õâ¸öadviceÒ»Ö±Ã»ÓĞÅäÖÃÉúĞ§£¬Ö±µ½¼ÓÁËÒ»¸ö@EnableWebMvcµÄ×¢ÊÍ²ÅÉúĞ§£¬²»ÖªµÀÎªÊ²Ã´
+// TODO:è¿™ä¸ªadviceä¸€ç›´æ²¡æœ‰é…ç½®ç”Ÿæ•ˆï¼Œç›´åˆ°åŠ äº†ä¸€ä¸ª@EnableWebMvcçš„æ³¨é‡Šæ‰ç”Ÿæ•ˆï¼Œä¸çŸ¥é“ä¸ºä»€ä¹ˆ
 public class ExportExcelAdvice implements ResponseBodyAdvice {
 
 	@Override
-	// TODO:×÷Îª¿ò¼ÜÀïµÄÀà£¬Ö±½ÓÒıÓÃÁËÒµÎñÀïµÄÀàÀ´»ñÈ¡Êä³öÎÄ¼şµÄµØÖ·£¬Õâ¸öĞèÒª¸Ä¹ıÀ´
+	// TODO:ä½œä¸ºæ¡†æ¶é‡Œçš„ç±»ï¼Œç›´æ¥å¼•ç”¨äº†ä¸šåŠ¡é‡Œçš„ç±»æ¥è·å–è¾“å‡ºæ–‡ä»¶çš„åœ°å€ï¼Œè¿™ä¸ªéœ€è¦æ”¹è¿‡æ¥
 	public Object beforeBodyWrite(Object arg0, MethodParameter arg1, MediaType arg2, Class arg3, ServerHttpRequest arg4,
 			ServerHttpResponse arg5) {
 
@@ -53,7 +53,12 @@ public class ExportExcelAdvice implements ResponseBodyAdvice {
 					List<String> heads = new ArrayList<String>();
 					for (Map headMap : datagrid_head_01) {
 						String value = (String) headMap.get("field");
-						if ("ck".equals(value)) {
+						boolean hidden_for_export = false;
+						String isHidden = (String) headMap.get("hidden_for_export");
+						if (!FrameTool.isEmpty(isHidden)) {
+							hidden_for_export = Boolean.parseBoolean(isHidden);
+						}
+						if ("ck".equals(value) || hidden_for_export) {
 							continue;
 						} else {
 							keys.add(value);

@@ -1,6 +1,10 @@
 eclipse.preferences.version=1
 encoding//WebContent/WEB-INF/tags/frame/commonHead.tag=UTF-8
 encoding//src/com/xl/busi/company/CompanyController.java=UTF-8
+encoding//src/com/xl/busi/company/CompanyServiceImpl.java=UTF-8
 encoding//src/com/xl/busi/hr/HumanResourceController.java=UTF-8
+encoding//src/com/xl/busi/hr/HumanResourceServiceImpl.java=UTF-8
 encoding//src/com/xl/busi/position/PositionController.java=UTF-8
+encoding//src/com/xl/busi/position/PositionServiceImpl.java=UTF-8
 encoding//src_frame_interactive/com/xl/busi/staff/StaffController.java=UTF-8
+encoding/<project>=UTF-8

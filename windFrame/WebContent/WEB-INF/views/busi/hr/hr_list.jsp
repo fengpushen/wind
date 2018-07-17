@@ -296,7 +296,12 @@
 						field : 'IDCARD_COVERD',
 						title : '身份证',
 						width : '14%',
-						align : 'center'
+						align : 'center',
+						hidden_for_export : 'true'
+					}, {
+						field : 'IDCARD',
+						title : '身份证',
+						hidden: 'true'
 					}, {
 						field : 'AGE',
 						title : '年龄',

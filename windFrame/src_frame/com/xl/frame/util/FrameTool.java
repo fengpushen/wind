@@ -53,7 +53,7 @@ public final class FrameTool {
 	}
 
 	/**
-	 * °ÑÊäÈëµÄ¶ÔÏó×ª»»Îªjson×Ö·û´®
+	 * æŠŠè¾“å…¥çš„å¯¹è±¡è½¬æ¢ä¸ºjsonå­—ç¬¦ä¸²
 	 * 
 	 * @param o
 	 * @return
@@ -77,8 +77,8 @@ public final class FrameTool {
 			initMessageDigest();
 		}
 		messageDigest.update(s.getBytes());
-		// digest()×îºóÈ·¶¨·µ»Ømd5 hashÖµ£¬·µ»ØÖµÎª8Îª×Ö·û´®¡£ÒòÎªmd5 hashÖµÊÇ16Î»µÄhexÖµ£¬Êµ¼ÊÉÏ¾ÍÊÇ8Î»µÄ×Ö·û
-		// BigIntegerº¯ÊıÔò½«8Î»µÄ×Ö·û´®×ª»»³É16Î»hexÖµ£¬ÓÃ×Ö·û´®À´±íÊ¾£»µÃµ½×Ö·û´®ĞÎÊ½µÄhashÖµ
+		// digest()æœ€åç¡®å®šè¿”å›md5 hashå€¼ï¼Œè¿”å›å€¼ä¸º8ä¸ºå­—ç¬¦ä¸²ã€‚å› ä¸ºmd5 hashå€¼æ˜¯16ä½çš„hexå€¼ï¼Œå®é™…ä¸Šå°±æ˜¯8ä½çš„å­—ç¬¦
+		// BigIntegerå‡½æ•°åˆ™å°†8ä½çš„å­—ç¬¦ä¸²è½¬æ¢æˆ16ä½hexå€¼ï¼Œç”¨å­—ç¬¦ä¸²æ¥è¡¨ç¤ºï¼›å¾—åˆ°å­—ç¬¦ä¸²å½¢å¼çš„hashå€¼
 		return new BigInteger(1, messageDigest.digest()).toString(16);
 
 	}
@@ -133,7 +133,7 @@ public final class FrameTool {
 	}
 
 	/**
-	 * ¹¦ÄÜ£ºÅĞ¶Ï×Ö·û´®ÊÇ·ñÎªÊı×Ö
+	 * åŠŸèƒ½ï¼šåˆ¤æ–­å­—ç¬¦ä¸²æ˜¯å¦ä¸ºæ•°å­—
 	 * 
 	 * @param str
 	 * @return
@@ -149,7 +149,7 @@ public final class FrameTool {
 	}
 
 	/**
-	 * ¹¦ÄÜ£ºÅĞ¶Ï×Ö·û´®ÊÇ·ñÎªÈÕÆÚ¸ñÊ½
+	 * åŠŸèƒ½ï¼šåˆ¤æ–­å­—ç¬¦ä¸²æ˜¯å¦ä¸ºæ—¥æœŸæ ¼å¼
 	 * 
 	 * @param str
 	 * @return
@@ -242,7 +242,7 @@ public final class FrameTool {
 	}
 
 	/**
-	 * »ñµÃÒÔiso-8859-1±àÂëµÄ×Ö·û´®
+	 * è·å¾—ä»¥iso-8859-1ç¼–ç çš„å­—ç¬¦ä¸²
 	 * 
 	 * @param str
 	 * @return
@@ -258,7 +258,7 @@ public final class FrameTool {
 	}
 
 	/**
-	 * ´Ó¶ººÅ·Ö¸ôµÄ×Ö·û´®ÖĞÉú³É×Ö·û´®µÄset
+	 * ä»é€—å·åˆ†éš”çš„å­—ç¬¦ä¸²ä¸­ç”Ÿæˆå­—ç¬¦ä¸²çš„set
 	 * 
 	 * @param s
 	 * @return

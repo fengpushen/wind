@@ -11,87 +11,87 @@ public final class FrameConstant {
 	public static final String frame_export_xls = "frame_export_xls";
 
 	/**
-	 * ÏµÍ³ÔËĞĞ»·¾³µÄ×Ö·û¼¯
+	 * ç³»ç»Ÿè¿è¡Œç¯å¢ƒçš„å­—ç¬¦é›†
 	 */
 	public static final String frame_sys_charset = "gbk";
 
 	/**
-	 * ³¬¼¶¹ÜÀíÔ±µÄÕËºÅid
+	 * è¶…çº§ç®¡ç†å‘˜çš„è´¦å·id
 	 */
 	public static final String busi_com_super_admin_account_id = "account001";
 
 	/**
-	 * ³¬¼¶¹ÜÀíÔ±µÄºóÌ¨ÓÃ»§id
+	 * è¶…çº§ç®¡ç†å‘˜çš„åå°ç”¨æˆ·id
 	 */
 	public static final String busi_com_super_admin_staff_id = "staff001";
 
-	// È«¹úµØÇøÊ÷
+	// å…¨å›½åœ°åŒºæ ‘
 	public static final String busi_com_area_tree = "busi_com_area_tree";
 
-	// ´ø±¾¼¶µÄÈ«¹úµØÇøÊ÷
+	// å¸¦æœ¬çº§çš„å…¨å›½åœ°åŒºæ ‘
 	public static final String busi_com_area_tree_bj = "busi_com_area_tree_bj";
 
-	// ±¾¼¶ĞĞÕşÇø»®ºó¸½¼ÓµÄ×Ö·û
+	// æœ¬çº§è¡Œæ”¿åŒºåˆ’åé™„åŠ çš„å­—ç¬¦
 	public static final String busi_com_area_bj_add = "BJ";
 
-	// ĞĞÕşÇø»®¼¶±ğºó¸½¼ÓµÄ×Ö·û
+	// è¡Œæ”¿åŒºåˆ’çº§åˆ«åé™„åŠ çš„å­—ç¬¦
 	public static final String busi_com_area_level_add = "LEVEL";
 
-	// µÇÂ¼ÓÃ»§ÀàĞÍ£ºÈËÉçÓÃ»§
+	// ç™»å½•ç”¨æˆ·ç±»å‹ï¼šäººç¤¾ç”¨æˆ·
 	public static final String busi_user_kind_rs = "0";
 
-	// µÇÂ¼ÓÃ»§ÀàĞÍ£ºÕĞÆ¸µ¥Î»ÓÃ»§
+	// ç™»å½•ç”¨æˆ·ç±»å‹ï¼šæ‹›è˜å•ä½ç”¨æˆ·
 	public static final String busi_user_kind_com = "1";
 
-	// µÇÂ¼ÓÃ»§ÀàĞÍ£º¸öÈËÓÃ»§
+	// ç™»å½•ç”¨æˆ·ç±»å‹ï¼šä¸ªäººç”¨æˆ·
 	public static final String busi_user_kind_hr = "2";
 
-	// Í¨ÓÃ²¼ÀÊÖµ£ºÕæ
+	// é€šç”¨å¸ƒæœ—å€¼ï¼šçœŸ
 	public static final String busi_com_boolean_true = "1";
 
-	// Í¨ÓÃ²¼ÀÊÖµ£º¼Ù
+	// é€šç”¨å¸ƒæœ—å€¼ï¼šå‡
 	public static final String busi_com_boolean_false = "0";
 
-	// ÆóÒµÀàĞÍÓÃ»§µÄÈ¨ÏŞ
+	// ä¼ä¸šç±»å‹ç”¨æˆ·çš„æƒé™
 	public static final String[] busi_user_kind_roles_com = { "20000" };
 
-	// ÊÜÎ¯ÍĞÕĞÆ¸ÆóÒµÀàĞÍÓÃ»§µÄÈ¨ÏŞ
+	// å—å§”æ‰˜æ‹›è˜ä¼ä¸šç±»å‹ç”¨æˆ·çš„æƒé™
 	public static final String[] busi_user_kind_roles_com_lwzj = { "20000", "role001" };
 
 	/**
-	 * ÆÕÍ¨ÕĞÆ¸ÆóÒµµÄtypeÖµ
+	 * æ™®é€šæ‹›è˜ä¼ä¸šçš„typeå€¼
 	 */
 	public static final String busi_company_type_normal = "1";
 
 	/**
-	 * ÀÍÎñÖĞ½éÆóÒµµÄtypeÖµ
+	 * åŠ³åŠ¡ä¸­ä»‹ä¼ä¸šçš„typeå€¼
 	 */
 	public static final String busi_company_type_lwzj = "2";
 
 	/**
-	 * Ö°Òµ½éÉÜÆóÒµµÄtypeÖµ
+	 * èŒä¸šä»‹ç»ä¼ä¸šçš„typeå€¼
 	 */
 	public static final String busi_company_type_zyjs = "3";
 
 	/**
-	 * Î¯ÍĞÕĞÆ¸ÆóÒµµÄtypeÖµ
+	 * å§”æ‰˜æ‹›è˜ä¼ä¸šçš„typeå€¼
 	 */
 	public static final String busi_company_type_wtzp = "4";
 
 	public static final String busi_default_date_style = "yyyy-MM-dd";
 
 	/**
-	 * ÄĞĞÔÂëÖµ
+	 * ç”·æ€§ç å€¼
 	 */
 	public static final String busi_sex_code_male = "1";
 
 	/**
-	 * Å®ĞÔÂëÖµ
+	 * å¥³æ€§ç å€¼
 	 */
 	public static final String busi_sex_code_female = "2";
 
 	/**
-	 * ÇóÖ°ÉêÇë×´Ì¬Ö®´ı´¦ÀíµÄÂëÖµ
+	 * æ±‚èŒç”³è¯·çŠ¶æ€ä¹‹å¾…å¤„ç†çš„ç å€¼
 	 */
 	public static final String busi_req_status_wait_deal = "01";
 

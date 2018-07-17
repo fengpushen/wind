@@ -78,22 +78,22 @@ public class StaffServiceImpl implements StaffService {
 		String staff_id = (String) staffInfo.get("STAFF_ID");
 		String[] roles = FrameTool.getStringArray(accountInfo, "ROLES");
 		if (FrameTool.isEmpty(roles)) {
-			rtn.setDefaultValue("È¨ÏŞ²»ÄÜÎª¿Õ");
+			rtn.setDefaultValue("æƒé™ä¸èƒ½ä¸ºç©º");
 			return rtn;
 		}
 		Map orpStaff = staffDAO.selectV_busi_staff_accountByAccountId(orp_id);
 		if (FrameTool.isEmpty(orpStaff)) {
-			rtn.setDefaultValue("²Ù×÷ÕËºÅ²»´æÔÚ");
+			rtn.setDefaultValue("æ“ä½œè´¦å·ä¸å­˜åœ¨");
 			return rtn;
 		}
 		String orpAreaCode = (String) orpStaff.get("AREA_CODE");
 		String staffAreaCode = (String) staffInfo.get("AREA_CODE");
 		if (!BusiCommon.isInScope(orpAreaCode, staffAreaCode)) {
-			rtn.setDefaultValue("²»ÄÜ²Ù×÷·Ç±¾µØÇøÕËºÅ");
+			rtn.setDefaultValue("ä¸èƒ½æ“ä½œéæœ¬åœ°åŒºè´¦å·");
 			return rtn;
 		}
 		if (!frameService.accountHasRoles(orp_id, roles)) {
-			rtn.setDefaultValue("È¨ÏŞ³¬¹ı¸³Öµ·¶Î§");
+			rtn.setDefaultValue("æƒé™è¶…è¿‡èµ‹å€¼èŒƒå›´");
 			return rtn;
 		}
 
@@ -133,8 +133,8 @@ public class StaffServiceImpl implements StaffService {
 	}
 
 	/**
-	 * ÅĞ¶Ïstaff_id¶ÔÓ¦µÄÓÃ»§ÊÇ·ñ¿ÉÒÔ¹ÜÀístaff_id_mgd¶ÔÓ¦µÄÓÃ»§£¬¹ÜÀíµÄ¹æÔòÎª 1. ³¬¼¶ÓÃ»§Ö»ÄÜÓÉ³¬¼¶ÓÃ»§×Ô¼º¹ÜÀí 2.
-	 * ÕËºÅ²»ÄÜ±»±ÈÆä×ÔÉíĞĞÕşÇø»®»¹ÒªµÍµÄÕË»§¹ÜÀí
+	 * åˆ¤æ–­staff_idå¯¹åº”çš„ç”¨æˆ·æ˜¯å¦å¯ä»¥ç®¡ç†staff_id_mgdå¯¹åº”çš„ç”¨æˆ·ï¼Œç®¡ç†çš„è§„åˆ™ä¸º 1. è¶…çº§ç”¨æˆ·åªèƒ½ç”±è¶…çº§ç”¨æˆ·è‡ªå·±ç®¡ç† 2.
+	 * è´¦å·ä¸èƒ½è¢«æ¯”å…¶è‡ªèº«è¡Œæ”¿åŒºåˆ’è¿˜è¦ä½çš„è´¦æˆ·ç®¡ç†
 	 * 
 	 * @param opr_id
 	 * @param staff_id
@@ -151,7 +151,7 @@ public class StaffServiceImpl implements StaffService {
 			return rtn;
 		}
 		if (FrameConstant.busi_com_super_admin_staff_id.equals(staff_id_mgd)) {
-			rtn.setDefaultValue("²»ÄÜ¹ÜÀíÏµÍ³¹ÜÀíÔ±ÕËºÅ");
+			rtn.setDefaultValue("ä¸èƒ½ç®¡ç†ç³»ç»Ÿç®¡ç†å‘˜è´¦å·");
 			return rtn;
 		}
 		Map staffInfo = staffDAO.selectV_busi_staff_accountById(staff_id);
@@ -168,7 +168,7 @@ public class StaffServiceImpl implements StaffService {
 				if (FrameCache.getTree(FrameConstant.busi_com_area_tree).isTheUnbornNode(node.getId(), areaStaffMgd)) {
 					rtn.setSucc(true);
 				} else {
-					rtn.setDefaultValue(staffMgdInfo.get("STAFF_NAME") + "£º²»ÄÜ¹ÜÀí·Ç±¾µØÇøÕËºÅ");
+					rtn.setDefaultValue(staffMgdInfo.get("STAFF_NAME") + "ï¼šä¸èƒ½ç®¡ç†éæœ¬åœ°åŒºè´¦å·");
 				}
 				return rtn;
 			}
@@ -177,8 +177,8 @@ public class StaffServiceImpl implements StaffService {
 	}
 
 	/**
-	 * ÅĞ¶Ïstaff_id¶ÔÓ¦µÄÓÃ»§ÊÇ·ñ¿ÉÒÔÉ¾³ıstaff_id_mgd¶ÔÓ¦µÄÓÃ»§£¬
-	 * ³¬¼¶ÓÃ»§Ö®ÍâµÄÅĞ¶Ï¹æÔòÎª³ıÁË×ñÑ­¹ÜÀíµÄ¹æÔòÍâstaff_id»¹ĞèÒªÓĞstaff_id_mgdÓÃ»§µÄËùÓĞÈ¨ÏŞ
+	 * åˆ¤æ–­staff_idå¯¹åº”çš„ç”¨æˆ·æ˜¯å¦å¯ä»¥åˆ é™¤staff_id_mgdå¯¹åº”çš„ç”¨æˆ·ï¼Œ
+	 * è¶…çº§ç”¨æˆ·ä¹‹å¤–çš„åˆ¤æ–­è§„åˆ™ä¸ºé™¤äº†éµå¾ªç®¡ç†çš„è§„åˆ™å¤–staff_idè¿˜éœ€è¦æœ‰staff_id_mgdç”¨æˆ·çš„æ‰€æœ‰æƒé™
 	 * 
 	 * @param opr_id
 	 * @param staff_id
@@ -191,7 +191,7 @@ public class StaffServiceImpl implements StaffService {
 			return rtn;
 		}
 		if (staff_id_mgd.equals(staff_id)) {
-			rtn.setDefaultValue("²»ÄÜÉ¾³ı×ÔÉíÕËºÅ");
+			rtn.setDefaultValue("ä¸èƒ½åˆ é™¤è‡ªèº«è´¦å·");
 			return rtn;
 		}
 		rtn = checkMgeAccount(staff_id, staff_id_mgd);
@@ -208,7 +208,7 @@ public class StaffServiceImpl implements StaffService {
 			if (frameService.accountHasOtherAllRole(accountStaff, accountStaffMgd)) {
 				rtn.setSucc(true);
 			} else {
-				rtn.setDefaultValue(staffMgdInfo.get("STAFF_NAME") + "£ºÈ¨ÏŞ²»¹»²»ÄÜÉ¾³ı´ËÕËºÅ");
+				rtn.setDefaultValue(staffMgdInfo.get("STAFF_NAME") + "ï¼šæƒé™ä¸å¤Ÿä¸èƒ½åˆ é™¤æ­¤è´¦å·");
 			}
 			return rtn;
 		}
@@ -226,7 +226,7 @@ public class StaffServiceImpl implements StaffService {
 			if (!oneCheck.isSucc()) {
 				rtn.setSucc(false);
 				if (!FrameTool.isEmpty(rtn.getDefaultValue())) {
-					rtn.setDefaultValue(rtn.getDefaultValue() + "¡¢");
+					rtn.setDefaultValue(rtn.getDefaultValue() + "ã€");
 				}
 				rtn.setDefaultValue(rtn.getDefaultValue() + oneCheck.getDefaultValue());
 			}

@@ -6,7 +6,7 @@ import java.util.Set;
 public interface TreeView {
 
 	/**
-	 * ¸ù¾İid»ñÈ¡Ê÷ÖĞµÄ½Úµã
+	 * æ ¹æ®idè·å–æ ‘ä¸­çš„èŠ‚ç‚¹
 	 * 
 	 * @param id
 	 * @return
@@ -14,14 +14,14 @@ public interface TreeView {
 	TreeNode getNode(String id);
 
 	/**
-	 * »ñÈ¡ËùÓĞµÄ¸ù½Úµã
+	 * è·å–æ‰€æœ‰çš„æ ¹èŠ‚ç‚¹
 	 * 
 	 * @return
 	 */
 	List<TreeNode> getRoots();
 
 	/**
-	 * »ñÈ¡Ò»¸ö½ÚµãµÄËùÓĞ×Ó½Úµã
+	 * è·å–ä¸€ä¸ªèŠ‚ç‚¹çš„æ‰€æœ‰å­èŠ‚ç‚¹
 	 * 
 	 * @param treeNode
 	 * @return
@@ -31,21 +31,21 @@ public interface TreeView {
 	List<TreeNode> getSons(String id);
 
 	/**
-	 * ÏòÊ÷ÖĞÔö¼Ó½Úµã
+	 * å‘æ ‘ä¸­å¢åŠ èŠ‚ç‚¹
 	 * 
 	 * @param node
 	 */
 	void addNode(TreeNode node);
 
 	/**
-	 * »ñÈ¡Ê÷µÄ×î´ó²ã¸ß
+	 * è·å–æ ‘çš„æœ€å¤§å±‚é«˜
 	 * 
 	 * @return
 	 */
 	int getMaxLevel();
 
 	/**
-	 * »ñÈ¡½ÚµãµÄ¸ù½Úµã
+	 * è·å–èŠ‚ç‚¹çš„æ ¹èŠ‚ç‚¹
 	 * 
 	 * @param id
 	 * @return
@@ -55,7 +55,7 @@ public interface TreeView {
 	TreeNode getRoot(TreeNode node);
 
 	/**
-	 * »ñÈ¡Ò»×é½ÚµãµÄËùÓĞ¸ù½Úµã
+	 * è·å–ä¸€ç»„èŠ‚ç‚¹çš„æ‰€æœ‰æ ¹èŠ‚ç‚¹
 	 * 
 	 * @param id
 	 * @return
@@ -65,7 +65,7 @@ public interface TreeView {
 	Set<TreeNode> getRelatedHigherTreeNode(List<String> ids);
 
 	/**
-	 * »ñÈ¡idËùÓĞµÄÉÏ¼¶½Úµã£¬°üÀ¨id×Ô¼º
+	 * è·å–idæ‰€æœ‰çš„ä¸Šçº§èŠ‚ç‚¹ï¼ŒåŒ…æ‹¬idè‡ªå·±
 	 * 
 	 * @param id
 	 * @return
@@ -75,7 +75,7 @@ public interface TreeView {
 	Set<TreeNode> getRelatedHigherTreeNode(TreeNode node);
 
 	/**
-	 * ÅĞ¶ÏunbornNode½ÚµãÊÇ·ñÎªnode½ÚµãµÄ×ÓËï½Úµã
+	 * åˆ¤æ–­unbornNodeèŠ‚ç‚¹æ˜¯å¦ä¸ºnodeèŠ‚ç‚¹çš„å­å­™èŠ‚ç‚¹
 	 * 
 	 * @param nodeId
 	 * @param unbornNodeId
