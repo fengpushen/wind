@@ -295,7 +295,7 @@ public class HumanResourceController {
 
 	@ResponseBody
 	@RequestMapping(value = "/updateHrInfoStaff.do")
-	public String updateHrInfoStaff(HttpSession session, HttpServletRequest request) {
+	public Object updateHrInfoStaff(HttpSession session, HttpServletRequest request) {
 
 		ExecuteResult rst = new ExecuteResult();
 		try {
@@ -306,7 +306,7 @@ public class HumanResourceController {
 			rst.setDefaultValue("程序内部错误");
 			log.error("error", e);
 		}
-		return FrameTool.toJson(rst);
+		return rst;
 	}
 
 	@RequestMapping("/unbindHr.do")

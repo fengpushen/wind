@@ -249,6 +249,9 @@ function enableEles(ids) {
 }
 
 function loadDatagridData(datagridId) {
+	if(datagridId == null){
+		datagridId = 'datagrid';
+	}
 	var formId = $('#' + datagridId).datagrid('options').formId;
 	$('#' + datagridId).datagrid('load', $("#" + formId).serializeJson());
 }

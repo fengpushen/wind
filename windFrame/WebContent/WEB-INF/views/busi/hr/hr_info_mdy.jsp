@@ -392,9 +392,11 @@ body, td, th, input {
 				$('#theForm').form({
 					url : 'busi/hr/updateHrInfoStaff.do',
 					success : function(data) {
+						console.log(data);
 						var rst = eval('(' + data + ')');
+						console.log(rst);
 						if (rst.isSucc) {
-							loadDatagridData();
+							loadDatagridData('datagrid');
 							$.messager.alert('提示', '操作成功');
 							$('#dd').dialog('close');
 						} else {

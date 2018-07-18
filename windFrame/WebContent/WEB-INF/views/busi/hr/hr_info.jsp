@@ -385,7 +385,7 @@ body, td, th, input {
 									success : function(data) {
 										var rst = eval('(' + data + ')');
 										if (rst.isSucc) {
-											loadDatagridData();
+											loadDatagridData('datagrid');
 											showOprTip("oprTip",
 													"操作成功，你可继续添加下一条", 'green');
 											var hj_area = $("#hj_area").val();
