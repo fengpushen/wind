@@ -86,7 +86,7 @@
 			$('#menuTree').tree({
 				url : 'loginaccount/loadUserMenu.do',
 				onClick : function(node) {
-					if (!(node.id in loadedMenu)) {
+					if (!(node.id in loadedMenu) && node.attributes.menu_url != null) {
 						var content = '<iframe frameborder="0"  src="' + node.attributes.menu_url + '" style="width:100%;height:100%;"></iframe>';
 						$('#tabs').tabs('add', {
 							id : node.id,

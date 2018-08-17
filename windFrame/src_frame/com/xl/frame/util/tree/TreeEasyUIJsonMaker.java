@@ -197,7 +197,11 @@ public class TreeEasyUIJsonMaker implements TreeJsonMaker {
 			Map<String, Object> nodeInfo = node.getNodeInfo();
 			for (Map.Entry<String, Object> entry : nodeInfo.entrySet()) {
 				sb.append("\"").append(entry.getKey()).append("\":");
-				sb.append("\"").append(entry.getValue()).append("\"");
+				if (entry.getValue() == null) {
+					sb.append("null");
+				} else {
+					sb.append("\"").append(entry.getValue()).append("\"");
+				}
 				sb.append(",");
 			}
 			sb.deleteCharAt(sb.length() - 1);

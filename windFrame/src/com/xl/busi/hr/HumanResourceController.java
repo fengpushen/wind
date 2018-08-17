@@ -87,8 +87,8 @@ public class HumanResourceController {
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/saveHrInfo.do")
-	public Object saveHrInfo(HttpSession session, HttpServletRequest request) {
+	@RequestMapping(value = "/saveHrInfo.do", produces = "text/plain;charset=UTF-8")
+	public String saveHrInfo(HttpSession session, HttpServletRequest request) {
 
 		ExecuteResult rst = new ExecuteResult();
 		try {
@@ -99,11 +99,11 @@ public class HumanResourceController {
 			rst.setDefaultValue("程序内部错误");
 			log.error("error", e);
 		}
-		return rst;
+		return FrameTool.toJson(rst);
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/loadHrInfo.do")
+	@RequestMapping(value = "/loadHrInfo.do", produces = "text/plain;charset=UTF-8")
 	public String loadHrInfo(@RequestParam(required = true) String hr_id) {
 
 		ExecuteResult rst = humanResourceService.loadHrInfo(hr_id);
@@ -132,7 +132,7 @@ public class HumanResourceController {
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/delHrInfo.do")
+	@RequestMapping(value = "/delHrInfo.do", produces = "text/plain;charset=UTF-8")
 	public String delHrInfo(HttpSession session, HttpServletRequest request) {
 
 		ExecuteResult rst = new ExecuteResult();
@@ -151,7 +151,7 @@ public class HumanResourceController {
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/delJobNojobInfo.do")
+	@RequestMapping(value = "/delJobNojobInfo.do", produces = "text/plain;charset=UTF-8")
 	public String delJobNojobInfo(HttpSession session, HttpServletRequest request,
 			@RequestParam(required = true) String hr_id) {
 
@@ -214,7 +214,7 @@ public class HumanResourceController {
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/saveJobInfo.do")
+	@RequestMapping(value = "/saveJobInfo.do", produces = "text/plain;charset=UTF-8")
 	public String saveJobInfo(HttpSession session, HttpServletRequest request) {
 
 		ExecuteResult rst = new ExecuteResult();
@@ -230,7 +230,7 @@ public class HumanResourceController {
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/comHirePerson.do")
+	@RequestMapping(value = "/comHirePerson.do", produces = "text/plain;charset=UTF-8")
 	public String comHirePerson(HttpSession session, HttpServletRequest request) {
 
 		ExecuteResult rst = new ExecuteResult();
@@ -248,7 +248,7 @@ public class HumanResourceController {
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/saveNOjobInfo.do")
+	@RequestMapping(value = "/saveNOjobInfo.do", produces = "text/plain;charset=UTF-8")
 	public String saveNOjobInfo(HttpSession session, HttpServletRequest request) {
 
 		ExecuteResult rst = new ExecuteResult();
@@ -270,7 +270,7 @@ public class HumanResourceController {
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/bindHr.do")
+	@RequestMapping(value = "/bindHr.do", produces = "text/plain;charset=UTF-8")
 	public String bindHr(@RequestParam(required = true) String idcard, @RequestParam(required = true) String hr_name) {
 
 		ExecuteResult rst = humanResourceService.bindHr(idcard, hr_name);
@@ -278,7 +278,7 @@ public class HumanResourceController {
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/saveHrInfoSelfMo.do")
+	@RequestMapping(value = "/saveHrInfoSelfMo.do", produces = "text/plain;charset=UTF-8")
 	public String saveHrInfoSelfMo(HttpSession session, HttpServletRequest request) {
 
 		ExecuteResult rst = new ExecuteResult();
@@ -294,8 +294,8 @@ public class HumanResourceController {
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/updateHrInfoStaff.do")
-	public Object updateHrInfoStaff(HttpSession session, HttpServletRequest request) {
+	@RequestMapping(value = "/updateHrInfoStaff.do", produces = "text/plain;charset=UTF-8")
+	public String updateHrInfoStaff(HttpSession session, HttpServletRequest request) {
 
 		ExecuteResult rst = new ExecuteResult();
 		try {
@@ -306,7 +306,7 @@ public class HumanResourceController {
 			rst.setDefaultValue("程序内部错误");
 			log.error("error", e);
 		}
-		return rst;
+		return FrameTool.toJson(rst);
 	}
 
 	@RequestMapping("/unbindHr.do")
@@ -381,7 +381,7 @@ public class HumanResourceController {
 	}
 
 	@ResponseBody
-	@RequestMapping("/batchImpHrInfo.do")
+	@RequestMapping(value = "/batchImpHrInfo.do", produces = "text/plain;charset=UTF-8")
 	public String batchImpHrInfo(@RequestParam(value = "hrImpFile", required = true) CommonsMultipartFile file,
 			HttpSession session) {
 
@@ -444,7 +444,7 @@ public class HumanResourceController {
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/attentionHrs.do")
+	@RequestMapping(value = "/attentionHrs.do", produces = "text/plain;charset=UTF-8")
 	public String attentionHrs(HttpSession session, HttpServletRequest request) {
 
 		ExecuteResult rst = new ExecuteResult();
@@ -463,7 +463,7 @@ public class HumanResourceController {
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/unattentionHrs.do")
+	@RequestMapping(value = "/unattentionHrs.do", produces = "text/plain;charset=UTF-8")
 	public String unattentionHrs(HttpSession session, HttpServletRequest request) {
 
 		ExecuteResult rst = new ExecuteResult();
@@ -481,7 +481,7 @@ public class HumanResourceController {
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/turnRegularEmployees.do")
+	@RequestMapping(value = "/turnRegularEmployees.do", produces = "text/plain;charset=UTF-8")
 	public String turnRegularEmployees(HttpSession session, HttpServletRequest request) {
 
 		ExecuteResult rst = new ExecuteResult();
@@ -506,7 +506,7 @@ public class HumanResourceController {
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/quitHire.do")
+	@RequestMapping(value = "/quitHire.do", produces = "text/plain;charset=UTF-8")
 	public String quitHire(HttpSession session, HttpServletRequest request,
 			@RequestParam(required = true) String hire_id, @RequestParam(required = true) String quit_time,
 			@RequestParam(required = true) String quit_reason) {

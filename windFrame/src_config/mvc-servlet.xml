@@ -28,7 +28,6 @@
 							<value>text/plain;charset=UTF-8</value>
 						</list>
 					</property>
-					<property name="writeAcceptCharset" value="false"></property>
 				</bean>
 				<bean
 					class="org.springframework.http.converter.ByteArrayHttpMessageConverter" />
