@@ -383,6 +383,7 @@ body, td, th, input {
 								{
 									url : 'busi/hr/saveHrInfo.do',
 									success : function(data) {
+										console.log(data);
 										var rst = eval('(' + data + ')');
 										if (rst.isSucc) {
 											loadDatagridData('datagrid');
