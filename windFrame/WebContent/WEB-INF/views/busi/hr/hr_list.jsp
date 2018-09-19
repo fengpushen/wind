@@ -313,6 +313,10 @@
 						width : '4%',
 						align : 'center'
 					}, {
+						field : 'PHONE',
+						title : '电话',
+						hidden: 'true'
+					}, {
 						field : 'HJ_AREA_NAME',
 						title : '户籍地',
 						width : '8%',
