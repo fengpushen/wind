@@ -741,12 +741,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		  from (select *
 		          from com_area
 		         where area_level = #{area_level}
+		         <if test="area_type != null and area_type != ''">
+					and area_type = #{area_type}
+				 </if>
 		         <if test='area_scope_level == "1"'>and city_code = #{area_scope}</if>
 		         <if test='area_scope_level == "2"'>and country_code = #{area_scope}</if>
 		         <if test='area_scope_level == "3"'>and STREET_CODE = #{area_scope}</if>
 		         <if test='area_scope_level == "4"'>and VILLAGE_CODE = #{area_scope}</if>
 		           ) a
-		 inner join (select area_code,
+		 left outer join (select area_code,
 		                    all_count,
 		                    ldl,
 		                    jobed,

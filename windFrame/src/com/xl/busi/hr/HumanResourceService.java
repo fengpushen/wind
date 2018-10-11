@@ -58,5 +58,5 @@ public interface HumanResourceService {
 
 	ExecuteResult quitHire(String opr_id, String hire_id, String quit_time, String quit_reason);
 
-	ExecuteResult loadHrJobTjList(String area_scope, String area_level);
+	ExecuteResult loadHrJobTjList(String area_scope, String area_level, String area_type);
 }

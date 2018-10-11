@@ -26,6 +26,10 @@
 					<td style="width: 23%; text-align: left"><input
 						class="easyui-textbox" id="area_level" name="area_level"
 						style="width: 100%" value="${area_level }"></td>
+					<td style="width: 10%; text-align: right">地区性质:</td>
+					<td style="width: 23%; text-align: left"><input
+						class="easyui-textbox" id="area_type" name="area_type"
+						style="width: 100%" ></td>
 				</tr>
 			</table>
 		</form>
@@ -109,6 +113,30 @@
 							}
 						}
 						return data;
+					}
+				});
+				$("#area_type").combobox({
+					method : 'post',
+					valueField : 'id',
+					textField : 'text',
+					panelHeight : 'auto',
+					required : false,
+					editable : false,
+					loader : function(param, success, error) {
+						$.ajax({
+							url : 'frame/loadCode.do?codeName=area_type',
+							dataType : 'json',
+							success : function(data) {
+								data.unshift({
+									"text" : "请选择",
+									"id" : ""
+								});
+								success(data);
+							},
+							error : function() {
+								error.apply(this, arguments);
+							}
+						});
 					}
 				});
 				$('#datagrid').datagrid({

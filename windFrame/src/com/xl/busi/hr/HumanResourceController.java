@@ -535,9 +535,9 @@ public class HumanResourceController {
 	@ResponseBody
 	@RequestMapping(value = "/loadHrJobTjList.do")
 	public String loadHrJobTjList(@RequestParam(required = true) String area_scope,
-			@RequestParam(required = true) String area_level) {
+			@RequestParam(required = true) String area_level, String area_type) {
 
-		ExecuteResult rst = humanResourceService.loadHrJobTjList(area_scope, area_level);
+		ExecuteResult rst = humanResourceService.loadHrJobTjList(area_scope, area_level, area_type);
 		if (rst.isSucc()) {
 			Map map = (Map) rst.getInfoOne("info");
 			return FrameTool.toJson(map);

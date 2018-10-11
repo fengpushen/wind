@@ -753,11 +753,12 @@ public class HumanResourceServiceImpl implements HumanResourceService {
 		return rtn;
 	}
 
-	public ExecuteResult loadHrJobTjList(String area_scope, String area_level) {
+	public ExecuteResult loadHrJobTjList(String area_scope, String area_level, String area_type) {
 		Map params = new HashMap();
 		params.put("area_scope", area_scope);
 		params.put("area_scope_level", BusiCommon.getAreaLevel(area_scope));
 		params.put("area_level", area_level);
+		params.put("area_type", area_type);
 		return frameDAO.qryPaginationInfo("selectBusi_hr_job_tj", params);
 	}
 
