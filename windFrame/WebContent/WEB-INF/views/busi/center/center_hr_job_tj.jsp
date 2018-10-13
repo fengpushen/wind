@@ -159,18 +159,21 @@
 						title : '采集总数',
 						width : '6%',
 						rowspan : 3,
+						sortable : true,
 						align : 'center'
 					},{
 						field : 'LDL',
 						title : '劳动力',
 						width : '6%',
 						rowspan : 3,
+						sortable : true,
 						align : 'center'
 					}, {
 						field : 'JOBED',
 						title : '已就业',
 						width : '10%',
 						rowspan : 3,
+						sortable : true,
 						align : 'center'
 					}, {
 						title : '未就业',
@@ -180,6 +183,7 @@
 						field : 'JYL',
 						title : '就业占比',
 						width : '8%',
+						sortable : true,
 						align : 'center',
 						rowspan : 3
 					} ], [ {
@@ -187,6 +191,7 @@
 						title : '总数',
 						width : '8%',
 						rowspan : 2,
+						sortable : true,
 						align : 'center'
 					}, {
 						field : 'NO_WANT_JOB',

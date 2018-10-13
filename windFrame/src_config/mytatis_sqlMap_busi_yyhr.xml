@@ -829,7 +829,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		                      group by area_code)) b
 		    on a.area_code = b.AREA_CODE  
 		<if test="record_count == null">
-		order by a.area_code
+			<if test ="sort == null or sort == ''">
+				order by a.area_code
+			</if>
+			<if test ="sort != null and sort != ''">
+				order by ${sort} ${order} 
+				<if test="order == 'asc'">
+					nulls first 
+				</if>
+				<if test="order == 'desc'">
+					nulls last 
+				</if>
+			</if>
 		</if>
 		<if test="record_count == null and page != null and page != ''">
 			)qry ) where rowidx > (#{page} - 1) * #{rows} and rowidx
