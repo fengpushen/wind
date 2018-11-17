@@ -609,6 +609,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="IS_JOB != null and IS_JOB != ''">
 				and IS_JOB = #{IS_JOB}
 			</if>
+			<if test="area_kind != null and area_kind != ''">
+				and WANT_WORK_AREA_KIND = #{area_kind}
+			</if>
 			<if test="HJ_AREA != null and HJ_AREA != ''">
 				<choose>
 					<when test="HJ_AREA_BJ != null and HJ_AREA_BJ  != ''">

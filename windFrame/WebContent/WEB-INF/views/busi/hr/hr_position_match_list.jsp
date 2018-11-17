@@ -32,6 +32,10 @@
 					<td style="width: 23%; text-align: left"><input
 						class="easyui-combobox" name="IS_JOB" id="IS_JOB_LIST"
 						style="width: 100%" /></td>
+					<td style="width: 10%; text-align: right">区域意向:</td>
+					<td style="width: 23%; text-align: left"><input
+						class="easyui-combobox" name="area_kind" id="area_kind"
+						style="width: 100%" /></td>
 					<td colspan="4" style="text-align: center;"><a
 						href="javascript:void(0)" class="easyui-linkbutton"
 						onclick="loadDatagridData();" style="width: 80px">开始匹配</a></td>
@@ -199,6 +203,11 @@
 						});
 					}
 				});
+				comboboxDefaultInit('area_kind', 'area_kind', false,
+						'auto', false, true, {
+							"text" : "请选择",
+							"id" : ""
+						});
 				var areaTree = new AreaTree('dlgList', 'HJ_AREA_LIST',
 						'HJ_AREA_NAME_LIST');
 				var accountArea = '${accountInfo.staffInfo.AREA_CODE}';
@@ -280,6 +289,16 @@
 					}, {
 						field : 'IS_WANT_JOB_NAME',
 						title : '有就业意愿',
+						width : '6%',
+						align : 'center'
+					}, {
+						field : 'WANT_WORK_AREA_KIND_NAME',
+						title : '区域意向',
+						width : '6%',
+						align : 'center'
+					}, {
+						field : 'WANT_JOB_NAME',
+						title : '工种意愿',
 						width : '6%',
 						align : 'center'
 					}, {
