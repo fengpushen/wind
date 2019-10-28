@@ -52,7 +52,19 @@ public class CommonServiceImpl implements CommonService {
 				nodeBj = new TreeNode(areaCode, areaName, pid);
 			}
 			node.setOrderNo(node.getId());
+			node.addNodeInfo("province_code", area.get("PROVINCE_CODE"));
+			node.addNodeInfo("city_code", area.get("CITY_CODE"));
+			node.addNodeInfo("country_code", area.get("COUNTRY_CODE"));
+			node.addNodeInfo("street_code", area.get("STREET_CODE"));
+			node.addNodeInfo("village_code", area.get("VILLAGE_CODE"));
+			node.addNodeInfo("area_level", areaLevel);
 			nodeBj.setOrderNo(nodeBj.getId());
+			nodeBj.addNodeInfo("province_code", area.get("PROVINCE_CODE"));
+			nodeBj.addNodeInfo("city_code", area.get("CITY_CODE"));
+			nodeBj.addNodeInfo("country_code", area.get("COUNTRY_CODE"));
+			nodeBj.addNodeInfo("street_code", area.get("STREET_CODE"));
+			nodeBj.addNodeInfo("village_code", area.get("VILLAGE_CODE"));
+			nodeBj.addNodeInfo("area_level", areaLevel);
 			nodes.add(node);
 			bjnodes.add(nodeBj);
 			if (!"4".equals(areaLevel)) {

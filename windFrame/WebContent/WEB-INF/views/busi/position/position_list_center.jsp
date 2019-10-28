@@ -25,7 +25,13 @@
 					<td style="width: 10%; text-align: right">月工资大于:</td>
 					<td style="width: 23%; text-align: left"><input
 						class="easyui-textbox" name="pay_botton_bgn" style="width: 100%" /></td>
-					<td style="width: 33%; text-align: center"><a
+				</tr>
+				<tr>
+					<td style="width: 10%; text-align: right">工作地区域:</td>
+					<td style="width: 23%; text-align: left"><input
+						class="easyui-combobox" name="area_kind" id="area_kind"
+						style="width: 100%" /></td>
+					<td style="width: 33%; text-align: center" colspan="4"><a
 						href="javascript:void(0)" class="easyui-linkbutton"
 						onclick="loadDatagridData();" style="width: 80px">查询</a>
 				</tr>
@@ -45,6 +51,11 @@
 			$('#datagrid').datagrid('load', $("#qryForm").serializeJson());
 		}
 		$(function() {
+			comboboxDefaultInit('area_kind', 'area_kind', false,
+					'auto', false, true, {
+						"text" : "请选择",
+						"id" : ""
+					});
 			var toolbar = [ {
 				text : '查看岗位详情',
 				iconCls : 'icon-cut',

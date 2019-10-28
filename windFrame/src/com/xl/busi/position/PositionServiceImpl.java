@@ -13,13 +13,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import com.xl.busi.BusiCommon;
-import com.xl.busi.company.CompanyDAO;
 import com.xl.busi.hr.HumanResourceDAO;
 import com.xl.frame.FrameDAO;
 import com.xl.frame.util.ExecuteResult;
-import com.xl.frame.util.FrameCache;
 import com.xl.frame.util.FrameConstant;
 import com.xl.frame.util.FrameTool;
+import com.xl.frame.util.tree.TreeNode;
 
 @Service
 public class PositionServiceImpl implements PositionService {
@@ -62,6 +61,15 @@ public class PositionServiceImpl implements PositionService {
 			String p_work_area = (String) params.get("P_WORK_AREA");
 			if (!FrameTool.isEmpty(p_work_area)) {
 				params.put("P_WORK_AREA_LEVEL", BusiCommon.getAreaLevel(p_work_area));
+			}
+			String area_kind = (String) params.get("area_kind");
+			if (!FrameTool.isEmpty(area_kind)) {
+				String staffArea = (String) params.get("staffArea");
+				TreeNode node = BusiCommon.getAreaTreeNode(staffArea);
+				params.put("staff_area_level", node.getNodeInfo().get("area_level"));
+				params.put("staff_area_province_code", node.getNodeInfo().get("province_code"));
+				params.put("staff_area_city_code", node.getNodeInfo().get("city_code"));
+				params.put("staff_area_country_code", node.getNodeInfo().get("country_code"));
 			}
 			return frameDAO.qryPaginationInfo("selectBs_position", params);
 		} catch (Exception e) {

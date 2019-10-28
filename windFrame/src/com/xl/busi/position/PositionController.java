@@ -43,7 +43,7 @@ public class PositionController {
 
 		return new ModelAndView("/busi/position/position_list_com");
 	}
-	
+
 	@RequestMapping("/showCenterPositionUI")
 	public ModelAndView showCenterPositionUI() {
 
@@ -66,9 +66,12 @@ public class PositionController {
 
 	@ResponseBody
 	@RequestMapping(value = "/loadPositionValidList.do")
-	public Object loadPositionValidList(HttpServletRequest request) {
+	public Object loadPositionValidList(HttpSession session, HttpServletRequest request) {
 
 		Map<String, Object> info = FrameTool.getRequestParameterMap(request);
+		String staffArea = BusiCommon.getLoginAccountStaffArea(session);
+		BusiCommon.getAreaTreeNode(staffArea);
+		info.put("staffArea", staffArea);
 		ExecuteResult rst = positionService.loadPositionValidList(info);
 		if (rst.isSucc()) {
 			Map map = (Map) rst.getInfoOne("info");
@@ -104,7 +107,7 @@ public class PositionController {
 		}
 		return new ModelAndView("/busi/position/position_info_com", positionInfo);
 	}
-	
+
 	@RequestMapping("/showPositionInfoUI")
 	public ModelAndView showPositionInfoUI(HttpSession session, @RequestParam(required = true) String pid) {
 		Map positionInfo = null;
@@ -113,7 +116,7 @@ public class PositionController {
 			positionInfo = (Map) rst.getInfoOne("positionInfo");
 		}
 
-		String c_id = (String)positionInfo.get("C_ID");
+		String c_id = (String) positionInfo.get("C_ID");
 		rst = companyService.loadComInfo(c_id);
 		if (rst.isSucc()) {
 			positionInfo.put("comInfo", rst.getInfoOne("comInfo"));
@@ -309,17 +312,16 @@ public class PositionController {
 		}
 		return new ModelAndView("/busi/position/position_req_interview_com_rtc", trans);
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(value = "/bgnPostionReqInterview.do")
-	public String bgnPostionReqInterview(HttpServletRequest request,
-			@RequestParam(required = true) String req_id) {
+	public String bgnPostionReqInterview(HttpServletRequest request, @RequestParam(required = true) String req_id) {
 
 		String host = request.getHeader("host");
 		ExecuteResult rst = positionService.bgnPostionReqInterview(req_id, host);
 		return FrameTool.toJson(rst);
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(value = "/personInPostionReqInterview.do")
 	public String personInPostionReqInterview(HttpServletRequest request,

@@ -376,6 +376,42 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="pay_botton_bgn != null and pay_botton_bgn != ''">
 				and (p_pay_botton >= #{pay_botton_bgn} or p_pay_top >= #{pay_botton_bgn})
 			</if>
+			<if test="area_kind != null and area_kind != ''">
+				<choose>
+					<when test="area_kind == 10">
+						<choose>
+							<when test="staff_area_level >= 2">
+								and p_work_area_country_code = #{staff_area_country_code}
+							</when>
+							<when test="staff_area_level = 1">
+								and p_work_area_city_code = #{staff_area_city_code} and p_work_area_level >= 2
+							</when>
+							<when test="staff_area_level = 0">
+								and p_work_area_province_code = #{staff_area_province_code} and p_work_area_level >= 2
+							</when>
+						</choose>
+					</when>
+					<when test="area_kind == 20">
+						<choose>
+							<when test="staff_area_level >= 2">
+								and p_work_area_country_code &lt;> #{staff_area_country_code} and p_work_area_city_code = #{staff_area_city_code}
+							</when>
+							<when test="staff_area_level = 1">
+								and p_work_area_city_code = #{staff_area_city_code} and p_work_area_level = 1
+							</when>
+							<when test="staff_area_level = 0">
+								and p_work_area_province_code = #{staff_area_province_code} and p_work_area_level = 1
+							</when>
+						</choose>
+					</when>
+					<when test="area_kind == 30">
+						and p_work_area_city_code &lt;> #{staff_area_city_code} and p_work_area_province_code = #{staff_area_province_code}
+					</when>
+					<when test="area_kind == 40">
+						and p_work_area_province_code &lt;> #{staff_area_province_code}
+					</when>
+				</choose>
+			</if>
 			<if test="P_WORK_AREA != null and P_WORK_AREA != ''">
 				<choose>
 					<when test="P_WORK_AREA_LEVEL == 0">
