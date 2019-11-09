@@ -363,7 +363,10 @@
 							"id" : ""
 						});
 				comboboxDefaultInit('want_train_type', 'train_type', false,
-						'auto', false, true);
+						'auto', false, true, {
+							"text" : "有培训需求",
+							"id" : "00"
+						});
 				comboboxDefaultInit('sex', 'sex', false, 'auto', false,
 						true);
 

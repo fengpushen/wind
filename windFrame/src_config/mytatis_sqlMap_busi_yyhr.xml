@@ -103,7 +103,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				and exists (select 1 from bs_hr_label cc where cc.hr_id = a.hr_id and cc.c_id = #{lable_cid})
 			</if>
 			<if test="want_train_type != null and want_train_type != ''">
-				and exists (select 1 from BS_H_WANT_TRAIN_TYPE b where a.hr_id = b.hr_id and b.train_type = #{want_train_type})
+				and exists (select 1 from BS_H_WANT_TRAIN_TYPE b where a.hr_id = b.hr_id 
+				<if test="want_train_type != '00'">
+					and b.train_type = #{want_train_type}
+				</if>
+				)
 			</if>
 			<if test="IS_WANT_JOB != null and IS_WANT_JOB != ''">
 				and IS_WANT_JOB = #{IS_WANT_JOB}
@@ -304,7 +308,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		from bs_company
 		<where>
 			<if test="C_NAME_LIKE != null and C_NAME_LIKE != ''">
-				C_NAME like #{C_NAME_LIKE} || '%'
+				C_NAME like '%' || #{C_NAME_LIKE} || '%'
 			</if>
 			<if test="C_NAME != null and C_NAME != ''">
 				and C_NAME = #{C_NAME}
