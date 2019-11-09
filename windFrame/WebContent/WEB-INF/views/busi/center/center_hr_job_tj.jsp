@@ -180,6 +180,13 @@
 						align : 'center',
 						colspan : 8
 					},{
+						field : 'SYL',
+						title : '失业率',
+						width : '8%',
+						sortable : true,
+						align : 'center',
+						rowspan : 3
+					},{
 						field : 'JYL',
 						title : '就业占比',
 						width : '8%',
