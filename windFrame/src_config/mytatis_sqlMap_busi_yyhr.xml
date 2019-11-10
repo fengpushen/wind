@@ -414,6 +414,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 					<when test="area_kind == 40">
 						and p_work_area_province_code &lt;> #{staff_area_province_code}
 					</when>
+					<when test="area_kind == 50">
+						and 1 = 2
+					</when>
 				</choose>
 			</if>
 			<if test="P_WORK_AREA != null and P_WORK_AREA != ''">

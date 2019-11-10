@@ -14,6 +14,7 @@
 	<div class="easyui-panel" data-options="region:'north',noheader:true"
 		style="overflow: hidden; background-color: #E0EEEE;">
 		<form id="qryForm" method="post">
+			<input type="hidden" id="P_WORK_AREA" name="P_WORK_AREA" />
 			<table style="width: 100%">
 				<tr>
 					<td style="width: 10%; text-align: right">单位名称:</td>
@@ -31,6 +32,10 @@
 					<td style="width: 23%; text-align: left"><input
 						class="easyui-combobox" name="area_kind" id="area_kind"
 						style="width: 100%" /></td>
+					<td style="width: 10%; text-align: right">工作地:</td>
+					<td style="width: 23%; text-align: left"><input
+						class="easyui-textbox" id="P_WORK_AREA_NAME"
+						 style="width: 100%"></td>
 					<td style="width: 33%; text-align: center" colspan="4"><a
 						href="javascript:void(0)" class="easyui-linkbutton"
 						onclick="loadDatagridData();" style="width: 80px">查询</a>
@@ -45,6 +50,13 @@
 	</div>
 
 	<div id="dd"></div>
+	
+	<div id="dlgList" class="easyui-dialog" title="选择"
+		style="width: 250px; height: 350px; padding: 10px;"
+		data-options="iconCls:'icon-save',closed:true">
+		<ul id="areaTreeList" class="easyui-tree">
+		</ul>
+	</div>
 
 	<script type="text/javascript">
 		function loadDatagridData() {
@@ -56,6 +68,28 @@
 						"text" : "请选择",
 						"id" : ""
 					});
+			var areaTree = new AreaTree('dlgList', 'P_WORK_AREA', 'P_WORK_AREA_NAME');
+			var accountArea = '${accountInfo.staffInfo.AREA_CODE}';
+			$('#areaTreeList').tree({
+				url : 'busi/common/loadTree.do',
+				method : 'post',
+				queryParams : {
+					'treeName' : 'busi_com_area_tree_bj'
+				},
+				onClick : function(node) {
+					areaTree.nodeClick(node);
+				}
+			});
+			$('#P_WORK_AREA_NAME').textbox({
+				buttonText : '选择',
+				onClickButton : function() {
+					areaTree.showAreaTree();
+				},
+				onClick : function() {
+					areaTree.showAreaTree();
+				},
+				editable : false
+			});
 			var toolbar = [ {
 				text : '查看岗位详情',
 				iconCls : 'icon-cut',
