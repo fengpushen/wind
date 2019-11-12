@@ -220,19 +220,19 @@
 						width : '15%',
 						align : 'center'
 					}, {
-						field : 'C_LICENCE',
-						title : '营业执照',
+						field : 'C_ZPR',
+						title : '联系人',
 						width : '15%',
 						align : 'center'
 					}, {
-						field : 'C_FR',
-						title : '法人',
+						field : 'C_ZPDH',
+						title : '联系电话',
 						width : '8%',
 						align : 'center'
 					}, {
-						field : 'C_CREATETIME',
-						title : '成立时间',
-						width : '8%',
+						field : 'C_ADDRESS',
+						title : '地址',
+						width : '20%',
 						align : 'center'
 					} ] ],
 				});
