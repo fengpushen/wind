@@ -937,5 +937,70 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			&lt;= #{page} * #{rows}
 		</if>
 	</select>
+	
+	<select id="selectBusi_hr_change_tj" resultType="hashMap"
+		parameterType="hashMap">
+		<if test="record_count == null and page != null and page != ''">
+			select * from (select rownum as rowidx, qry.* from (
+		</if>
+		select
+		<if test="record_count == null">
+			a.area_name, b.*
+		</if>
+		<if test="record_count != null">
+			count(1) as record_count
+		</if>
+		  from (select *
+		          from com_area
+		         where area_level = #{area_level}
+		         <if test="area_type != null and area_type != ''">
+					and area_type = #{area_type}
+				 </if>
+		         <if test='area_scope_level == "1"'>and city_code = #{area_scope}</if>
+		         <if test='area_scope_level == "2"'>and country_code = #{area_scope}</if>
+		         <if test='area_scope_level == "3"'>and STREET_CODE = #{area_scope}</if>
+		         <if test='area_scope_level == "4"'>and VILLAGE_CODE = #{area_scope}</if>
+		           ) a
+					 left outer join (select area_code,
+			       sum(all_count) all_count,
+			       sum(changed) changed,
+			       sum(job_change) job_change,
+			       sum(jyxx_change) jyxx_change,
+			       decode(sum(all_count),
+			              0,
+			              100,
+			              ROUND(sum(changed) * 100 / sum(all_count), 2)) as gxl
+			  from (select <if test='area_level == "1"'>b.city_code</if>
+		                       <if test='area_level == "2"'>b.country_code</if>
+		                       <if test='area_level == "3"'>b.STREET_CODE</if>
+		                       <if test='area_level == "4"'>b.VILLAGE_CODE</if> as area_code, 
+			               a.all_count,
+			               a.changed,
+			               a.job_change,
+			               a.jyxx_change
+			          from v_hr_change_base a
+			         inner join v_com_area_all_name b
+			            on a.hj_area = b.AREA_CODE)
+			 group by area_code) b
+		    on a.area_code = b.AREA_CODE  
+		<if test="record_count == null">
+			<if test ="sort == null or sort == ''">
+				order by a.area_code
+			</if>
+			<if test ="sort != null and sort != ''">
+				order by ${sort} ${order} 
+				<if test="order == 'asc'">
+					nulls first 
+				</if>
+				<if test="order == 'desc'">
+					nulls last 
+				</if>
+			</if>
+		</if>
+		<if test="record_count == null and page != null and page != ''">
+			)qry ) where rowidx > (#{page} - 1) * #{rows} and rowidx
+			&lt;= #{page} * #{rows}
+		</if>
+	</select>
 
 </mapper>

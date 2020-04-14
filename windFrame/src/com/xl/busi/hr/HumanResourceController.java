@@ -531,6 +531,17 @@ public class HumanResourceController {
 		trans.put("area_scope_name", BusiCommon.getAreaName(area));
 		return new ModelAndView("/busi/center/center_hr_job_tj", trans);
 	}
+	
+	@RequestMapping("/showHrChangeTjUI.do")
+	public ModelAndView showHrChangeTjUI(HttpSession session) {
+		String area = BusiCommon.getLoginAccountStaffArea(session);
+		String area_level = BusiCommon.getAreaDownLevel(area);
+		Map trans = new HashMap();
+		trans.put("area_scope", area);
+		trans.put("area_level", area_level);
+		trans.put("area_scope_name", BusiCommon.getAreaName(area));
+		return new ModelAndView("/busi/center/center_hr_change_tj", trans);
+	}
 
 	@ResponseBody
 	@RequestMapping(value = "/loadHrJobTjList.do")
@@ -538,6 +549,19 @@ public class HumanResourceController {
 			@RequestParam(required = true) String area_level, String area_type, String sort, String order) {
 
 		ExecuteResult rst = humanResourceService.loadHrJobTjList(area_scope, area_level, area_type, sort, order);
+		if (rst.isSucc()) {
+			Map map = (Map) rst.getInfoOne("info");
+			return FrameTool.toJson(map);
+		}
+		return null;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/loadHrChangeTjList.do")
+	public String loadHrChangeTjList(@RequestParam(required = true) String area_scope,
+			@RequestParam(required = true) String area_level, String area_type, String sort, String order) {
+
+		ExecuteResult rst = humanResourceService.loadHrChangeTjList(area_scope, area_level, area_type, sort, order);
 		if (rst.isSucc()) {
 			Map map = (Map) rst.getInfoOne("info");
 			return FrameTool.toJson(map);

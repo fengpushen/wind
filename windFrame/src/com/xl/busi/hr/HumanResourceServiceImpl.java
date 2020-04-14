@@ -753,5 +753,17 @@ public class HumanResourceServiceImpl implements HumanResourceService {
 		params.put("order", order);
 		return frameDAO.qryPaginationInfo("selectBusi_hr_job_tj", params);
 	}
+	
+	public ExecuteResult loadHrChangeTjList(String area_scope, String area_level, String area_type, String sort,
+			String order) {
+		Map params = new HashMap();
+		params.put("area_scope", area_scope);
+		params.put("area_scope_level", BusiCommon.getAreaLevel(area_scope));
+		params.put("area_level", area_level);
+		params.put("area_type", area_type);
+		params.put("sort", sort);
+		params.put("order", order);
+		return frameDAO.qryPaginationInfo("selectBusi_hr_change_tj", params);
+	}
 
 }
