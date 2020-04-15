@@ -178,6 +178,18 @@
 						sortable : true,
 						align : 'center',
 					},{
+						field : 'ADD_COUNT',
+						title : '新增人数',
+						width : '8%',
+						sortable : true,
+						align : 'center',
+					},{
+						field : 'DEL_COUNT',
+						title : '删除人数',
+						width : '8%',
+						sortable : true,
+						align : 'center',
+					},{
 						field : 'GXL',
 						title : '变更占比',
 						width : '8%',

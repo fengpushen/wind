@@ -966,6 +966,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			       sum(changed) changed,
 			       sum(job_change) job_change,
 			       sum(jyxx_change) jyxx_change,
+			       sum(del_count) del_count,
+			       sum(add_count) add_count,
 			       decode(sum(all_count),
 			              0,
 			              100,
@@ -977,7 +979,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			               a.all_count,
 			               a.changed,
 			               a.job_change,
-			               a.jyxx_change
+			               a.jyxx_change,
+			               a.del_count,
+			               a.add_count
 			          from v_hr_change_base a
 			         inner join v_com_area_all_name b
 			            on a.hj_area = b.AREA_CODE)
