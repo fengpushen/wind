@@ -41,4 +41,8 @@ public class PositionDAOImpl implements PositionDAO {
 		params.put("REQ_ID", id);
 		return sqlSession.selectOne("selectBs_position_req", params);
 	}
+	
+	public List<Map> selectV_syn_hire() {
+		return sqlSession.selectList("selectV_syn_hire");
+	}
 }

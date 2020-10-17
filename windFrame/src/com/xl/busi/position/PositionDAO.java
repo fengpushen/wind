@@ -15,4 +15,6 @@ public interface PositionDAO {
 
 	Map selectBs_position_reqById(String id);
 
+	List<Map> selectV_syn_hire();
+
 }

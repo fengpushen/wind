@@ -20,7 +20,9 @@ public interface CompanyDAO {
 	Map selectV_c_area_video_last(String c_id, String area_code);
 
 	Map selectBs_s_area_phone(String area_code);
-	
+
 	List<Map> selectCom_area_phone(Map params);
+
+	List<Map> selectV_syn_corp();
 
 }

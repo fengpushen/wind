@@ -1006,5 +1006,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			&lt;= #{page} * #{rows}
 		</if>
 	</select>
+	
+	<select id="selectV_syn_corp" resultType="hashMap"
+		parameterType="hashMap">
+		select * from v_syn_corp
+	</select>
+	
+	<select id="selectV_syn_hire" resultType="hashMap"
+		parameterType="hashMap">
+		select * from v_syn_hire
+	</select>
 
 </mapper>
