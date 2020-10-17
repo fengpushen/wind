@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.xl.frame.util.tree.TreeView;
+import com.xl.util.Tree;
 
 public final class FrameCache {
 
@@ -12,6 +13,8 @@ public final class FrameCache {
 	private static Map<String, FrameDbInfo> dbInfos = new HashMap<String, FrameDbInfo>();
 
 	private static Map<String, String> configs = new HashMap<String, String>();
+
+	private static Tree menuTree;
 
 	public static void addTree(String key, TreeView tree) {
 		trees.put(key, tree);
@@ -45,4 +48,13 @@ public final class FrameCache {
 	public static String getFrameConfig(String name) {
 		return configs.get(name);
 	}
+
+	public static Tree getMenuTree() {
+		return menuTree;
+	}
+
+	public static void setMenuTree(Tree menuTree) {
+		FrameCache.menuTree = menuTree;
+	}
+
 }

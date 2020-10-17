@@ -261,6 +261,18 @@ public class CompanyController {
 		}
 		return json;
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/loadCompanyMgdCenter.do")
+	public String loadCompanyMgd(@RequestParam(required = true) String cid) {
+
+		List<Map> mgds = companyService.selectComanyMge(cid);
+		String json = FrameTool.toJson(mgds);
+		if (json == null) {
+			json = "";
+		}
+		return json;
+	}
 
 	@RequestMapping("/showComRegJobList")
 	public ModelAndView showComRegJobList() {
@@ -431,6 +443,16 @@ public class CompanyController {
 		Map<String, Object> info = FrameTool.getRequestParameterMap(request);
 		ExecuteResult rst = companyService.setCenterPhone(BusiCommon.getLoginAccountStaffArea(session), info);
 		return FrameTool.toJson(rst);
+	}
+	
+	@RequestMapping("/showAddComPositionInfoCenterUI")
+	public ModelAndView showAddComPositionInfoUI(@RequestParam(required = true) String cid) {
+		Map positionInfo = positionInfo = new HashMap();
+		ExecuteResult rst = companyService.loadComInfo(cid);
+		if (rst.isSucc()) {
+			positionInfo.put("comInfo", rst.getInfoOne("comInfo"));
+		}
+		return new ModelAndView("/busi/position/position_info_center_add", positionInfo);
 	}
 
 }

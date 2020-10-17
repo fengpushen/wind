@@ -159,7 +159,38 @@
 								alert(e);
 							}
 						}
-					} ];
+					},
+					{
+						text : '新增岗位',
+						iconCls : 'icon-add',
+						handler : function() {
+							var rows = $('#datagrid').datagrid('getSelections');
+							if (rows == null || rows.length == 0) {
+								$.messager.alert("", "请选中要操作的记录");
+							}else if (rows.length > 1) {
+								$.messager.alert("", "请选中单条记录进行操作");
+							}  else {
+								var cid = rows[0].C_ID;
+								$('#dd')
+										.dialog(
+												{
+													title : '岗位管理',
+													width : 1000,
+													height : 500,
+													closed : false,
+													cache : false,
+													href : 'busi/company/showAddComPositionInfoCenterUI.do',
+													queryParams : {
+														'cid' : cid
+													},
+													modal : false,
+													onBeforeClose : function() {
+														loadDatagridData();
+													}
+												});
+							}
+						}
+					}];
 			if (ctype != 4) {
 				toolbar
 						.push({

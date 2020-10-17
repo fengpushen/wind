@@ -26,6 +26,7 @@ import com.xl.frame.util.tree.TreeEasyUIJsonMaker;
 import com.xl.frame.util.tree.TreeNode;
 import com.xl.frame.util.tree.TreeNodeFilterHasSon;
 import com.xl.frame.util.tree.TreeView;
+import com.xl.util.Tree;
 
 @Service
 public class FrameServiceImpl implements FrameService {
@@ -109,6 +110,7 @@ public class FrameServiceImpl implements FrameService {
 				ids.add((String) menu.get("MENU_ID"));
 			}
 			TreeView menuTree = ((BaseTree) FrameCache.getTree(FrameConstant.frame_menu_base_tree));
+			rst.addInfo("menuTree", menuTree);
 			rst.setDefaultValue(menuTree.getJson(ids));
 			rst.setSucc(true);
 		} catch (Exception e) {
@@ -182,6 +184,7 @@ public class FrameServiceImpl implements FrameService {
 
 	private void initMenuBaseTree() {
 		BaseTree tree = new BaseTree(false, TreeEasyUIJsonMaker.getMaker());
+		Tree t = new Tree();
 		List<Map> menus = frameDAO.selectFrame_menu();
 		List<TreeNode> nodes = new ArrayList<TreeNode>();
 		for (Map menu : menus) {
@@ -192,9 +195,21 @@ public class FrameServiceImpl implements FrameService {
 			node.addNodeInfo("menu_memo", menu.get("MENU_MEMO"));
 			node.setOrderNo((String) menu.get("MENU_ORDER"));
 			nodes.add(node);
+
+			com.xl.util.TreeNode treeNode = new com.xl.util.TreeNode((String) menu.get("MENU_ID"),
+					(String) menu.get("MENU_NAME"), (String) menu.get("MENU_P_ID"));
+			treeNode.addNodeInfo("menu_url", menu.get("MENU_URL"));
+			treeNode.addNodeInfo("is_leaf", menu.get("IS_LEAF"));
+			treeNode.addNodeInfo("menu_memo", menu.get("MENU_MEMO"));
+			t.addTreeNode(treeNode);
+
 		}
+		com.xl.util.TreeNode treeNode = new com.xl.util.TreeNode("menu0016", "系统用户管理", "10001");
+		treeNode.addNodeInfo("menu_url", "sys/users");
+		t.addTreeNode(treeNode);
 		tree.initTree(nodes);
 		FrameCache.addTree(FrameConstant.frame_menu_base_tree, tree);
+		FrameCache.setMenuTree(t);
 	}
 
 	private void initFrameCode() {
