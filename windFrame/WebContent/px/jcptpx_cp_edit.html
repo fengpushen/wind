@@ -18,7 +18,7 @@
 }
 
 .item_req {
-	font-size: 12px;
+	font-size: 15px;
 }
 
 .img_box {
@@ -81,13 +81,13 @@
 					<span>{{subItem.ITEM_NAME}}&nbsp;&nbsp;({{subItem.ITEM_SCORE}}分)&nbsp;&nbsp;{{subItem.ITEM_TXSM}}</span>&nbsp;&nbsp;<span
 						v-if="subItem.ITEM_REQ != null" class="item_req">【{{subItem.ITEM_REQ}}】</span><span
 						class="imgOpr"
-						v-show="(!cped() || beforeSub()) && subItem.cpItem.atts.length < subItem.PHOTO_MAX "><input
+						v-show="!cped() || beforeSub() && subItem.cpItem.atts.length < subItem.PHOTO_MAX "><input
 						type="file" @change="tirggerFile($event, subItem.ITEM_ID)" />&nbsp;&nbsp;
 						<button @click="uploadImg(subItem.ITEM_ID)">上传</button></span>
 				</div>
-				<div v-show="subItem.cpItem != null">
+				<div v-show="cped() && subItem.cpItem != null">
 
-					<div v-for="atta in subItem.cpItem.atts" class="imgDiv"
+					<div v-for="atta in cped() ? subItem.cpItem.atts : []" class="imgDiv"
 						@mouseenter="enterImg($event, atta.CP_XM_ATTA_ID)"
 						@mouseleave="leaveImg($event, atta.CP_XM_ATTA_ID)">
 						<img :src="atta.ATTA_URL" :alt="atta.ATTA_SHOW_NAME"
@@ -137,6 +137,7 @@
 							 var fileType = this.getFileType(file.name);
 							 if(fileType != 'png' && fileType != 'jpg'){
 								 alert('只能上传jpg或png格式文件');
+								 return false;
 							 }
 							 
 							 var fileSize = file.size/(1024*1024);
@@ -253,11 +254,11 @@
 				},
 				cped : function(){
 					//是否已经参评
-					return this.cpInfo.CP_STATUS != null && this.cpInfo.CP_STATUS != '';
+					return this.cpInfo.hasOwnProperty("CP_STATUS") && this.cpInfo.CP_STATUS != null && this.cpInfo.CP_STATUS != '';
 				},
 				beforeSub : function(){
 					//参评是否是提交前状态
-					return this.cpInfo.CP_STATUS == '00';
+					return this.cpInfo.hasOwnProperty("CP_STATUS") && this.cpInfo.CP_STATUS == '00';
 				},
 				getCpInfo : function(){
 					if (this.px_id != null) {
@@ -271,7 +272,10 @@
 								_this.cpInfo = rst.info.cpInfo;
 								_this.localNdzj = _this.cpInfo.CP_NDZJ;
 								//如果参评主键不为空的话，说明本地区已经参评
-								if(_this.cpInfo.CP_ID != null){
+								console.log("aaa:"+ _this.cpInfo.hasOwnProperty("CP_STATUS"));
+								console.log("all:" + (_this.cpInfo.hasOwnProperty("CP_STATUS") && _this.cpInfo.CP_STATUS != null && _this.cpInfo.CP_STATUS != ''));
+								
+								if(_this.cpInfo.hasOwnProperty("CP_STATUS") && _this.cpInfo.CP_STATUS != null && _this.cpInfo.CP_STATUS != ''){
 									
 									//初始化图片删除图标的控制器，每个图片都有一个删除图标，当鼠标进入图片的时候显示，移除图片的时候消失
 									//这里在数据加载的时候遍历生成一个图标控制器，这个控制器本质上是一个map，key是图片的id，value是一个
