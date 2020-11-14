@@ -72,7 +72,8 @@
 			<h2>{{cpInfo.PX_YEAR+'年度基层平台评选'}}</h2>
 			<h3>{{cpInfo.AREA_NAME}}</h3>
 			<h4>年度总结</h4>
-			<textarea rows="15" cols="120" v-model="localNdzj" @blur="saveNdzj"></textarea>
+			<textarea rows="15" cols="120" v-model="localNdzj" @blur="saveNdzj" v-if="!cped() || beforeSub()"></textarea>
+			<p v-if="afterSub()">{{localNdzj}}</p>
 		</div>
 		<div v-for="item in cpInfo.pxItems" class="w">
 			<h4>{{item.ITEM_NAME}}</h4>
@@ -177,10 +178,16 @@
 					  }
 				},
 				enterImg : function(event, cpxmAttaId){
-					Vue.set( this.imgDelControler, cpxmAttaId, true );
+					//未参评或未提交才需要控制图片删除图标的显示或隐藏
+					if(!this.cped() || this.beforeSub()){
+						Vue.set( this.imgDelControler, cpxmAttaId, true );
+					}
 				},
 				leaveImg : function(event, cpxmAttaId){
-					Vue.set( this.imgDelControler, cpxmAttaId, false );
+					//未参评或未提交才需要控制图片删除图标的显示或隐藏
+					if(!this.cped() || this.beforeSub()){
+						Vue.set( this.imgDelControler, cpxmAttaId, false );
+					}
 				},
 				delImg : function(cpxmAttaId){
 					//未参评或未提交可以删除照片
@@ -260,6 +267,10 @@
 					//参评是否是提交前状态
 					return this.cpInfo.hasOwnProperty("CP_STATUS") && this.cpInfo.CP_STATUS == '00';
 				},
+				afterSub : function(){
+					//参评是否是提交后状态
+					return this.cpInfo.hasOwnProperty("CP_STATUS") && this.cpInfo.CP_STATUS != null && this.cpInfo.CP_STATUS != '' && this.cpInfo.CP_STATUS != '00';					
+				},
 				getCpInfo : function(){
 					if (this.px_id != null) {
 						var url = "../busi/px/loadJcptpxCpInfo.do?px_id="
@@ -268,13 +279,9 @@
 						axios.get(url).then(function(response) {
 							var rst = response.data;
 							if (rst != null && rst.isSucc) {
-								console.log(rst.info.cpInfo);
 								_this.cpInfo = rst.info.cpInfo;
 								_this.localNdzj = _this.cpInfo.CP_NDZJ;
-								//如果参评主键不为空的话，说明本地区已经参评
-								console.log("aaa:"+ _this.cpInfo.hasOwnProperty("CP_STATUS"));
-								console.log("all:" + (_this.cpInfo.hasOwnProperty("CP_STATUS") && _this.cpInfo.CP_STATUS != null && _this.cpInfo.CP_STATUS != ''));
-								
+								//如果本地区已经参评,则需要初始化所有图片的删除图标控制器
 								if(_this.cpInfo.hasOwnProperty("CP_STATUS") && _this.cpInfo.CP_STATUS != null && _this.cpInfo.CP_STATUS != ''){
 									
 									//初始化图片删除图标的控制器，每个图片都有一个删除图标，当鼠标进入图片的时候显示，移除图片的时候消失
