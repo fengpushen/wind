@@ -32,6 +32,15 @@ public class BusiCommon {
 	public static final String temp_file_dir = "temp/";
 
 	/**
+	 * 基层平台评选照片存放目录
+	 */
+	public static final String jcptpx_file_dir = "/jcptpx";
+
+	public static String getJcptpxFileDir() {
+		return jcptpx_file_dir;
+	}
+
+	/**
 	 * 获取人员批量导入模板的全路径
 	 * 
 	 * @return
@@ -166,6 +175,14 @@ public class BusiCommon {
 			level++;
 		}
 		return Integer.toString(level);
+	}
+
+	public static boolean isVillageCode(String areaCode) {
+		return "4".equals(getAreaLevel(areaCode));
+	}
+
+	public static boolean isStreetCode(String areaCode) {
+		return "3".equals(getAreaLevel(areaCode));
 	}
 
 	/**

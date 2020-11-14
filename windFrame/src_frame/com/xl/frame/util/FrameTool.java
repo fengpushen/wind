@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -274,5 +275,13 @@ public final class FrameTool {
 		}
 		return null;
 	}
+	
+	private static int i=0;
+	
+	public static synchronized String generatUniqueString() {
+        i = (++i) % 100000;
+        StringBuilder s = new StringBuilder(Long.toString(new Date().getTime()));
+        return s.append(i).toString();
+    }
 
 }

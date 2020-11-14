@@ -35,7 +35,7 @@ public class Transtor {
 	 */
 	private boolean isTransing;
 
-	@Scheduled(cron = "0 0 2 * * ? ")
+	@Scheduled(cron = "0 0 0 * * ? ")
 	public void doTrans() {
 		log.info("doTrans bgn:");
 		if (!isTransing) {
@@ -45,11 +45,11 @@ public class Transtor {
 					try {
 						log.info("trans corp:");
 						List<Map> datas = companyDAO.selectV_syn_corp();
-						if (!FrameTool.isEmpty(datas)) {
-							SynPackage pkg = SynPackage.getCorpInfoPkg();
-							pkg.setDatas(datas);
-							sendPkg(pkg);
-						}
+//						if (!FrameTool.isEmpty(datas)) {
+//							SynPackage pkg = SynPackage.getCorpInfoPkg();
+//							pkg.setDatas(datas);
+//							sendPkg(pkg);
+//						}
 						log.info("trans hire:");
 						datas = positionDAO.selectV_syn_hire();
 						if (!FrameTool.isEmpty(datas)) {

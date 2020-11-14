@@ -29,7 +29,7 @@ public class CommonServiceImpl implements CommonService {
 	public void initBusi() {
 		// 初始化地区树
 		initAreaTree();
-	}
+	} 
 
 	private void initAreaTree() {
 		BaseTree tree = new BaseTree(false, TreeEasyUIJsonMaker.getMaker());

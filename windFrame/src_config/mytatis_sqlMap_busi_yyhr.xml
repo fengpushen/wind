@@ -1016,5 +1016,106 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		parameterType="hashMap">
 		select * from v_syn_hire
 	</select>
+	
+	<select id="selectBs_jcptpx_cp" resultType="hashMap"
+		parameterType="hashMap">
+		select 
+		<if test="record_count == null">
+			a.*, decode(b.cp_status, null, '未参评', '00', '待提交', '01', '待区县评选', '02', '待市州评选', '03', '市州选定') as cp_status_name, 
+			b.cp_status, b.area_name, b.cp_id, b.area_code, b.cp_ndzj
+		</if>
+		<if test="record_count != null">
+			count(1) as record_count
+		</if>
+		  from BS_JCPTPX a
+		  left outer join 
+		  (
+		  select * from v_BX_JCPTCP
+			<where>
+				<if test ="cp_area != null and cp_area != ''">
+					area_code = #{cp_area}
+				</if>	
+				<if test ="cp_id != null and cp_id != ''">
+					and cp_id = #{cp_id}
+				</if>	
+			</where>		  
+		  ) b
+		    on a.px_id = b.px_id
+		    <where>
+				<if test ="px_id != null and px_id != ''">
+					a.px_id = #{px_id}
+				</if>		
+			</where>
+	</select>
+	
+	<select id="selectBs_jcptpx_xm" resultType="hashMap"
+		parameterType="hashMap">
+		select a.px_item_id, a.px_id, b.*
+		  from BS_JCPTPX_XM a
+		 inner join v_bs_pxxm b
+		    on a.item_id = b.item_id
+		    <where>
+				<if test ="px_id != null and px_id != ''">
+					a.px_id = #{px_id}
+				</if>	
+				<if test ="item_id != null and item_id != ''">
+					and a.item_id = #{item_id}
+				</if>		
+			</where>
+		 order by a.item_ord	
+	</select>
+	
+	<select id="selectBs_jcptpxcp_xm_att" resultType="hashMap"
+		parameterType="hashMap">
+		select a.*,
+		       b.cp_xm_atta_id,
+		       b.atta_id,
+		       b.atta_show_name,
+		       b.atta_suff,
+		       b.atta_dire,
+		       b.atta_name,
+		       b.atta_url,
+		       b.atta_path,
+		       b.in_time
+		  from BX_JCPTCP_XM a
+		  left outer join v_BX_JCPTCP_XM_ATTA b
+		    on a.cp_item_id = b.cp_item_id
+		    <where>
+				<if test ="cp_id != null and cp_id != ''">
+					a.cp_id = #{cp_id}
+				</if>	
+				<if test ="px_item_id != null and px_item_id != ''">
+					and a.px_item_id = #{px_item_id}
+				</if>	
+				<if test ="cp_xm_atta_id != null and cp_xm_atta_id != ''">
+					and b.cp_xm_atta_id = #{cp_xm_atta_id}
+				</if>		
+			</where>
+	</select>	
+	
+	<select id="selectBs_jcptpxcp_xm" resultType="hashMap"
+		parameterType="hashMap">
+		select * from BX_JCPTCP_XM a
+		<where>
+			<if test ="cp_id != null and cp_id != ''">
+				a.cp_id = #{cp_id}
+			</if>	
+			<if test ="px_item_id != null and px_item_id != ''">
+				and a.px_item_id = #{px_item_id}
+			</if>
+		</where>
+	</select>
+	
+	<insert id="insertBx_jcptcp_xm"  parameterType="hashMap">  
+		insert into BX_JCPTCP_XM
+		  (CP_ITEM_ID, CP_ID, PX_ITEM_ID)
+		  select f_make_unique_id, #{cp_id}, PX_ITEM_ID
+		    from BS_JCPTPX_XM a
+		   where a.px_id = #{px_id}
+		     and exists (select 1
+		            from bs_pxxm b
+		           where b.item_id = a.item_id
+		             and b.p_item_id &lt;> '0')
+	</insert> 
 
 </mapper>

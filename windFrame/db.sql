@@ -23,3 +23,22 @@ select area_code,
                     group by c_id) d
     on a.c_id = d.c_id
  group by area_code
+ 
+-----------------------------20201105
+COM_ATTA
+BS_JCPTPX
+BX_JCPTCP
+BS_PXXM
+BS_JCPTPX_XM
+BX_JCPTCP_XM
+BX_JCPTCP_XM_ATTA
+
+v_BX_JCPTCP_XM_ATTA
+v_BX_JCPTCP
+v_com_atta
+v_bs_pxxm
+SEQ_UNIQUE
+f_make_unique_id
+
+frame_config
+file_root\

@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+<script
+	src="https://cdn.jsdelivr.net/npm/axios@0.12.0/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lodash@4.13.1/lodash.min.js"></script>
+<style>
+.w {
+	width: 1200px;
+	background-color: #F5F5F5;
+}
+
+.border_bottom {
+	border-bottom: 3px solid #A8A8A8;
+}
+
+.item_req {
+	font-size: 12px;
+}
+
+.img_box {
+	height: 200px;
+}
+
+.imgDiv {
+	display: inline-block;
+	position: relative;
+	margin: 10px;
+}
+
+.imgDiv img:hover {
+	box-shadow: 3px 3px 4px 4px rgba(0, 0, 0, 0.3)
+}
+
+.imgDiv .delete {
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	width: 25px;
+	height: 25px;
+}
+
+.btn {
+	height: 30px;
+	margin-left: 20px;
+}
+
+.opt {
+	margin-top: 10px;
+	margin-left: 10px;
+}
+
+.imgOpr {
+	float: right;
+	margin-right: 20px;
+}
+
+.item {
+	height: 40px;
+	margin-left: 10px;
+	line-height: 40px;
+}
+</style>
+</head>
+<body>
+
+	<div id="cp">
+		<div class="border_bottom w">
+			<h2>{{cpInfo.PX_YEAR+'年度基层平台评选'}}</h2>
+			<h3>{{cpInfo.AREA_NAME}}</h3>
+			<h4>年度总结</h4>
+			<textarea rows="15" cols="120" v-model="localNdzj" @blur="saveNdzj"></textarea>
+		</div>
+		<div v-for="item in cpInfo.pxItems" class="w">
+			<h4>{{item.ITEM_NAME}}</h4>
+			<div v-for="subItem in item.subItems" class="border_bottom">
+				<div class="item">
+					<span>{{subItem.ITEM_NAME}}&nbsp;&nbsp;({{subItem.ITEM_SCORE}}分)&nbsp;&nbsp;{{subItem.ITEM_TXSM}}</span>&nbsp;&nbsp;<span
+						v-if="subItem.ITEM_REQ != null" class="item_req">【{{subItem.ITEM_REQ}}】</span><span
+						class="imgOpr"
+						v-show="(!cped() || beforeSub()) && subItem.cpItem.atts.length < subItem.PHOTO_MAX "><input
+						type="file" @change="tirggerFile($event, subItem.ITEM_ID)" />&nbsp;&nbsp;
+						<button @click="uploadImg(subItem.ITEM_ID)">上传</button></span>
+				</div>
+				<div v-show="subItem.cpItem != null">
+
+					<div v-for="atta in subItem.cpItem.atts" class="imgDiv"
+						@mouseenter="enterImg($event, atta.CP_XM_ATTA_ID)"
+						@mouseleave="leaveImg($event, atta.CP_XM_ATTA_ID)">
+						<img :src="atta.ATTA_URL" :alt="atta.ATTA_SHOW_NAME"
+							class="img_box" /><img
+							src="../resource/imgs/close-circle-line.png" class="delete"
+							v-show="imgDelControler[atta.CP_XM_ATTA_ID]"
+							@click="delImg(atta.CP_XM_ATTA_ID)" />
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="opt" class="w">
+			<button class="btn" @click="quitClose()">{{ (!cped() ||
+				beforeSub()) ? '保存&' : '' }}退出</button>
+
+			<button class="btn" @click="subQuit()"
+				v-show="(cped() && beforeSub())">提交&退出</button>
+
+		</div>
+
+	</div>
+
+	<script>
+		var cp = new Vue({
+			el : "#cp",
+			data : {
+				cpInfo : {},
+				localImgs : {},
+				localNdzj : '',
+				px_id : getUrlKey('px_id'),
+				imgDelControler : {}
+			},
+			methods : {
+				getFileType:function (filePath){
+				      var startIndex = filePath.lastIndexOf(".");
+				      if(startIndex != -1)
+				        return filePath.substring(startIndex+1, filePath.length).toLowerCase();
+				      else return "";
+				},
+				uploadImg : function(itemId) {
+					//未参评或未提交可以保存照片
+					if(!this.cped() || this.beforeSub()){
+						var files = this.localImgs[itemId] ;
+						if(files != null){
+							 let file = files[0];
+							 
+							 var fileType = this.getFileType(file.name);
+							 if(fileType != 'png' && fileType != 'jpg'){
+								 alert('只能上传jpg或png格式文件');
+							 }
+							 
+							 var fileSize = file.size/(1024*1024);
+							 if(fileSize>2){
+							     alert("文件大小请控制在2MB以内");
+							     return false;
+							 }
+							  
+							 let formData = new FormData();
+							 formData.append("cpImg",file,file.name);
+							 formData.append("itemId", itemId);
+							 formData.append("px_id", this.px_id);
+							  
+							 const config = {
+							 	headers: { "Content-Type": "multipart/form-data;boundary="+new Date().getTime() }
+							 };
+							 
+							 var _this = this;
+							 axios.post("../busi/px/uploadCpImg.do",formData,config).then(function (response) {
+								var rst = response.data;
+								if (rst != null && rst.isSucc) {
+									_this.getCpInfo();
+								}else{
+									alert(rst.info.INFO_KEY_DEFAULT);
+								}
+							 }).catch(function (error) {
+							  	console.log(error);
+							 });
+						}
+					}
+				},
+				tirggerFile : function (event, itemId) {
+					  var file = event.target.files; 
+					  if(file != null && file.length > 0){
+						  this.localImgs[itemId] = file;
+						  console.log(this.localImgs);
+					  }
+				},
+				enterImg : function(event, cpxmAttaId){
+					Vue.set( this.imgDelControler, cpxmAttaId, true );
+				},
+				leaveImg : function(event, cpxmAttaId){
+					Vue.set( this.imgDelControler, cpxmAttaId, false );
+				},
+				delImg : function(cpxmAttaId){
+					//未参评或未提交可以删除照片
+					if(!this.cped() || this.beforeSub()){
+					     let formData = new FormData();
+						 formData.append("cpxmAttaId", cpxmAttaId);
+						 var _this = this;
+						 axios.post("../busi/px/delImg.do",formData).then(function (response) {
+							var rst = response.data;
+							if (rst != null && !rst.isSucc) {
+								alert("失败");
+							}else{
+								_this.getCpInfo();
+							}
+						 }).catch(function (error) {
+						  	console.log(error);
+						 });
+					}
+				},
+				saveNdzj : function(){
+					//未参评或未提交可以保存年度总结
+					if(!this.cped() || this.beforeSub()){
+						if(this.localNdzj != this.cpInfo.CP_NDZJ){
+							 let formData = new FormData();
+							 formData.append("cpNdzj", this.localNdzj);
+							 if(this.cped()){
+								 formData.append("cp_id", this.cpInfo.CP_ID);
+							 }else{
+								 formData.append("px_id", this.px_id); 
+							 }
+							 
+							 var _this = this;
+							 axios.post("../busi/px/saveNdzj.do",formData).then(function (response) {
+								var rst = response.data;
+								if (rst != null && !rst.isSucc) {
+									alert(rst);
+								}else{
+									_this.cpInfo.CP_NDZJ = _this.localNdzj;
+								}
+							 }).catch(function (error) {
+							  	console.log(error);
+							 });
+						}
+					}
+				},
+				quitClose : function(){
+					parent.closeWin();
+				},
+				subQuit : function(){
+					if(this.cped() && this.beforeSub()){
+						if(this.cpInfo.CP_NDZJ == null || this.cpInfo.CP_NDZJ == ""){
+							alert("年度总结必须填写");
+							return;
+						}
+						let formData = new FormData();
+					
+						 formData.append("cpId", this.cpInfo.CP_ID);
+						 var _this = this;
+						 axios.post("../busi/px/submitCp.do",formData).then(function (response) {
+							var rst = response.data;
+							console.log(rst);
+							if (rst != null && !rst.isSucc) {
+								alert(rst.info.INFO_KEY_DEFAULT);
+							}else{
+								parent.closeWin();
+							}
+						 }).catch(function (error) {
+						  	console.log(error);
+						 });	
+					 }				
+				},
+				cped : function(){
+					//是否已经参评
+					return this.cpInfo.CP_STATUS != null && this.cpInfo.CP_STATUS != '';
+				},
+				beforeSub : function(){
+					//参评是否是提交前状态
+					return this.cpInfo.CP_STATUS == '00';
+				},
+				getCpInfo : function(){
+					if (this.px_id != null) {
+						var url = "../busi/px/loadJcptpxCpInfo.do?px_id="
+								+ this.px_id;
+						var _this = this;
+						axios.get(url).then(function(response) {
+							var rst = response.data;
+							if (rst != null && rst.isSucc) {
+								console.log(rst.info.cpInfo);
+								_this.cpInfo = rst.info.cpInfo;
+								_this.localNdzj = _this.cpInfo.CP_NDZJ;
+								//如果参评主键不为空的话，说明本地区已经参评
+								if(_this.cpInfo.CP_ID != null){
+									
+									//初始化图片删除图标的控制器，每个图片都有一个删除图标，当鼠标进入图片的时候显示，移除图片的时候消失
+									//这里在数据加载的时候遍历生成一个图标控制器，这个控制器本质上是一个map，key是图片的id，value是一个
+									//布尔值，这个布尔值的意思是是否显示删除图标，然后再在图片的鼠标进入和移除的方法上控制切换这个值就可以
+									//达到图片的删除图标的显示效果了
+									for (var pxItem in _this.cpInfo.pxItems){
+										for(var subItem in pxItem.subItems){
+											for(var cpItem in subItem.cpItem){
+												for(var atta in cpItem.atts){
+													Vue.set( _this.imgDelControler, atta.CP_XM_ATTA_ID, false );
+												}
+											}
+										}
+									}
+								}
+							}
+						});
+					}
+				}
+			},
+			created : function() {
+				this.getCpInfo();
+			}
+		});
+		function getUrlKey(name) {
+			return decodeURIComponent((new RegExp('[?|&]' + name + '='
+					+ '([^&;]+?)(&|#|;|$)').exec(location.href) || [ , "" ])[1]
+					.replace(/\+/g, '%20'))
+					|| null;
+		}
+	</script>
+</body>
+</html>
