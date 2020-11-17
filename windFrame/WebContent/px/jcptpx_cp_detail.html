@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+<script
+	src="https://cdn.jsdelivr.net/npm/axios@0.12.0/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lodash@4.13.1/lodash.min.js"></script>
+<style>
+.w {
+	width: 1200px;
+	background-color: #F5F5F5;
+}
+
+.border_bottom {
+	border-bottom: 3px solid #A8A8A8;
+}
+
+.item_req {
+	font-size: 15px;
+}
+
+.img_box {
+	height: 200px;
+}
+
+.imgDiv {
+	display: inline-block;
+	position: relative;
+	margin: 10px;
+}
+
+.imgDiv img:hover {
+	box-shadow: 3px 3px 4px 4px rgba(0, 0, 0, 0.3)
+}
+
+.imgDiv .delete {
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	width: 25px;
+	height: 25px;
+}
+
+.btn {
+	height: 30px;
+	margin-left: 20px;
+}
+
+.opt {
+	margin-top: 10px;
+	margin-left: 10px;
+}
+
+.imgOpr {
+	float: right;
+	margin-right: 20px;
+}
+
+.item {
+	height: 40px;
+	margin-left: 10px;
+	line-height: 40px;
+}
+</style>
+</head>
+<body>
+
+	<div id="cp">
+		<div class="border_bottom w">
+			<h2>{{cpInfo.PX_YEAR+'年度基层平台评选'}}</h2>
+			<h3>{{cpInfo.AREA_NAME}}</h3>
+			<h4>年度总结</h4>
+			<p>{{localNdzj}}</p>
+		</div>
+		<div v-for="item in cpInfo.pxItems" class="w">
+			<h4>{{item.ITEM_NAME}}</h4>
+			<div v-for="subItem in item.subItems" class="border_bottom">
+				<div class="item">
+					<span>{{subItem.ITEM_NAME}}&nbsp;&nbsp;({{subItem.ITEM_SCORE}}分)&nbsp;&nbsp;{{subItem.ITEM_TXSM}}</span>&nbsp;&nbsp;<span
+						v-if="subItem.ITEM_REQ != null" class="item_req">【{{subItem.ITEM_REQ}}】</span>
+				</div>
+				<div>
+
+					<div v-for="atta in  subItem.cpItem.atts " class="imgDiv">
+						<img :src="atta.ATTA_URL" :alt="atta.ATTA_SHOW_NAME"
+							class="img_box" />
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="opt" class="w">
+			<button class="btn" @click="quitClose()">退出</button>
+		</div>
+
+	</div>
+
+	<script>
+		var cp = new Vue({
+			el : "#cp",
+			data : {
+				cpInfo : {},
+				localImgs : {},
+				localNdzj : '',
+				cp_id : getUrlKey('cp_id')
+			},
+			methods : {
+
+				quitClose : function(){
+					parent.closeWin();
+				},
+				cped : function(){
+					//是否已经参评
+					return this.cpInfo.hasOwnProperty("CP_STATUS") && this.cpInfo.CP_STATUS != null && this.cpInfo.CP_STATUS != '';
+				},
+				beforeSub : function(){
+					//参评是否是提交前状态
+					return this.cpInfo.hasOwnProperty("CP_STATUS") && this.cpInfo.CP_STATUS == '00';
+				},
+				afterSub : function(){
+					//参评是否是提交后状态
+					return this.cpInfo.hasOwnProperty("CP_STATUS") && this.cpInfo.CP_STATUS != null && this.cpInfo.CP_STATUS != '' && this.cpInfo.CP_STATUS != '00';					
+				},
+				getCpInfo : function(){
+					if (this.cp_id != null) {
+						console.log(this.cp_id);
+						var url = "../busi/px/loadJcptpxCpInfoByCpId.do?cp_id="
+								+ this.cp_id;
+						var _this = this;
+						axios.get(url).then(function(response) {
+							var rst = response.data;
+							if (rst != null && rst.isSucc) {
+								_this.cpInfo = rst.info.cpInfo;
+								_this.localNdzj = _this.cpInfo.CP_NDZJ;
+							}
+						});
+					}
+				}
+			},
+			created : function() {
+				this.getCpInfo();
+			}
+		});
+		function getUrlKey(name) {
+			return decodeURIComponent((new RegExp('[?|&]' + name + '='
+					+ '([^&;]+?)(&|#|;|$)').exec(location.href) || [ , "" ])[1]
+					.replace(/\+/g, '%20'))
+					|| null;
+		}
+	</script>
+</body>
+</html>

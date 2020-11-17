@@ -106,7 +106,7 @@ public class PxController {
 		ExecuteResult rst = pxService.delImg(cpxmAttaId);
 		return rst;
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(value = "/submitCp.do")
 	public ExecuteResult submitCp(HttpSession session, @RequestParam(required = true) String cpId) {
@@ -114,6 +114,40 @@ public class PxController {
 		ExecuteResult rst = pxService.submitCp(cpId);
 		return rst;
 	}
+
+	@RequestMapping("/showXjCpList")
+	public ModelAndView showXjCpList() {
+
+		return new ModelAndView("/busi/px/xj_cp_list");
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/loadXjCpList")
+	public String loadXjCpList(HttpSession session, HttpServletRequest request) {
+
+		Map<String, Object> info = FrameTool.getRequestParameterMap(request);
+		String areaCode = BusiCommon.getLoginAccountStaffArea(session);
+		if (BusiCommon.isCityCode(areaCode)) {
+			info.put("city_code", areaCode);
+		} else if (BusiCommon.isCountryCode(areaCode)) {
+			info.put("country_code", areaCode);
+		} else {
+			return null;
+		}
+		ExecuteResult rst = pxService.selectV_bx_jcptcp(info);
+		if (rst.isSucc()) {
+			Map map = (Map) rst.getInfoOne("info");
+			return FrameTool.toJson(map);
+		}
+		return null;
+	}
 	
+	@ResponseBody
+	@RequestMapping(value = "/loadJcptpxCpInfoByCpId.do")
+	public ExecuteResult loadJcptpxCpInfoByCpId(HttpSession session, @RequestParam(required = true) String cp_id) {
+
+		ExecuteResult rst = pxService.loadJcptpxCpInfo(cp_id);
+		return rst;
+	}
 
 }

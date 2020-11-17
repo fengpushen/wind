@@ -32,4 +32,8 @@ public class PxDAOImpl implements PxDAO {
 	public Map selectBs_jcptpxcp_xm(Map params) {
 		return sqlSession.selectOne("selectBs_jcptpxcp_xm", params);
 	}
+	
+	public List selectV_bx_jcptcp(Map params) {
+		return sqlSession.selectList("selectV_bx_jcptcp", params);
+	}
 }

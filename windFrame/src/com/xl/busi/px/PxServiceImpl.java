@@ -41,6 +41,11 @@ public class PxServiceImpl implements PxService {
 
 		return frameDAO.qryPaginationInfo("selectBs_jcptpx_cp", params);
 	}
+	
+	public ExecuteResult selectV_bx_jcptcp(Map<String, Object> params) {
+
+		return frameDAO.qryPaginationInfo("selectV_bx_jcptcp", params);
+	}
 
 	/**
 	 * 根据评选id和参评地区两个属性加载某个地区的所有参评信息

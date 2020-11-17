@@ -15,4 +15,6 @@ public interface PxDAO {
 
 	Map selectBs_jcptpxcp_xm(Map params);
 
+	List selectV_bx_jcptcp(Map params);
+
 }

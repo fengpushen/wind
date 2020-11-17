@@ -1030,13 +1030,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		  from BS_JCPTPX a
 		  left outer join 
 		  (
-		  select * from v_BX_JCPTCP
+		  select * from v_BX_JCPTCP c
 			<where>
 				<if test ="cp_area != null and cp_area != ''">
 					area_code = #{cp_area}
 				</if>	
 				<if test ="cp_id != null and cp_id != ''">
 					and cp_id = #{cp_id}
+				</if>
+				<if test ="country_code != null and country_code != ''">
+					and exists (select 1
+						          from com_area d
+						         where c.AREA_CODE = d.area_code
+						           and d.country_code = #{country_code})
+				</if>	
+				<if test ="city_code != null and city_code != ''">
+					and exists (select 1
+						          from com_area d
+						         where c.AREA_CODE = d.area_code
+						           and d.city_code = #{city_code})
 				</if>	
 			</where>		  
 		  ) b
@@ -1046,6 +1058,47 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 					a.px_id = #{px_id}
 				</if>		
 			</where>
+	</select>
+	
+	<select id="selectV_bx_jcptcp" resultType="hashMap"
+		parameterType="hashMap">
+		<if test="record_count == null and page != null and page != ''">
+			select * from (select rownum as rowidx, qry.* from (
+		</if>
+		select 
+		<if test="record_count == null">
+		       a.*, b.px_year, b.is_add, b.is_show_result,decode(a.cp_status, null, '未参评', '00', '待提交', '01', '待区县评选', '02', '待市州评选', '03', '市州选定') as cp_status_name
+		</if>
+		<if test="record_count != null">
+			count(1) as record_count
+		</if>
+		  from v_BX_JCPTCP a
+		 inner join BS_JCPTPX b
+		    on a.PX_ID = b.px_id
+		<where>
+			<if test ="cp_id != null and cp_id != ''">
+				cp_id = #{cp_id}
+			</if>
+			<if test ="country_code != null and country_code != ''">
+				and exists (select 1
+					          from com_area d
+					         where a.AREA_CODE = d.area_code
+					           and d.country_code = #{country_code})
+			</if>	
+			<if test ="city_code != null and city_code != ''">
+				and exists (select 1
+					          from com_area d
+					         where a.AREA_CODE = d.area_code
+					           and d.city_code = #{city_code})
+			</if>	
+		</where>		  
+		<if test="record_count == null">
+		order by px_year desc, area_code
+		</if>
+		<if test="record_count == null and page != null and page != ''">
+			)qry ) where rowidx > (#{page} - 1) * #{rows} and rowidx
+			&lt;= #{page} * #{rows}
+		</if>
 	</select>
 	
 	<select id="selectBs_jcptpx_xm" resultType="hashMap"

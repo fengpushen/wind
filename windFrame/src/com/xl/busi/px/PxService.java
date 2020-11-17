@@ -9,6 +9,8 @@ import com.xl.frame.util.ExecuteResult;
 public interface PxService {
 
 	ExecuteResult loadJcptpxCpList(Map<String, Object> params);
+	
+	ExecuteResult selectV_bx_jcptcp(Map<String, Object> params);
 
 	ExecuteResult loadJcptpxCpInfo(String px_id, String cp_area);
 

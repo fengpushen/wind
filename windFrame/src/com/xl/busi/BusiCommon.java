@@ -184,6 +184,14 @@ public class BusiCommon {
 	public static boolean isStreetCode(String areaCode) {
 		return "3".equals(getAreaLevel(areaCode));
 	}
+	
+	public static boolean isCountryCode(String areaCode) {
+		return "2".equals(getAreaLevel(areaCode));
+	}
+	
+	public static boolean isCityCode(String areaCode) {
+		return "1".equals(getAreaLevel(areaCode));
+	}
 
 	/**
 	 * 判断otherAreaCode是否为areaCode的范围之内
