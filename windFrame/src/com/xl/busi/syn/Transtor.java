@@ -1,7 +1,6 @@
 package com.xl.busi.syn;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
@@ -45,11 +44,11 @@ public class Transtor {
 					try {
 						log.info("trans corp:");
 						List<Map> datas = companyDAO.selectV_syn_corp();
-//						if (!FrameTool.isEmpty(datas)) {
-//							SynPackage pkg = SynPackage.getCorpInfoPkg();
-//							pkg.setDatas(datas);
-//							sendPkg(pkg);
-//						}
+						if (!FrameTool.isEmpty(datas)) {
+							SynPackage pkg = SynPackage.getCorpInfoPkg();
+							pkg.setDatas(datas);
+							sendPkg(pkg);
+						}
 						log.info("trans hire:");
 						datas = positionDAO.selectV_syn_hire();
 						if (!FrameTool.isEmpty(datas)) {
