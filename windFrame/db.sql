@@ -10,3 +10,6 @@ drop table bak_frame_role_menu
 /
 create table bak_frame_role_menu as select * from frame_role_menu
 /
+
+v_last_h_job
+v_syn_corp

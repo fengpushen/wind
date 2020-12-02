@@ -44,17 +44,25 @@ public class Transtor {
 					try {
 						log.info("trans corp:");
 						List<Map> datas = companyDAO.selectV_syn_corp();
-						if (!FrameTool.isEmpty(datas)) {
+						while (!FrameTool.isEmpty(datas)) {
+							System.out.println("---------"+datas.size());
+							List<Map> trans = datas.subList(0, datas.size() > 100 ? 100 : datas.size());
 							SynPackage pkg = SynPackage.getCorpInfoPkg();
-							pkg.setDatas(datas);
+							pkg.setDatas(trans);
 							sendPkg(pkg);
+							datas.removeAll(trans);
+							System.out.println("---------"+datas.size());
 						}
 						log.info("trans hire:");
 						datas = positionDAO.selectV_syn_hire();
-						if (!FrameTool.isEmpty(datas)) {
+						while (!FrameTool.isEmpty(datas)) {
+							System.out.println("---------"+datas.size());
+							List<Map> trans = datas.subList(0, datas.size() > 100 ? 100 : datas.size());
 							SynPackage pkg = SynPackage.getHireInfoPkg();
 							pkg.setDatas(datas);
 							sendPkg(pkg);
+							datas.removeAll(trans);
+							System.out.println("---------"+datas.size());
 						}
 					} catch (Exception e) {
 						log.error("", e);
