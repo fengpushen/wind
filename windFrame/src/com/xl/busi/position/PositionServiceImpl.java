@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import com.xl.busi.BusiCommon;
+import com.xl.busi.company.CompanyService;
 import com.xl.busi.hr.HumanResourceDAO;
 import com.xl.frame.FrameDAO;
 import com.xl.frame.util.ExecuteResult;
@@ -33,6 +34,9 @@ public class PositionServiceImpl implements PositionService {
 
 	@Autowired
 	private HumanResourceDAO humanResourceDAO;
+
+	@Autowired
+	private CompanyService companyService;
 
 	public ExecuteResult loadPositionList(Map<String, Object> params) {
 		ExecuteResult rtn = new ExecuteResult();
@@ -351,6 +355,38 @@ public class PositionServiceImpl implements PositionService {
 			rtn.setSucc(true);
 		} catch (Exception e) {
 			log.error("changeReqStatus", e);
+		}
+		return rtn;
+	}
+
+	/**
+	 * 加载职位详情，这里出了加载职位本身的信息外，还需要加入公司信息和本公司除此职位外的其他所有职位
+	 * 
+	 * @param pid
+	 * @return
+	 */
+	public ExecuteResult loadPostionDetail(String pid) {
+		ExecuteResult rtn = new ExecuteResult();
+		try {
+			Map info = positionDAO.selectBs_positionById(pid);
+			if (!FrameTool.isEmpty(info)) {
+				String c_id = (String) info.get("C_ID");
+				ExecuteResult rst = companyService.loadComInfo(c_id);
+				info.put("comInfo", rst.getInfoOne("comInfo"));
+				
+				Map params = new HashMap();
+				params.put("C_ID", c_id);
+				params.put("noPid", pid);
+				params.put("VALID", "VALID");
+				List list = frameDAO.selectList("selectBs_position", params);
+				
+				info.put("otherJobs", list);
+				
+				rtn.addInfo("positionInfo", info);
+				rtn.setSucc(true);
+			}
+		} catch (Exception e) {
+			log.error("loadPostionInfo", e);
 		}
 		return rtn;
 	}

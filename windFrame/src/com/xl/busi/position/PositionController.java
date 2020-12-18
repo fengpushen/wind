@@ -10,6 +10,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -19,7 +21,6 @@ import com.xl.busi.BusiCommon;
 import com.xl.busi.company.CompanyService;
 import com.xl.busi.hr.HumanResourceService;
 import com.xl.frame.util.ExecuteResult;
-import com.xl.frame.util.FrameCache;
 import com.xl.frame.util.FrameConstant;
 import com.xl.frame.util.FrameTool;
 
@@ -340,7 +341,7 @@ public class PositionController {
 		ExecuteResult rst = positionService.personInPostionReqInterview(req_id, host);
 		return new ModelAndView("/busi/mobile/hr/mo_hr_interview_rtc", rst.getInfo());
 	}
-
+	
 	@RequestMapping("/showMobilePositionSearch.do")
 	public ModelAndView showMobilePositionSearch() {
 
@@ -350,15 +351,17 @@ public class PositionController {
 
 	@ResponseBody
 	@RequestMapping(value = "/searchMobilePositionValidList.do")
-	public String searchMobilePositionValidList(HttpServletRequest request) {
+	public ExecuteResult searchMobilePositionValidList(HttpSession session, @RequestBody Map<String, Object> map) {
 
-		Map<String, Object> info = FrameTool.getRequestParameterMap(request);
-		ExecuteResult rst = positionService.loadPositionValidList(info);
-		if (rst.isSucc()) {
-			Map map = (Map) rst.getInfoOne("info");
-			return FrameTool.toJson(map);
-		}
-		return null;
+		ExecuteResult rst = positionService.loadPositionValidList(map);
+		return rst;
+	}
+
+	@ResponseBody
+	@RequestMapping(value="/getPositionDetail/{pid}")
+	public ExecuteResult showPositionDetail(HttpSession session, @PathVariable("pid") String pid) {
+		ExecuteResult rst = positionService.loadPostionDetail(pid);
+		return rst;
 	}
 
 	@RequestMapping(value = "/searchMobilePositionValidListUI.do")

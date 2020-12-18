@@ -40,4 +40,6 @@ public interface PositionService {
 	ExecuteResult personInPostionReqInterview(String req_id, String host);
 
 	ExecuteResult sendPositionReqsCenter(String opr_id, String pids[], String hr_ids[]) throws SQLException;
+
+	ExecuteResult loadPostionDetail(String pid);
 }

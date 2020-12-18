@@ -1,8 +1,10 @@
 package com.xl.frame.util;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class ToolForMap {
 
@@ -32,5 +34,26 @@ public class ToolForMap {
 			}
 		}
 		return values;
+	}
+
+	public static void lowerKey(Map map) {
+		if (!FrameTool.isEmpty(map)) {
+			Set<String> upperKeys = new HashSet<String>();
+			for (Object key : map.keySet()) {
+				if (key instanceof String) {
+					String strKey = (String) key;
+					String lowerKey = strKey.toLowerCase();
+					if (!lowerKey.equals(strKey)) {
+						upperKeys.add(strKey);
+						map.put(lowerKey, map.get(strKey));
+					}
+				}
+			}
+			if (!FrameTool.isEmpty(upperKeys)) {
+				for (String key : upperKeys) {
+					map.remove(key);
+				}
+			}
+		}
 	}
 }
