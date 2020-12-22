@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"mybatis-3-config.dtd">
+
+<configuration>
+	<mappers>
+		<mapper resource="mytatis_sqlMap_frame.xml" />
+		<mapper resource="mytatis_sqlMap_frame_self_busi.xml" />
+		<mapper resource="mytatis_sqlMap_login.xml" />
+		<mapper resource="mytatis_sqlMap_com.xml" />
+		<mapper resource="mytatis_sqlMap_busi_yyhr.xml" />
+	</mappers>
+</configuration>
